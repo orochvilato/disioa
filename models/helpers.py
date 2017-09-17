@@ -44,6 +44,8 @@ def svgcircofrance(circo):
         circo = '013-01'
     dep = circo.split('-')[0]
     circosel = mdb.circonscriptions.find_one({'id':circo})
+    if not circosel:
+        return ""
     if circosel['paris']:
         filtre = {'paris':True}
     else:

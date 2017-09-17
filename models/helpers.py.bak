@@ -49,4 +49,4 @@ def svgcircofrance(circo):
     else:
         filtre = {'dep':dep}
     circos = list(mdb.circonscriptions.find(filtre))
-    return dict(dep=dep,circo=circosel,circos=circos)
+    return XML(response.render('svg/circofrance.svg',dep=dep,circo=circosel,circos=circos))
