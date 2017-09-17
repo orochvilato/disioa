@@ -1,0 +1,10 @@
+cache/*
+databases/*
+errors/*
+sessions/*
+uploads/*
+.pyenv
+*.bak
+*.pyc
+progress.log
+
