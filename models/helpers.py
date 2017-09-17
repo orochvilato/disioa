@@ -39,13 +39,13 @@ def svgtop(typet):
     return XML(response.render('svg/part-top.svg', color=color, colorlight=colorlight, label=label))
 
 
-def svgcircofrance(circo):
+def svgcirco(circo):
     if not circo:
         circo = '013-01'
     dep = circo.split('-')[0]
     circosel = mdb.circonscriptions.find_one({'id':circo})
     if not circosel:
-        return ""
+        return XML(response.render('svg/circoworld.svg',dep=dep,circo=circo))
     if circosel['paris']:
         filtre = {'paris':True}
     else:
