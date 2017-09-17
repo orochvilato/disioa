@@ -1,0 +1,1052 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.TypeError'> string indices must be integers"
+p3
+sS'layer'
+p4
+S'/home/www-data/web2py/applications/observatoireassemblee/views/depute/index.html'
+p5
+sS'code'
+p6
+S'response.write(\'<!DOCTYPE html>\\n<html lang="fr">\\n<head>\\n    <meta charset="utf-8">\\n    <meta http-equiv="x-ua-compatible" content="ie=edge">\\n    <title>ObsAss</title>\\n    <meta name="description" content="">\\n    <meta name="viewport" content="width=device-width, initial-scale=1">\\n\\n    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet">\\n    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">\\n    <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',\'css/main.css\'))\nresponse.write(\'" rel="stylesheet">\\n</head>\\n<body>\\n    <nav id="main-nav" class="flex">\\n        <img src="assets/logo.png" alt="Observatoire Insoumis">\\n        <ul>\\n            <li>Programme Pr\\xc3\\xa9sidentiel</li>\\n            <li>Gouvernement</li>\\n            <li>Assembl\\xc3\\xa9e Nationale</li>\\n        </ul>\\n    </nav>\\n    <header id="header">\\n        Header super chouette sisi !\\n    </header>\\n    <nav id="sub-nav">\\n        <ul>\\n            <li><i class="fa fa-users" aria-hidden="true"></i> Groupes</li>\\n            <li><i class="fa fa-user-circle-o" aria-hidden="true"></i> D\\xc3\\xa9put\\xc3\\xa9s</li>\\n            <li><i class="fa fa-thumbs-up" aria-hidden="true"></i> Suivi FI</li>\\n        </ul>\\n    </nav>\\n    \', escape=False)\nresponse.write(\'\\n    <div id="depute-template" class="container">\\n        <div class="depute-header">\\n            <div class="depute-photo">\\n                <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/\', escape=False)\nresponse.write(depute_uid[2:])\nresponse.write(\'.jpg"/>\\n            </div>\\n            <div class="depute-identite">\\n                <header>\\n                    <h2><span>\', escape=False)\nresponse.write("%s / %s / %se circ" % (depute_region,depute_departement,depute_circo))\nresponse.write(\'</span></h2>\\n                    <h1>M. Gabriel Serville</h1>\\n                </header>\\n\\n                <div class="depute-contacts">\\n                    \', escape=False)\nfor contact in depute_contacts:\n    if (contact[\'type\']==u\'mail\'):\n        response.write(\'<a class="depute-contact" href="mailto:\', escape=False)\n        response.write(contact[\'lien\'])\n        response.write(\'"><i class="fa fa-envelope-o"></i></a>\\n                    \', escape=False)\n    elif (contact[\'type\']==\'twitter\'):\n        response.write(\'<a class="depute-contact" href="https://twitter.com/\', escape=False)\n        response.write(contact[\'type\'][\'lien\'][1:])\n        response.write(\'"><i class="fa fa-twitter"></i></a>\\n                    \', escape=False)\n    elif (contact[\'type\']==\'facebook\'):\n        response.write(\'<a class="depute-contact" href="https://fr-fr.facebook.com/\', escape=False)\n        response.write(contact[\'lien\'])\n        response.write(\'"><i class="fa fa-facebook-square"></i></a>\\n                    \', escape=False)\n    elif (contact[\'type\']==\'site\'):\n        response.write(\'<a class="depute-contact" href="http://\', escape=False)\n        response.write(contact[\'lien\'])\n        response.write(\'"><i class="fa fa-globe"></i></a>\\n                    \', escape=False)\n        pass\n    response.write(\'\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                </div>\\n\\n                <div class="depute-groupe GDR"><i class="fa fa-group"></i> <a href="/obsas_dev/fiches/groupe/GDR">Gauche d\\xc3\\xa9mocrate et r\\xc3\\xa9publicaine (GDR)</a></div>\\n                <div class="depute-infos"><span>Professeur de Math\\xc3\\xa9matiques - Proviseur, n\\xc3\\xa9(e) le 1959-09-27 \\xc3\\xa0 Cayenne</span></div>\\n                <div class="depute-infos"><span>Participation : 556/577</span><br /><span>Dissidence : 41/577</span></div>\\n            </div>\\n        </div>\\n\\n        <div class="tab-container">\\n            <header>\\n                <input id="tab1" type="radio" name="tabs" value="presentation">\\n                <label for="tab1"><i class="fa fa-id-card-o"></i><span>Pr\\xc3\\xa9sentation</span></label>\\n\\n                <input id="tab2" type="radio" name="tabs" value="interventions" checked>\\n                <label for="tab2"><i class="fa fa-comment-o"></i><span>Interventions</span></label>\\n\\n                <input id="tab3" type="radio" name="tabs" value="votes">\\n                <label for="tab3"><i class="fa fa-hand-paper-o"></i><span>Votes</span></label>\\n            </header>\\n\\n            <section id="presentation" class="tab-content"> <!-- Pr\\xc3\\xa9sentation -->\\n                <div class="depute-hemicycle">\\n                    <object id="hemicycle" data="https://admin.obsas.orvdev.fr/obsas_dev/static/images/hemicyclelight.svg" type="image/svg+xml"></object>\\n                </div>\\n                <div class="depute-fonctions">\\n                    <h2>Fonctions / Mandats</h2>\\n                    <ul class="fa-ul">\\n                        <li>\\n                            <i class="fa fa-li fa-arrow-circle-o-right"></i> Secr\\xc3\\xa9taire <a href="/obsas_dev/fiches/organe?id=PO717460">de l&#x27;Assembl\\xc3\\xa9e</a> (depuis le 28 juin 2017)\\n                        </li><li>\\n                            <i class="fa fa-li fa-arrow-circle-o-right"></i> Membre <a href="/obsas_dev/fiches/organe?id=PO730940">du groupe Gauche d\\xc3\\xa9mocrate et r\\xc3\\xa9publicaine</a> (depuis le 27 juin 2017)\\n                        </li><li>\\n                            <i class="fa fa-li fa-arrow-circle-o-right"></i> Membre <a href="/obsas_dev/fiches/organe?id=PO419865">de la commission du d\\xc3\\xa9veloppement durable et de l&#x27;am\\xc3\\xa9nagement du territoire</a> (depuis le 29 juin 2017)\\n                        </li>\\n                    </ul>\\n                </div>\\n                <div class="depute-watch">\\n                    <h2>Deputy Watch</h2>\\n                    <div class="flex">\\n                        <img src="assets/deputywatch.png" alt="Deputy Watch">\\n                        <div>\\n                            Le site Deputy Watch tente de recenser les ant\\xc3\\xa9c\\xc3\\xa9dents judiciaires de notori\\xc3\\xa9t\\xc3\\xa9 publique des \\xc3\\xa9lus.\\n                            Nous y avons cherch\\xc3\\xa9 ce d\\xc3\\xa9put\\xc3\\xa9 et il semblerait qu\\\'il y soit list\\xc3\\xa9.<br />\\n                            <a href="https://www.deputywatch.org/afficherDepute/?nom=Serville&amp;prenom=Gabriel&amp;consulter=1" target="_blank">\\n                                <i class="fa fa-arrow-circle-o-right"></i> Voir le r\\xc3\\xa9sultat\\n                            </a>\\n                        </div>\\n                    </div>\\n                </div>\\n\\n                <div>\\n                    <h2>D\\xc3\\xa9claration \\xc3\\xa0 la HATVP</h2>\\n                    <ul class="fa-ul">\\n                        <li>\\n                            <a href="http://www.hatvp.fr/livraison/dossiers/dispense" target="_blank">\\n                                <i class="fa fa-li fa-file-text-o"></i>\\n                                D\\xc3\\xa9claration d\\xe2\\x80\\x99int\\xc3\\xa9r\\xc3\\xaats - Maire de Matoury\\n                            </a>\\n                        </li>\\n                    </ul>\\n                </div>\\n            </section>\\n\\n\\t\\t\\t<section id="interventions" class="tab-content"> <!-- Interventions -->\\n                <div class="depute-interventions-recap">\\n                    Nombre d\\\'interventions : <span>311</span>, nombre de mots : <span>23812</span>\\n                </div>\\n                <div class="depute-interventions-cloud">\\n                    <div>\\n                        <h2>Ses mots</h2>\\n                        <div id="sourrounding_div_noms" class="cloud">\\n                            <canvas id="wordcanvas_noms"></canvas>\\n                        </div>\\n                    </div>\\n                    <div>\\n                        <h2>Ses verbes</h2>\\n                        <div id="sourrounding_div_verbs" class="cloud">\\n                            <canvas id="wordcanvas_verbs"></canvas>\\n                        </div>\\n                    </div>\\n                </div>\\n                <div id="itvlist" class="depute-interventions-list">\\n                    <h2>Ses interventions</h2>\\n                    <div class="depute-interventions-search">\\n                        <label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>\\n                        <input class="search" placeholder="Rechercher une intervention">\\n                    </div>\\n                    <ul class="list collection">\\n                        <li class="collection-item"><div class="ctx_intervention"><a href="http://www.assemblee-nationale.fr/15/cri/2016-2017-extra/20171033.asp#P1019124" target="_blank">S\\xc3\\xa9ance du mercredi 09 ao\\xc3\\xbbt 2017 / 2. Questions au Gouvernement / Bilan de la session extraordinaire</a></div><div class="s_itv"><p>Pour notre malheur !</p></div></li>\\n                        <li class="collection-item"><div class="ctx_intervention"><a href="http://www.assemblee-nationale.fr/15/cri/2016-2017-extra/20171033.asp#P1019138" target="_blank">S\\xc3\\xa9ance du mercredi 09 ao\\xc3\\xbbt 2017 / 2. Questions au Gouvernement / Bilan de la session extraordinaire</a></div><div class="s_itv"><p>Vos histoires de famille, on s\\xe2\\x80\\x99en fout !</p></div></li>\\n                        <li class="collection-item"><div class="ctx_intervention"><a href="http://www.assemblee-nationale.fr/15/cri/2016-2017-extra/20171033.asp#P1019360" target="_blank">S\\xc3\\xa9ance du mercredi 09 ao\\xc3\\xbbt 2017 / 2. Questions au Gouvernement / Ma\\xc3\\xaetrise des flux migratoires</a></div><div class="s_itv"><p>La faute \\xc3\\xa0 qui ?</p></div></li>\\n                        <li class="collection-item"><div class="ctx_intervention"><a href="http://www.assemblee-nationale.fr/15/cri/2016-2017-extra/20171033.asp#P1019469" target="_blank">S\\xc3\\xa9ance du mercredi 09 ao\\xc3\\xbbt 2017 / 2. Questions au Gouvernement / Allocation de rentr\\xc3\\xa9e scolaire</a></div><div class="s_itv"><p>Et vous fermez des lyc\\xc3\\xa9es !</p></div></li>\\n                        <li class="collection-item"><div class="ctx_intervention"><a href="http://www.assemblee-nationale.fr/15/cri/2016-2017-extra/20171033.asp#P1019206" target="_blank">S\\xc3\\xa9ance du mercredi 09 ao\\xc3\\xbbt 2017 / 2. Questions au Gouvernement / Privatisation des a\\xc3\\xa9roports</a></div><div class="s_itv"><p>Ah oui ! \\xc3\\x80 bas le capital !</p></div></li>\\n                    </ul>\\n                </div>\\n\\t\\t\\t</section>\\n\\n            <section id="votes" class="tab-content">\\n                blabla\\n            </section>\\n        </div>\\n    </div>\\n\', escape=False)\nresponse.write(\'\\n    \', escape=False)\nresponse.write(\'\\n    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>\\n    <script src="https://admin.obsas.orvdev.fr/obsas_dev/static/js/wordcloud2.js"></script>\\n    <script>\\n    $(document).ready(function() {\\n        var visible = $(\\\'.tab-container input:checked\\\').val();\\n        $(\\\'#\\\' + visible).show();\\n\\n        $(\\\'.tab-container input\\\').change(function(e) {\\n            $(\\\'.tab-content\\\').fadeOut();\\n            $(\\\'#\\\' + e.target.value).fadeIn();\\n        });\\n\\n        // Nuages\\n        var wordlist = {};\\n        wordlist[\\\'noms\\\'] = JSON.parse(\\\'[["politique", 184], ["travail", 180], ["loi", 165], ["droit", 142], ["social", 126], ["compte", 111], ["va", 111], ["seul", 99], ["doit", 88], ["grand", 88], ["d\\\\u00e9bat", 88], ["entreprise", 84], ["r\\\\u00e9publique", 80], ["chose", 80], ["monde", 76], ["public", 76], ["raison", 76], ["accord", 72], ["pays", 72], ["temps", 72], ["situation", 69], ["rapport", 69], ["cas", 65], ["fran\\\\u00e7ais", 65], ["syndicat", 61], ["norme", 61], ["mer", 57], ["salari\\\\u00e9", 57], ["condition", 57], ["moment", 57], ["gens", 57], ["vie", 53], ["principe", 53], ["demande", 53], ["code", 53], ["peuple", 49], ["mani\\\\u00e8re", 49], ["fort", 46], ["groupe", 46], ["vote", 46], ["\\\\u00e9conomique", 46], ["reste", 42], ["ordonnance", 42], ["d\\\\u00e9cision", 42], ["discussion", 42], ["part", 42], ["moins", 42], ["\\\\u00e9tat", 42], ["pouvoir", 42], ["sens", 42], ["licenciement", 38], ["peu", 38], ["travailleur", 38], ["g\\\\u00e9n\\\\u00e9ral", 38], ["bon", 34], ["instant", 34], ["mesure", 30], ["branche", 30], ["mot", 30], ["compris", 30], ["territoire", 30], ["train", 30], ["dette", 30], ["libert\\\\u00e9", 26], ["confiance", 26], ["petit", 26], ["vue", 26], ["r\\\\u00e8gle", 26], ["personne", 26], ["jour", 26], ["soci\\\\u00e9t\\\\u00e9", 26], ["fa\\\\u00e7on", 26], ["niveau", 26], ["fin", 23], ["contraire", 23], ["possible", 23], ["hi\\\\u00e9rarchie", 23], ["c\\\\u00f4t\\\\u00e9", 23], ["taux", 23], ["relation", 23], ["heure", 23], ["assembl\\\\u00e9e", 23], ["cause", 23], ["partie", 23], ["personnel", 23], ["crise", 23], ["production", 19], ["pris", 19], ["sorte", 19], ["doute", 19], ["article", 19], ["d\\\\u00e9tach\\\\u00e9", 19], ["r\\\\u00e9serve", 19], ["particulier", 19], ["donne", 19], ["t\\\\u00e9l\\\\u00e9travail", 19], ["trente", 19], ["moyen", 19], ["protection", 15], ["banc", 15], ["faveur", 15], ["parler", 15], ["donner", 15], ["projet", 15], ["ann\\\\u00e9e", 15], ["contrat", 15], ["mandat", 15], ["savoir", 15], ["repr\\\\u00e9sentation", 15], ["classe", 15], ["r\\\\u00e9sultat", 15], ["lutte", 15], ["ami", 15], ["jeune", 11], ["bas", 11], ["candidat", 11], ["bonne", 11], ["brave", 11], ["mal", 11], ["nombreux", 11], ["probl\\\\u00e8me", 11], ["forme", 11], ["contr\\\\u00f4le", 11], ["nouveau", 11], ["d\\\\u00e9pense", 11], ["vision", 11], ["besoin", 11], ["r\\\\u00f4le", 11], ["devon", 11], ["r\\\\u00e9publicain", 11], ["majorit\\\\u00e9", 11], ["fond", 11], ["comp\\\\u00e9titivit\\\\u00e9", 11], ["propos", 11], ["coup", 11], ["signal", 11], ["conseil", 11], ["r\\\\u00e9f\\\\u00e9rendum", 11], ["nature", 11], ["s\\\\u00e9curit\\\\u00e9", 7], ["propre", 7], ["candidature", 7], ["vertu", 7], ["philosophie", 7], ["capacit\\\\u00e9", 7], ["terme", 7], ["gouvernement", 7], ["cadre", 7], ["passage", 7], ["salaire", 7], ["vrai", 7], ["europ\\\\u00e9en", 7], ["fonctionnaire", 7], ["responsabilit\\\\u00e9", 7], ["r\\\\u00e9volution", 7], ["d\\\\u00e9mocratie", 7], ["s\\\\u00e9ance", 7], ["source", 7], ["suppression", 7], ["proposition", 7], ["repr\\\\u00e9sentant", 7], ["nationale", 7], ["d\\\\u00e9but", 7], ["qualification", 7], ["face", 7], ["libre", 7], ["revient", 7], ["cotisation", 7], ["h\\\\u00e9micycle", 7], ["collectif", 7], ["entendu", 7], ["pardon", 3], ["patronal", 3], ["histoire", 3], ["circonstance", 3], ["service", 3], ["somme", 3], ["quarante", 3], ["rendu", 3], ["argument", 3], ["change", 3], ["volont\\\\u00e9", 3], ["int\\\\u00e9r\\\\u00eat", 3], ["organisation", 3], ["r\\\\u00e9ponse", 3], ["capable", 3], ["propri\\\\u00e9t\\\\u00e9", 3], ["tour", 3], ["ouvrier", 3], ["violence", 3], ["fiscal", 3], ["sixi\\\\u00e8me", 3], ["espace", 3], ["r\\\\u00e9alit\\\\u00e9", 3], ["acte", 3], ["surtout", 3], ["bout", 3], ["porte", 3], ["favorable", 3], ["dernier", 3]]\\\');\\n        wordlist[\\\'verbs\\\'] = JSON.parse(\\\'[["faire", 515], ["pouvoir", 510], ["vouloir", 289], ["falloir", 265], ["croire", 176], ["venir", 171], ["permettre", 127], ["prendre", 122], ["voir", 117], ["trouver", 103], ["mettre", 103], ["aller", 103], ["parler", 103], ["penser", 103], ["voter", 88], ["demander", 83], ["devoir", 83], ["comprendre", 78], ["rappeler", 63], ["discuter", 58], ["supprimer", 58], ["cr\\\\u00e9er", 58], ["repr\\\\u00e9senter", 58], ["r\\\\u00e9pondre", 58], ["tenir", 54], ["passer", 54], ["\\\\u00e9voquer", 54], ["proposer", 54], ["changer", 49], ["commencer", 49], ["maintenir", 49], ["arriver", 49], ["travailler", 49], ["savoir", 44], ["consid\\\\u00e9rer", 44], ["inventer", 39], ["sembler", 39], ["donner", 34], ["appeler", 34], ["finir", 34], ["montrer", 34], ["entendre", 34], ["rendre", 34], ["conclure", 34], ["respecter", 34], ["d\\\\u00e9fendre", 34], ["remercier", 34], ["souhaiter", 34], ["concerner", 29], ["expliquer", 29], ["partir", 29], ["sais", 29], ["para\\\\u00eetre", 29], ["vivre", 29], ["r\\\\u00e9fl\\\\u00e9chir", 29], ["exister", 29], ["conna\\\\u00eetre", 29], ["pr\\\\u00e9senter", 29], ["rester", 29], ["saisir", 29], ["devenir", 24], ["pr\\\\u00e9voir", 24], ["valoir", 24], ["exprimer", 24], ["perdre", 24], ["relever", 24], ["pr\\\\u00e9parer", 24], ["accepter", 24], ["payer", 24], ["intervenir", 24], ["signifier", 24], ["essayer", 24], ["revenir", 19], ["b\\\\u00e9n\\\\u00e9ficier", 19], ["convenir", 19], ["retirer", 19], ["rassurer", 19], ["soutenir", 19], ["prot\\\\u00e9ger", 19], ["r\\\\u00e9duire", 19], ["interpeller", 19], ["terminer", 19], ["choisir", 19], ["reconna\\\\u00eetre", 19], ["proc\\\\u00e9der", 19], ["d\\\\u00e9noncer", 19], ["suivre", 19], ["cesser", 19], ["r\\\\u00e9unir", 19], ["regarder", 19], ["viser", 19], ["r\\\\u00e9tablir", 19], ["laisser", 19], ["correspondre", 19], ["r\\\\u00e9sumer", 19], ["participer", 19], ["d\\\\u00e9pendre", 19], ["reprendre", 14], ["\\\\u00e9couter", 14], ["exercer", 14], ["sugg\\\\u00e9rer", 14], ["entrer", 14], ["parvenir", 14], ["construire", 14], ["invoquer", 14], ["affirmer", 14], ["imaginer", 14], ["produire", 14], ["pr\\\\u00e9tendre", 14], ["dominer", 14], ["soulever", 14], ["servir", 14], ["d\\\\u00e9truire", 14], ["percevoir", 14], ["d\\\\u00e9poser", 14], ["poster", 14], ["admettre", 14], ["chercher", 14], ["souligner", 14], ["utiliser", 14], ["d\\\\u00e9rouler", 9], ["gouverner", 9], ["inverser", 9], ["rechercher", 9], ["opposer", 9], ["plaire", 9], ["d\\\\u00e9placer", 9], ["lutter", 9], ["pratiquer", 9], ["estimer", 9], ["modifier", 9], ["citer", 9], ["conduire", 9], ["convaincre", 9], ["r\\\\u00e9sulter", 9], ["connais", 9], ["reculer", 9], ["organiser", 9], ["corriger", 9], ["apporter", 9], ["d\\\\u00e9penser", 9], ["contenter", 9], ["aboutir", 9], ["supposer", 9], ["recevoir", 9], ["autoriser", 9], ["manifester", 9], ["accumuler", 9], ["garantir", 9], ["favoriser", 9], ["pousser", 9], ["souvenir", 9], ["suffire", 9], ["distinguer", 9], ["emp\\\\u00eacher", 9], ["traduire", 9], ["couper", 9], ["compl\\\\u00e9ter", 9], ["confirmer", 9], ["traiter", 9], ["contenir", 9], ["contribuer", 9], ["d\\\\u00e9montrer", 9], ["r\\\\u00e9gler", 9], ["refuser", 9], ["disposer", 9], ["d\\\\u00e9cider", 9], ["monter", 9], ["mourir", 9], ["constater", 9], ["co\\\\u00fbter", 9], ["d\\\\u00e9faire", 9], ["projeter", 4], ["peser", 4], ["aider", 4], ["d\\\\u00e9sorganiser", 4], ["continuer", 4], ["d\\\\u00e9roger", 4], ["partager", 4], ["attendre", 4], ["animer", 4], ["importer", 4], ["soustraire", 4], ["assister", 4], ["r\\\\u00e9p\\\\u00e9ter", 4], ["refonder", 4], ["aimer", 4], ["r\\\\u00e9f\\\\u00e9rer", 4], ["insister", 4], ["pr\\\\u00e9sider", 4], ["sortir", 4], ["poss\\\\u00e9der", 4], ["d\\\\u00e9porter", 4], ["fausser", 4], ["installer", 4], ["d\\\\u00e9couvrir", 4], ["argumenter", 4], ["surgir", 4], ["emb\\\\u00eater", 4], ["ressembler", 4]]\\\');\\n\\n        function showNuage(lex) {\\n            if (lex==\\\'verbatim\\\') {\\n                return\\n            }\\n            var div = document.getElementById("sourrounding_div_"+lex);\\n            var canvas = document.getElementById("wordcanvas_"+lex);\\n\\n            canvas.height = div.offsetHeight;\\n            canvas.width  = div.offsetWidth;\\n\\n            WordCloud(document.getElementById(\\\'wordcanvas_\\\'+lex), {\\n                gridSize: Math.round(16 * document.getElementById(\\\'wordcanvas_\\\'+lex).offsetWidth / 1024),\\n                weightFactor: function (size) {\\n                    return 0.3*size;\\n                },\\n                list: wordlist[lex],\\n                color: function(word, weight) {\\n                    if (weight < 30) {\\n                        return \\\'#82cde2\\\';\\n                    } else if (weight < 130) {\\n                        return \\\'#213558\\\';\\n                    }\\n                    return \\\'#ff0052\\\';\\n                },\\n                backgroundColor: \\\'transparent\\\'\\n            });\\n        }\\n\\n        function drawNuage() {\\n            showNuage(\\\'noms\\\');\\n            showNuage(\\\'verbs\\\');\\n        }\\n\\n        drawNuage();\\n        var resizeDebounce;\\n        $(window).resize(function() {\\n            clearTimeout(resizeDebounce);\\n            resizeDebounce = setTimeout(function() {\\n                window.requestAnimationFrame(function() {\\n                    drawNuage();\\n                });\\n            }, 100);\\n        });\\n    });\\n    </script>\\n    \', escape=False)\nresponse.write(\'\\n</body>\\n</html>\\n\', escape=False)'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__getslice__'
+p12
+S"<method-wrapper '__getslice__' of exceptions.TypeError object>"
+p13
+sS'__str__'
+p14
+S"<method-wrapper '__str__' of exceptions.TypeError object>"
+p15
+sS'__reduce__'
+p16
+S'<built-in method __reduce__ of exceptions.TypeError object>'
+p17
+sS'__dict__'
+p18
+S'{}'
+p19
+sS'message'
+p20
+S"'string indices must be integers'"
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of exceptions.TypeError object>'
+p23
+sS'__init__'
+p24
+S"<method-wrapper '__init__' of exceptions.TypeError object>"
+p25
+sS'__setattr__'
+p26
+S"<method-wrapper '__setattr__' of exceptions.TypeError object>"
+p27
+sS'__reduce_ex__'
+p28
+S'<built-in method __reduce_ex__ of exceptions.TypeError object>'
+p29
+sS'__new__'
+p30
+S'<built-in method __new__ of type object>'
+p31
+sS'__format__'
+p32
+S'<built-in method __format__ of exceptions.TypeError object>'
+p33
+sS'__class__'
+p34
+S"<type 'exceptions.TypeError'>"
+p35
+sS'__doc__'
+p36
+S"'Inappropriate argument type.'"
+p37
+sS'__getitem__'
+p38
+S"<method-wrapper '__getitem__' of exceptions.TypeError object>"
+p39
+sS'__setstate__'
+p40
+S'<built-in method __setstate__ of exceptions.TypeError object>'
+p41
+sS'__getattribute__'
+p42
+S"<method-wrapper '__getattribute__' of exceptions.TypeError object>"
+p43
+sS'args'
+p44
+S"('string indices must be integers',)"
+p45
+sS'__subclasshook__'
+p46
+S'<built-in method __subclasshook__ of type object>'
+p47
+sS'__unicode__'
+p48
+S'<built-in method __unicode__ of exceptions.TypeError object>'
+p49
+sS'__delattr__'
+p50
+S"<method-wrapper '__delattr__' of exceptions.TypeError object>"
+p51
+sS'__repr__'
+p52
+S"<method-wrapper '__repr__' of exceptions.TypeError object>"
+p53
+sS'__hash__'
+p54
+S"<method-wrapper '__hash__' of exceptions.TypeError object>"
+p55
+ssS'evalue'
+p56
+S'string indices must be integers'
+p57
+sS'request'
+p58
+cgluon.html
+XML_unpickle
+p59
+(S'sZv\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>observatoireassemblee</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>gabrielserville</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>depute</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_admin</td><td style="vertical-align:top;">:</td><td><div>83.203.170.106-62f39627-f7d7-4927-a80b-f6a1100be47c<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_obsas_dev</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41-a63f1cc7-827f-4cab-8051-78c6b1463e76<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_observatoireassemblee</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41-58b9156f-cbf8-4858-9186-80def9c1178c<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">CONTEXT_DOCUMENT_ROOT</td><td style="vertical-align:top;">:</td><td><div>/var/www/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">CONTEXT_PREFIX</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">DOCUMENT_ROOT</td><td style="vertical-align:top;">:</td><td><div>/var/www/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">GATEWAY_INTERFACE</td><td style="vertical-align:top;">:</td><td><div>CGI/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate, br</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CACHE_CONTROL</td><td style="vertical-align:top;">:</td><td><div>max-age=0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>session_id_observatoireassemblee=83.203.170.41-58b9156f-cbf8-4858-9186-80def9c1178c; session_id_obsas_dev=83.203.170.41-a63f1cc7-827f-4cab-8051-78c6b1463e76; session_id_admin=83.203.170.106-62f39627-f7d7-4927-a80b-f6a1100be47c</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_UPGRADE_INSECURE_REQUESTS</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_TRANSLATED</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/wsgihandler.py/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>45411</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_SCHEME</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_URI</td><td style="vertical-align:top;">:</td><td><div>/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_FILENAME</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/wsgihandler.py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_NAME</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_ADDR</td><td style="vertical-align:top;">:</td><td><div>151.80.57.169</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_ADMIN</td><td style="vertical-align:top;">:</td><td><div>[no address given]</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SIGNATURE</td><td style="vertical-align:top;">:</td><td><div>&lt;address&gt;Apache/2.4.18 (Ubuntu) Server at admin.obsas.orvdev.fr Port 443&lt;/address&gt;\n</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>Apache/2.4.18 (Ubuntu)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SSL_TLS_SNI</td><td style="vertical-align:top;">:</td><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">apache.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>2</div></td></tr><tr><td><div>4</div></td></tr><tr><td><div>18</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">apache_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>2</div></td></tr><tr><td><div>4</div></td></tr><tr><td><div>18</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/www-data/web2py/applications/observatoireassemblee/&#x27;, &#x27;/home/www-data/web2py/applications/obsas_dev/&#x27;, &#x27;/home/www-data/web2py/applications/admin/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">context_document_root</td><td style="vertical-align:top;">:</td><td><div>/var/www/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">context_prefix</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">document_root</td><td style="vertical-align:top;">:</td><td><div>/var/www/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gateway_interface</td><td style="vertical-align:top;">:</td><td><div>CGI/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate, br</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cache_control</td><td style="vertical-align:top;">:</td><td><div>max-age=0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>session_id_observatoireassemblee=83.203.170.41-58b9156f-cbf8-4858-9186-80def9c1178c; session_id_obsas_dev=83.203.170.41-a63f1cc7-827f-4cab-8051-78c6b1463e76; session_id_admin=83.203.170.106-62f39627-f7d7-4927-a80b-f6a1100be47c</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_upgrade_insecure_requests</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>vps433020</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>151.80.57.169</div></td></tr><tr><td><div>vps433020.ovh.net</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.application_group</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.callable_object</td><td style="vertical-align:top;">:</td><td><div>application</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.daemon_connects</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.daemon_restarts</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.daemon_start</td><td style="vertical-align:top;">:</td><td><div>1505647527080183</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.enable_sendfile</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.handler_script</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.input_chunked</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.listener_host</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.listener_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.process_group</td><td style="vertical-align:top;">:</td><td><div>obsasadm</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.queue_start</td><td style="vertical-align:top;">:</td><td><div>1505647527080073</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.request_handler</td><td style="vertical-align:top;">:</td><td><div>wsgi-script</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.request_start</td><td style="vertical-align:top;">:</td><td><div>1505647527079864</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.script_reloading</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.script_start</td><td style="vertical-align:top;">:</td><td><div>1505647527080227</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>4</div></td></tr><tr><td><div>3</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_application_group</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_callable_object</td><td style="vertical-align:top;">:</td><td><div>application</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_daemon_connects</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_daemon_restarts</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_daemon_start</td><td style="vertical-align:top;">:</td><td><div>1505647527080183</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_enable_sendfile</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_handler_script</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_input_chunked</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_listener_host</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_listener_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_process_group</td><td style="vertical-align:top;">:</td><td><div>obsasadm</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_queue_start</td><td style="vertical-align:top;">:</td><td><div>1505647527080073</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_request_handler</td><td style="vertical-align:top;">:</td><td><div>wsgi-script</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_request_start</td><td style="vertical-align:top;">:</td><td><div>1505647527079864</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_script_reloading</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_script_start</td><td style="vertical-align:top;">:</td><td><div>1505647527080227</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">mod_wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>4</div></td></tr><tr><td><div>3</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">nokeepalive</td><td style="vertical-align:top;">:</td><td><div>ssl-unclean-shutdown</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_translated</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/wsgihandler.py/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>45411</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_filename</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/wsgihandler.py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_name</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_addr</td><td style="vertical-align:top;">:</td><td><div>151.80.57.169</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_admin</td><td style="vertical-align:top;">:</td><td><div>[no address given]</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_signature</td><td style="vertical-align:top;">:</td><td><div>&lt;address&gt;Apache/2.4.18 (Ubuntu) Server at admin.obsas.orvdev.fr Port 443&lt;/address&gt;\n</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>Apache/2.4.18 (Ubuntu)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">ssl_tls_sni</td><td style="vertical-align:top;">:</td><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_original_uri</td><td style="vertical-align:top;">:</td><td><div>/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.15.1-stable+timestamp.2017.07.10.21.25.06</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;mod_wsgi.Log object at 0x7f56f789ea98&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;type &#x27;mod_wsgi.FileWrapper&#x27;&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;mod_wsgi.Input object at 0x7f56f79c61b0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;mod_wsgi.Log object at 0x7f56f789ea98&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;type &#x27;mod_wsgi.FileWrapper&#x27;&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;mod_wsgi.Input object at 0x7f56f79c61b0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/applications/observatoireassemblee/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/www-data/web2py/applications/observatoireassemblee/&#x27;, &#x27;/home/www-data/web2py/applications/obsas_dev/&#x27;, &#x27;/home/www-data/web2py/applications/admin/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>vps433020</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>151.80.57.169</div></td></tr><tr><td><div>vps433020.ovh.net</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>admin.obsas.orvdev.fr</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.15.1-stable+timestamp.2017.07.10.21.25.06</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 9, 17, 13, 25, 27, 80416)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/observatoireassemblee/depute/index/gabrielserville</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 9, 17, 11, 25, 27, 80436)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x7f56f7bf1250&gt;</div></td></tr></table></div>'
+tRp60
+sS'frames'
+p61
+(lp62
+(dp63
+S'file'
+p64
+S'/home/www-data/web2py/gluon/restricted.py'
+p65
+sS'dump'
+p66
+(dp67
+S'environment'
+p68
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppCache': <class __restricted__.AppCache>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, ...}"
+p69
+sS'ccode'
+p70
+S'\'response.write(\\\'<!DOCTYPE html>\\\\n<html lang="fr"...ponse.write(\\\'\\\\n</body>\\\\n</html>\\\\n\\\', escape=False)\''
+p71
+ssS'lnum'
+p72
+I219
+sS'lines'
+p73
+(dp74
+I214
+S'    if environment is None:'
+p75
+sI215
+S'        environment = {}'
+p76
+sI216
+S"    environment['__file__'] = layer"
+p77
+sI217
+S"    environment['__name__'] = '__restricted__'"
+p78
+sI218
+S'    try:'
+p79
+sI219
+S'        exec(ccode, environment)'
+p80
+sI220
+S'    except HTTP:'
+p81
+sI221
+S'        raise'
+p82
+sI222
+S'    except RestrictedError:'
+p83
+sI223
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p84
+ssS'call'
+p85
+S'(ccode=\'response.write(\\\'<!DOCTYPE html>\\\\n<html lang="fr"...ponse.write(\\\'\\\\n</body>\\\\n</html>\\\\n\\\', escape=False)\', environment={\'A\': <class \'gluon.html.A\'>, \'ANY_OF\': <class \'gluon.validators.ANY_OF\'>, \'ASSIGNJS\': <function ASSIGNJS>, \'AppCache\': <class __restricted__.AppCache>, \'AppConfig\': <function AppConfig>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, ...}, layer=\'/home/www-data/web2py/applications/observatoireassemblee/views/depute/index.html\')'
+p86
+sS'func'
+p87
+S'restricted'
+p88
+sa(dp89
+g64
+S'/home/www-data/web2py/<string>'
+p90
+sg66
+(dp91
+sg72
+I16
+sg73
+(dp92
+sg85
+S'()'
+p93
+sg87
+S'<module>'
+p94
+sasS'pyver'
+p95
+S'Python 2.7.12: /home/www-data/web2py/applications/obsas_dev/.pyenv/bin/python (prefix: /home/www-data/web2py/applications/obsas_dev/.pyenv)'
+p96
+sS'session'
+p97
+g59
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp98
+sS'etype'
+p99
+S"<type 'exceptions.TypeError'>"
+p100
+sS'date'
+p101
+S'Sun Sep 17 13:25:27 2017'
+p102
+sS'response'
+p103
+g59
+(S's6?\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x7f56fc47aab0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_observatoireassemblee</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41-cf03fc8e-5cf9-4a4b-8a15-23452feeecc8<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap3_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*.json</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">logo</td><td style="vertical-align:top;">:</td><td><div><a class="navbar-brand" href="http://www.web2py.com/" id="web2py-logo"><b>web<span>2</span>py</b>&trade;&nbsp;</a></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Accueil</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/observatoireassemblee</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Mes sites</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/site</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Cette Appli</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Design</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/design/observatoireassemblee</div></td></tr></table></div></td></tr><tr><td><div><li class="divider"></li></div></td></tr><tr><td><div><table><tr><td><div>Contr\xc3\xb4leur</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/controllers/depute.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Pr\xc3\xa9sentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/views/depute/index.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Mod\xc3\xa8le BD</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/models/db.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Menu mod\xc3\xa8le</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/models/menu.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Config.ini</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/private/appconfig.ini</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Mise en page</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/views/layout.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Feuille de style</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/observatoireassemblee/static/css/web2py-bootstrap3.css</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>base de donn\xc3\xa9es</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/observatoireassemblee/appadmin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Erreurs</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/errors/observatoireassemblee</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>\xc3\x80 propos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/about/observatoireassemblee</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>web2py.com</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>T\xc3\xa9l\xc3\xa9chargement</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/download</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Soutien</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/support</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>D\xc3\xa9mo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/demo_admin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Exemples Rapides</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/examples/default/examples</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>FAQ</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/AlterEgo</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Vid\xc3\xa9os</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/videos/</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Applications gratuites</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/appliances</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Plugiciels</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/plugins</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recettes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2pyslices.com/</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Documentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Online book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book</div></td></tr></table></div></td></tr><tr><td><div><li class="divider"></li></div></td></tr><tr><td><div><table><tr><td><div>Pr\xc3\xa9face</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/00</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Pr\xc3\xa9sentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/01</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Python</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/02</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Pr\xc3\xa9sentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/03</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Le noyau</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/04</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Les Vues</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/05</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>base de donn\xc3\xa9es</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/06</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Formulaires et Validateurs</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/07</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Courriel et texto</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/08</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Contr\xc3\xb4le d\'acc\xc3\xa8s</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/09</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Services</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/10</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recettes Ajax</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/11</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Composants et Plugiciels</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/12</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recettes de d\xc3\xa9ploiement</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/13</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Autres recettes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/14</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Aider web2py</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/15</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Buy web2py\'s book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://stores.lulu.com/web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Communaut\xc3\xa9</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Groupes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/usergroups</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Twitter</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://twitter.com/web2py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Clavardage en direct</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://webchat.freenode.net/?channels=web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Your Name &lt;you@example.com&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">description</td><td style="vertical-align:top;">:</td><td><div>a cool new app</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>Web2py Web Framework</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>web2py</div></td></tr><tr><td><div>python</div></td></tr><tr><td><div>framework</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^depute/\\w+\\.py$</div></td></tr><tr><td><div>^depute/index/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_observatoireassemblee</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/applications/observatoireassemblee/sessions/83.203.170.41-cf03fc8e-5cf9-4a4b-8a15-23452feeecc8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>c0762cbf4baf7f9af97c051e7fcb8083</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>83.203.170.41-cf03fc8e-5cf9-4a4b-8a15-23452feeecc8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_observatoireassemblee</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>observatoireassemblee</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">subtitle</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">title</td><td style="vertical-align:top;">:</td><td><div>Observatoireassemblee</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>depute/index.html</div></td></tr></table></div>'
+tRp104
+sS'locals'
+p105
+(dp106
+S'Service'
+p107
+S"<class 'gluon.tools.Service'>"
+p108
+sS'PY2'
+p109
+S'True'
+p110
+sS'OBJECT'
+p111
+S"<class 'gluon.html.OBJECT'>"
+p112
+sS'SQLDB'
+p113
+S"<class 'pydal.base.DAL'>"
+p114
+sS'colors'
+p115
+S"{'FI': 'rgba(12,195,214,1)', 'GDR': 'rgba(192,0,0,1)', 'LC': 'rgba(112,48,160,1)', 'LR': 'rgba(47,85,151,1)', 'MODEM': 'rgba(237,125,49,1)', 'NG': 'rgba(234,52,208,1)', 'NI': 'rgba(191,191,191,1)', 'REM': 'rgba(255,192,0,1)'}"
+p116
+sg97
+S'<Storage {}>'
+p117
+sS'LINK'
+p118
+S"<class 'gluon.html.LINK'>"
+p119
+sS'BR'
+p120
+S"<class 'gluon.html.BR'>"
+p121
+sS'local_import'
+p122
+S'<function <lambda>>'
+p123
+sVdepute_suppleant
+p124
+S"u'Mme Carine Sina\\xef-Bossou'"
+p125
+sS'__package__'
+p126
+S'None'
+p127
+sS'PRE'
+p128
+S"<class 'gluon.html.PRE'>"
+p129
+sS'IS_INT_IN_RANGE'
+p130
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p131
+sS'to_bytes'
+p132
+S'<function to_bytes>'
+p133
+sS'IS_LOWER'
+p134
+S"<class 'gluon.validators.IS_LOWER'>"
+p135
+sS'IS_STRONG'
+p136
+S"<class 'gluon.validators.IS_STRONG'>"
+p137
+sS'cache'
+p138
+S'<gluon.cache.Cache object>'
+p139
+sS'vide'
+p140
+S'<function vide>'
+p141
+sS'IS_IN_DB'
+p142
+S"<class 'gluon.validators.IS_IN_DB'>"
+p143
+sS'TAG'
+p144
+S'<gluon.html.__TAG__ object>'
+p145
+sVdeputes_nuages
+p146
+g19
+sS'CRYPT'
+p147
+S"<class 'gluon.validators.CRYPT'>"
+p148
+sS'SQLField'
+p149
+S"<class 'pydal.objects.Field'>"
+p150
+sS'mail'
+p151
+S'<gluon.tools.Mail object>'
+p152
+sS'BODY'
+p153
+S"<class 'gluon.html.BODY'>"
+p154
+sS'IS_DATE_IN_RANGE'
+p155
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p156
+sVdepute_circo
+p157
+S"u'1'"
+p158
+sS'IFRAME'
+p159
+S"<class 'gluon.html.IFRAME'>"
+p160
+sS'URL'
+p161
+S'<function URL>'
+p162
+sS'__file__'
+p163
+S"'/home/www-data/web2py/applications/observatoireassemblee/views/depute/index.html'"
+p164
+sS'db'
+p165
+S'<DAL uri="sqlite://storage.sqlite">'
+p166
+sS'hashlib'
+p167
+S"<module 'hashlib' from '/usr/lib/python2.7/hashlib.pyc'>"
+p168
+sS'auth'
+p169
+S'<gluon.tools.Auth object>'
+p170
+sS'nuages_excl'
+p171
+S"('ministre', 'monsieur', u'coll\\xe8gue', 'madame', 'premier', 'cher', 'effet', 'commission', 'parlementaire', u'd\\xe9put\\xe9', 'deux', 'amendement', 'sujet', 'texte', 'an', 'fois', 'lieu', 'trois', 'mois', 'rapporteur', ...)"
+p172
+sVdepute_departement_id
+p173
+S"u'973'"
+p174
+sS'P'
+S"<class 'gluon.html.P'>"
+p175
+sS'TFOOT'
+p176
+S"<class 'gluon.html.TFOOT'>"
+p177
+sS'iteritems'
+p178
+S'<function <lambda>>'
+p179
+sVdepute_contacts
+p180
+S"[{u'lien': u'mailto:gabriel.serville@assemblee-nationale.fr', u'type': u'mail'}, {u'lien': u'mailto:gabriel.serville@orange.fr', u'type': u'mail'}, {u'lien': u'https://fr-fr.facebook.com/GabrielServille/', u'type': u'facebook'}, {u'lien': u'https://twitter.com/@GabrielServille/', u'type': u'twitter'}]"
+p181
+sS'XHTML'
+p182
+S"<class 'gluon.html.XHTML'>"
+p183
+sS'datetime'
+p184
+S"<module 'datetime' (built-in)>"
+p185
+sS'ON'
+p186
+g110
+sS'OL'
+p187
+S"<class 'gluon.html.OL'>"
+p188
+sVgroupe_qualite
+p189
+S"u'membre'"
+p190
+sS'TEXTAREA'
+p191
+S"<class 'gluon.html.TEXTAREA'>"
+p192
+sS'MENU'
+p193
+S"<class 'gluon.html.MENU'>"
+p194
+sS'AppCache'
+p195
+S'<class __restricted__.AppCache>'
+p196
+sS'IS_IMAGE'
+p197
+S"<class 'gluon.validators.IS_IMAGE'>"
+p198
+sS'EM'
+p199
+S"<class 'gluon.html.EM'>"
+p200
+sS'CODE'
+p201
+S"<class 'gluon.html.CODE'>"
+p202
+sS'HTTP'
+p203
+S"<class 'gluon.http.HTTP'>"
+p204
+sS'locale'
+p205
+S"<module 'locale' from '/home/www-data/web2py/app...tions/obsas_dev/.pyenv/lib/python2.7/locale.pyc'>"
+p206
+sS'IS_DATETIME'
+p207
+S"<class 'gluon.validators.IS_DATETIME'>"
+p208
+sS'reduce'
+p209
+S'<built-in function reduce>'
+p210
+sS'STYLE'
+p211
+S"<class 'gluon.html.STYLE'>"
+p212
+sS'LABEL'
+p213
+S"<class 'gluon.html.LABEL'>"
+p214
+sS'OPTGROUP'
+p215
+S"<class 'gluon.html.OPTGROUP'>"
+p216
+sS'CLEANUP'
+p217
+S"<class 'gluon.validators.CLEANUP'>"
+p218
+sS'departements_ids'
+p219
+S"{u'Ain': '001', u'Aisne': '002', u'Allier': '003', u'Alpes-Maritimes': '006', u'Alpes-de-Haute-Provence': '004', u'Ardennes': '008', u'Ard\\xe8che': '007', u'Ari\\xe8ge': '009', u'Aube': '010', u'Aude': '011', ...}"
+p220
+sS'THEAD'
+p221
+S"<class 'gluon.html.THEAD'>"
+p222
+sS'plugins'
+p223
+S'<gluon.tools.PluginManager object>'
+p224
+sS'SELECT'
+p225
+S"<class 'gluon.html.SELECT'>"
+p226
+sVstats
+p227
+S"{u'compat': {u'FI': 75.0, u'GDR': 75.0, u'LC': 25.0, u'LR': 25.0, u'MODEM': 0.0, u'NG': 75.0, u'NI': 75.0, u'REM': 0.0}, u'compat_sort': [{u'g': u'NI', u'p': 75.0}, {u'g': u'GDR', u'p': 75.0}, {u'g': u'NG', u'p': 75.0}, {u'g': u'FI', u'p': 75.0}, {u'g': u'LC', u'p': 25.0}, {u'g': u'LR', u'p': 25.0}, {u'g': u'REM', u'p': 0.0}, {u'g': u'MODEM', u'p': 0.0}], u'nbitvs': 0, u'nbmots': 0, u'positions': {u'absent': 96.6, u'abstention': 1.7, u'contre': 1.7, u'dissidence': 0.8, u'exprimes': 3.4, u'pour': 0.0}}"
+p228
+sS'CENTER'
+p229
+S"<class 'gluon.html.CENTER'>"
+p230
+sS'axes'
+p231
+S'{\'ages\': {\'elements\': \'G\', \'libelle\': "Classes d\'age", \'source\': {\'filtre\': {}, \'key\': \'classeage\', \'label\': \'classeage\', \'nom\': \'acteurs\'}, \'titre\': "Votes par classe d\'age", \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'classeage\'}}, \'assemblee\': {\'elements\': \'G\', \'hidechart\': False, \'libelle\': \'Assembl\\xc3\\xa9e\', \'source\': {\'filtre\': {\'actif\': True, \'codeType\': \'ASSEMBLEE\'}, \'key\': \'libelleAbrev\', \'label\': \'libelle\', \'nom\': \'organes\'}, \'titre\': "Votes de l\'Assembl\\xc3\\xa9e", \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'organes\'}}, \'commissions\': {\'elements\': \'G\', \'libelle\': \'Commissions\', \'source\': {\'filtre\': {\'$and\': [{\'$or\': [...]}, {\'actif\': True}]}, \'key\': \'uid\', \'label\': \'libelle\', \'nom\': \'organes\'}, \'titre\': \'Votes par Commissions\', \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'commissions\'}}, \'csp\': {\'elements\': \'G\', \'libelle\': \'Cat\\xc3\\xa9gorie Socio-professionnelle\', \'source\': {\'filtre\': {}, \'key\': \'csp\', \'label\': \'csp\', \'nom\': \'acteurs\'}, \'titre\': \'Votes par Cat\\xc3\\xa9gorie Socio-professionnelle\', \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'csp\'}}, \'departements\': {\'elements\': \'G\', \'libelle\': \'D\\xc3\\xa9partements\', \'source\': {\'filtre\': {}, \'key\': \'departement\', \'label\': \'departement\', \'nom\': \'acteurs\'}, \'titre\': \'Votes par D\\xc3\\xa9partements\', \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'departement\'}}, \'depute\': {\'elements\': \'P\', \'libelle\': \'D\\xc3\\xa9put\\xc3\\xa9s\', \'source\': {\'filtre\': {}, \'key\': \'uid\', \'label\': \'prenomnom\', \'nom\': \'acteurs\'}, \'titre\': \'Votes par d\\xc3\\xa9put\\xc3\\xa9\', \'tri_defaut\': (\'alphanom\', False), \'votes\': {\'field\': \'uid\'}}, \'dossierleg\': {\'elements\': \'G\', \'libelle\': \'Dossier l\\xc3\\xa9gislatif\', \'source\': {\'filtre\': {}, \'key\': \'scrutin_dossier\', \'label\': \'scrutin_dossierLibelle\', \'nom\': \'scrutins\'}, \'titre\': \'Votes par dossier l\\xc3\\xa9gislatif\', \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'scrutin_dossier\'}}, \'groupes\': {\'elements\': \'G\', \'hidechart\': False, \'libelle\': \'Groupes\', \'source\': {\'filtre\': {\'actif\': True, \'codeType\': \'GP\'}, \'key\': \'uid\', \'label\': \'libelle\', \'nom\': \'organes\'}, \'titre\': \'Votes par Groupe parlementaire\', \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'groupe\'}}, \'regions\': {\'elements\': \'G\', \'libelle\': \'R\\xc3\\xa9gions\', \'source\': {\'filtre\': {}, \'key\': \'region\', \'label\': \'region\', \'nom\': \'acteurs\'}, \'titre\': \'Votes par R\\xc3\\xa9gions\', \'tri_defaut\': (\'alpha\', False), \'votes\': {\'field\': \'region\'}}, \'scrutin\': {\'elements\': \'G\', \'libelle\': \'Scrutins\', \'source\': {\'filtre\': {}, \'key\': \'scrutin_id\', \'label\': \'scrutin_fulldesc\', \'nom\': \'scrutins\'}, \'titre\': \'Votes par scrutin\', \'tri_defaut\': (\'datescrutin\', True), \'tris\': [\'datescrutin\'], \'votes\': {\'field\': \'scrutin_id\'}}, ...}'
+p232
+sS'Auth'
+p233
+S"<class 'gluon.tools.Auth'>"
+p234
+sS'DEVELOPMENT_MENU'
+p235
+g110
+sS'__builtins__'
+p236
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'BufferError': <type 'exceptions.BufferError'>, 'BytesWarning': <type 'exceptions.BytesWarning'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, ...}"
+p237
+sS'HTML'
+p238
+S"<class 'gluon.html.HTML'>"
+p239
+sS'filtresitm_order'
+p240
+S"['participation', 'ficompat', 'emcompat']"
+p241
+sS'SQLFORM'
+p242
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p243
+sVdepute_id
+p244
+S"u'm.gabrielserville'"
+p245
+sS'LOAD'
+p246
+S'<function LOAD>'
+p247
+sS'redirect'
+p248
+S'<function redirect>'
+p249
+sS'FIELDSET'
+p250
+S"<class 'gluon.html.FIELDSET'>"
+p251
+sS'embed64'
+p252
+S'<function embed64>'
+p253
+sS'IS_EQUAL_TO'
+p254
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p255
+sS'sortfcts_order'
+p256
+S"['participation', 'pctpour', 'pctcontre', 'pctabs', 'alpha', 'ficompat', 'emcompat']"
+p257
+sVdepute_age
+p258
+S'57'
+p259
+sS'filtresitm'
+p260
+S"{'emcompat': {'fct': <function <lambda>>, 'libelle': 'Taux de EM-compatibilit\\xc3\\xa9', 'max': 100, 'min': 0}, 'ficompat': {'fct': <function <lambda>>, 'libelle': 'Taux de FI-compatibilit\\xc3\\xa9', 'max': 100, 'min': 0}, 'participation': {'fct': <function <lambda>>, 'libelle': 'Taux de participation', 'max': 100, 'min': 0}}"
+p261
+sS'TinyURL'
+p262
+S'<class __restricted__.TinyURL>'
+p263
+sVdepute_compat
+p264
+S"{u'FI': 3, u'GDR': 3, u'LC': 1, u'LR': 1, u'MODEM': 0, u'NG': 3, u'NI': 3, u'REM': 0}"
+p265
+sS'IS_LIST_OF'
+p266
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p267
+sS'__name__'
+p268
+S"'__restricted__'"
+p269
+sS'EMBED'
+p270
+S"<class 'gluon.html.EMBED'>"
+p271
+sS'_'
+S'<function _>'
+p272
+sVdepute_circo_id
+p273
+S"u'973-01'"
+p274
+sVdepute_uid
+p275
+S"u'PA610667'"
+p276
+sS'myconf'
+p277
+S"{'forms': {'formstyle': 'bootstrap3_inline', 'se...': {'names': 'localhost:*, 127.0.0.1:*, *:*, *'}}"
+p278
+sS'H2'
+p279
+S"<class 'gluon.html.H2'>"
+p280
+sS'H3'
+p281
+S"<class 'gluon.html.H3'>"
+p282
+sS'AppConfig'
+p283
+S'<function AppConfig>'
+p284
+sS'H1'
+p285
+S"<class 'gluon.html.H1'>"
+p286
+sS'H6'
+p287
+S"<class 'gluon.html.H6'>"
+p288
+sVdepute_typeregion
+p289
+S"u'Dom'"
+p290
+sS'H4'
+p291
+S"<class 'gluon.html.H4'>"
+p292
+sS'H5'
+p293
+S"<class 'gluon.html.H5'>"
+p294
+sS'UL'
+p295
+S"<class 'gluon.html.UL'>"
+p296
+sS'IS_UPPER'
+p297
+S"<class 'gluon.validators.IS_UPPER'>"
+p298
+sVdepute_autresmandats
+p299
+S'[u\'Maire\\xa0de Matoury, Guyane\', u"Membre\\xa0de la communaut\\xe9 d\'agglom\\xe9ration du Centre Littoral"]'
+p300
+sS'xmlescape'
+p301
+S'<function xmlescape>'
+p302
+sS'IS_TIME'
+p303
+S"<class 'gluon.validators.IS_TIME'>"
+p304
+sS'svggauge'
+p305
+S'<function svggauge>'
+p306
+sS'OPTION'
+p307
+S"<class 'gluon.html.OPTION'>"
+p308
+sS'TITLE'
+p309
+S"<class 'gluon.html.TITLE'>"
+p310
+sS'short_url'
+p311
+S"<module 'short_url' from '/home/www-data/web2py/.../python2.7/site-packages/short_url/__init__.pyc'>"
+p312
+sS'IS_EMPTY_OR'
+p313
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p314
+sS'MARKMIN'
+p315
+S"<class 'gluon.html.MARKMIN'>"
+p316
+sVdepute_ddn
+p317
+S"u'27/09/1959'"
+p318
+sS'INPUT'
+p319
+S"<class 'gluon.html.INPUT'>"
+p320
+sS'STRONG'
+p321
+S"<class 'gluon.html.STRONG'>"
+p322
+sS'COL'
+p323
+S"<class 'gluon.html.COL'>"
+p324
+sVdepute_votes
+p325
+S"{u'absent': 115, u'abstention': 2, u'compat': {u'FI': 38, u'GDR': 104, u'LC': 111, u'LR': 114, u'MODEM': 97, u'NG': 113, u'NI': 115, u'REM': 95, u'assemblee': 111}, u'contre': 2, u'exprimes': 4, u'pour': 0, u'total': 119, u'votants': 0}"
+p326
+sS'service'
+p327
+S'<gluon.tools.Service object>'
+p328
+sS'SCRIPT'
+p329
+S"<class 'gluon.html.SCRIPT'>"
+p330
+sS'HR'
+p331
+S"<class 'gluon.html.HR'>"
+p332
+sVdepute_mandat_debut
+p333
+S"u'21/06/2017'"
+p334
+sVdepute_actif
+p335
+g110
+sS'mdb'
+p336
+S"Database(MongoClient(host=['localhost:27017'], d...s=dict, tz_aware=False, connect=True), u'obsass')"
+p337
+sVgroupe_abrev
+p338
+S"u'GDR'"
+p339
+sVdepute_hatvp
+p340
+S"[{u'civilite': u'M.', u'classement': u'servilleaaagabriel8200', u'date_depot': u'', u'date_publication': u'', u'departement': u'973', u'docurl': u'http://www.hatvp.fr/livraison/dossiers/dispense', u'id_origine': u'', u'nom': u'SERVILLE', u'nom_fichier': u'dispense', u'open_data': u'', ...}, {u'civilite': u'M.', u'classement': u'servilleaaagabriel8200', u'date_depot': u'', u'date_publication': u'', u'departement': u'973', u'docurl': u'http://www.hatvp.fr/livraison/dossiers/', u'id_origine': u'610667', u'nom': u'SERVILLE', u'nom_fichier': u'', u'open_data': u'', ...}]"
+p341
+sVdepute_classeage
+p342
+S"u'50-60 ans'"
+p343
+sS'TABLE'
+p344
+S"<class 'gluon.html.TABLE'>"
+p345
+sVdepute_naissance
+p346
+S"u'N\\xe9\\n\\t\\t\\t le 27 septembre 1959 \\xe0 Cayenne\\xa0(Guyane)'"
+p347
+sS'IS_IPV4'
+p348
+S"<class 'gluon.validators.IS_IPV4'>"
+p349
+sS'IS_LENGTH'
+p350
+S"<class 'gluon.validators.IS_LENGTH'>"
+p351
+sS'IS_IPV6'
+p352
+S"<class 'gluon.validators.IS_IPV6'>"
+p353
+sS'XML'
+p354
+S"<class 'gluon.html.XML'>"
+p355
+sVdepute_collaborateurs
+p356
+S"[u'M. Thibault Lechat-Vega', u'M. Christian Porthos']"
+p357
+sS'B'
+S"<class 'gluon.html.B'>"
+p358
+sS'IMG'
+p359
+S"<class 'gluon.html.IMG'>"
+p360
+sS'SQLTABLE'
+p361
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p362
+sVdepute_region
+p363
+S"u'Guyane'"
+p364
+sS'IS_MATCH'
+p365
+S"<class 'gluon.validators.IS_MATCH'>"
+p366
+sS'pymongo'
+p367
+S"<module 'pymongo' from '/home/www-data/web2py/ap...ib/python2.7/site-packages/pymongo/__init__.pyc'>"
+p368
+sS'IS_ALPHANUMERIC'
+p369
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p370
+sVdeputes_mots
+p371
+S'None'
+p372
+sVdepute_sexe
+p373
+S"u'Femme'"
+p374
+sVdepute_mots
+p375
+g19
+sS'CAT'
+p376
+S"<class 'gluon.html.CAT'>"
+p377
+sS'getVoteData_fct'
+p378
+S'<function getVoteData_fct>'
+p379
+sS'axes_order'
+p380
+S"['assemblee', 'groupes', 'commissions', 'typeregion', 'regions', 'departements', 'ages', 'csp', 'sexe', 'depute', 'scrutin', 'typescrutin', 'dossierleg']"
+p381
+sVdepute_nom_tri
+p382
+S"u'SERVILLE'"
+p383
+sS'SPAN'
+p384
+S"<class 'gluon.html.SPAN'>"
+p385
+sS'IS_JSON'
+p386
+S"<class 'gluon.validators.IS_JSON'>"
+p387
+sS'IS_IPADDRESS'
+p388
+S"<class 'gluon.validators.IS_IPADDRESS'>"
+p389
+sS'IS_SLUG'
+p390
+S"<class 'gluon.validators.IS_SLUG'>"
+p391
+sVdepute_departement
+p392
+S"u'Guyane'"
+p393
+sVdepute_nuages
+p394
+g19
+sVdepute_shortid
+p395
+S"u'gabrielserville'"
+p396
+sS'META'
+p397
+S"<class 'gluon.html.META'>"
+p398
+sS'client'
+p399
+S"MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True)"
+p400
+sVdepute_commissions
+p401
+S'[{u\'id\': u\'PO419865\', u\'lien\': u\'http://www2.assemblee-nationale.fr/instances/fiche/OMC_PO419865\', u\'nom\': u"Commission du d\\xe9veloppement durable et de l\'am\\xe9nagement du territoire", u\'qualite\': u\'Membre\'}]'
+p402
+sS'pickle'
+p403
+S"<module 'pickle' from '/usr/lib/python2.7/pickle.pyc'>"
+p404
+sS'BUTTON'
+p405
+S"<class 'gluon.html.BUTTON'>"
+p406
+sVdepute_mandat_fin_cause
+p407
+S'None'
+p408
+sVdepute_nom
+p409
+S"u'M. Gabriel Serville'"
+p410
+sS'IS_DATE'
+p411
+S"<class 'gluon.validators.IS_DATE'>"
+p412
+sS'IS_EMAIL'
+p413
+S"<class 'gluon.validators.IS_EMAIL'>"
+p414
+sS'IS_NOT_EMPTY'
+p415
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p416
+sS'xrange'
+p417
+S"<type 'xrange'>"
+p418
+sVgroupe_libelle
+p419
+S"u'Gauche d\\xe9mocrate et r\\xe9publicaine'"
+p420
+sS'BEAUTIFY'
+p421
+S"<class 'gluon.html.BEAUTIFY'>"
+p422
+sVdepute_dateelec
+p423
+S"u'18/06/2017'"
+p424
+sS'TBODY'
+p425
+S"<class 'gluon.html.TBODY'>"
+p426
+sS'appcache'
+p427
+S'<__restricted__.AppCache instance>'
+p428
+sS'Field'
+p429
+S"<class 'pydal.objects.Field'>"
+p430
+sS'tinyurl'
+p431
+S'<__restricted__.TinyURL instance>'
+p432
+sVmots
+p433
+S'None'
+p434
+sS'IS_LIST_OF_EMAILS'
+p435
+S"<class 'gluon.validators.IS_LIST_OF_EMAILS'>"
+p436
+sg58
+S"<Storage {'_vars': None, 'function': 'index', 'c...ata/web2py/applications/observatoireassemblee/'}>"
+p437
+sS'DIV'
+p438
+S"<class 'gluon.html.DIV'>"
+p439
+sS'LEGEND'
+p440
+S"<class 'gluon.html.LEGEND'>"
+p441
+sS'sortfcts'
+p442
+S"{'alpha': {'fct': <function <lambda>>, 'libelle': 'Ordre Alphab\\xc3\\xa9tique'}, 'alphanom': {'fct': <function <lambda>>, 'libelle': 'Ordre Alphab\\xc3\\xa9tique (nom prenom)'}, 'datescrutin': {'fct': <function <lambda>>, 'libelle': 'par N\\xc2\\xb0 de scrutin'}, 'emcompat': {'fct': <function <lambda>>, 'libelle': 'EM-Compatibilit\\xc3\\xa9'}, 'ficompat': {'fct': <function <lambda>>, 'libelle': 'FI-Compatibilit\\xc3\\xa9'}, 'participation': {'fct': <function <lambda>>, 'libelle': 'Participation'}, 'pctabs': {'fct': <function <lambda>>, 'libelle': '% Votes abstention'}, 'pctcontre': {'fct': <function <lambda>>, 'libelle': '% Votes contre'}, 'pctpour': {'fct': <function <lambda>>, 'libelle': '% Votes pour'}}"
+p443
+sS'svgtop'
+p444
+S'<function svgtop>'
+p445
+sS'to_native'
+p446
+S'<function to_native>'
+p447
+sS'COLGROUP'
+p448
+S"<class 'gluon.html.COLGROUP'>"
+p449
+sS'DAL'
+p450
+S"<class 'pydal.base.DAL'>"
+p451
+sS'ASSIGNJS'
+p452
+S'<function ASSIGNJS>'
+p453
+sS'TR'
+p454
+S"<class 'gluon.html.TR'>"
+p455
+sS'LI'
+p456
+S"<class 'gluon.html.LI'>"
+p457
+sVgroupe_uid
+p458
+S"u'PO730940'"
+p459
+sS'TH'
+p460
+S"<class 'gluon.html.TH'>"
+p461
+sS'TD'
+p462
+S"<class 'gluon.html.TD'>"
+p463
+sS'PluginManager'
+p464
+S"<class 'gluon.tools.PluginManager'>"
+p465
+sS'IS_URL'
+p466
+S"<class 'gluon.validators.IS_URL'>"
+p467
+sVdepute_place
+p468
+S"u'597'"
+p469
+sS'A'
+S"<class 'gluon.html.A'>"
+p470
+sS'HEAD'
+p471
+S"<class 'gluon.html.HEAD'>"
+p472
+sS'IS_DATETIME_IN_RANGE'
+p473
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p474
+sS'FORM'
+p475
+S"<class 'gluon.html.FORM'>"
+p476
+sS'I'
+S"<class 'gluon.html.I'>"
+p477
+sS'IS_NOT_IN_DB'
+p478
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p479
+sVdepute_mandat_fin
+p480
+S'None'
+p481
+sVdepute_positions
+p482
+S"{u'absent': 115, u'abstention': 2, u'contre': 2, u'dissidence': 1, u'exprimes': 4, u'total': 119}"
+p483
+sVdepute_deputywatch
+p484
+S"{u'flag': True, u'nom': u'M. Gabriel Serville', u'url': u'https://www.deputywatch.org/afficherDepute/?nom=Serville&prenom=Gabriel&consulter=1'}"
+p485
+sg103
+S"<Storage {'body': <cStringIO.StringO object at 0...at 0x7f56f7bf8b90>, 'view': 'depute/index.html'}>"
+p486
+sVdepute_profession
+p487
+S"u'Professeur de Math\\xe9matiques - Proviseur'"
+p488
+sS'ANY_OF'
+p489
+S"<class 'gluon.validators.ANY_OF'>"
+p490
+sS'IS_NULL_OR'
+p491
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p492
+sS'IS_FLOAT_IN_RANGE'
+p493
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p494
+sS'IS_EXPR'
+p495
+S"<class 'gluon.validators.IS_EXPR'>"
+p496
+sS'T'
+S'<gluon.languages.translator object>'
+p497
+sS'IS_IN_SET'
+p498
+S"<class 'gluon.validators.IS_IN_SET'>"
+p499
+sS'contact'
+p500
+S"{u'lien': u'https://twitter.com/@GabrielServille/', u'type': u'twitter'}"
+p501
+sS'IS_UPLOAD_FILENAME'
+p502
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p503
+sV_id
+p504
+S"ObjectId('59af32496d8669a20452a33a')"
+p505
+sVdepute_csp
+p506
+S"u'Cadres et professions intellectuelles sup\\xe9rieures'"
+p507
+sS'TT'
+p508
+S"<class 'gluon.html.TT'>"
+p509
+sS'IS_DECIMAL_IN_RANGE'
+p510
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p511
+sssS'traceback'
+p512
+S'Traceback (most recent call last):\n  File "/home/www-data/web2py/gluon/restricted.py", line 219, in restricted\n    exec(ccode, environment)\n  File "<string>", line 16, in <module>\nTypeError: string indices must be integers\n'
+p513
+s.

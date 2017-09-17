@@ -127,7 +127,6 @@ class AssembleeSpider(scrapy.Spider):
         naissance = nais.strip().replace('/t','').replace('/n','')
         
         mandats = {}
-        bureau = None
         # Fin mandat ?
         finmand = response.xpath('//dt[text()[contains(.,"fin de mandat")]]/following-sibling::dd/ul/li/text()')
         if finmand:

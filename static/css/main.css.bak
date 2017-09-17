@@ -1,0 +1,697 @@
+/*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
+/* Document
+   ========================================================================== */
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
+ */
+html {
+  line-height: 1.15;
+  /* 1 */
+  -ms-text-size-adjust: 100%;
+  /* 2 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */ }
+
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+body {
+  margin: 0; }
+
+/**
+ * Add the correct display in IE 9-.
+ */
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block; }
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0; }
+
+/* Grouping content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+figcaption,
+figure,
+main {
+  /* 1 */
+  display: block; }
+
+/**
+ * Add the correct margin in IE 8.
+ */
+figure {
+  margin: 1em 40px; }
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */ }
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */ }
+
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+a {
+  background-color: transparent;
+  /* 1 */
+  -webkit-text-decoration-skip: objects;
+  /* 2 */ }
+
+/**
+ * 1. Remove the bottom border in Chrome 57- and Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  text-decoration: underline dotted;
+  /* 2 */ }
+
+/**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+b,
+strong {
+  font-weight: inherit; }
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+  font-weight: bolder; }
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */ }
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+dfn {
+  font-style: italic; }
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+mark {
+  background-color: #ff0;
+  color: #000; }
+
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%; }
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline; }
+
+sub {
+  bottom: -0.25em; }
+
+sup {
+  top: -0.5em; }
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+audio,
+video {
+  display: inline-block; }
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0; }
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+img {
+  border-style: none; }
+
+/**
+ * Hide the overflow in IE.
+ */
+svg:not(:root) {
+  overflow: hidden; }
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: sans-serif;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: 1.15;
+  /* 1 */
+  margin: 0;
+  /* 2 */ }
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+  /* 1 */
+  overflow: visible; }
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+  /* 1 */
+  text-transform: none; }
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  /* 2 */ }
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0; }
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText; }
+
+/**
+ * Correct the padding in Firefox.
+ */
+fieldset {
+  padding: 0.35em 0.75em 0.625em; }
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */ }
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  display: inline-block;
+  /* 1 */
+  vertical-align: baseline;
+  /* 2 */ }
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+textarea {
+  overflow: auto; }
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */ }
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto; }
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */ }
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none; }
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */ }
+
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+details,
+menu {
+  display: block; }
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item; }
+
+/* Scripting
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+canvas {
+  display: inline-block; }
+
+/**
+ * Add the correct display in IE.
+ */
+template {
+  display: none; }
+
+/* Hidden
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10-.
+ */
+[hidden] {
+  display: none; }
+
+#depute-template {
+  padding-top: 60px; }
+  @media (max-width: 767px) {
+    #depute-template {
+      padding-top: 40px; } }
+  #depute-template .tab-container header i {
+    margin-right: 0.4em; }
+  #depute-template .tab-content {
+    display: none;
+    padding: 0 5px 15px; }
+    @media (max-width: 767px) {
+      #depute-template .tab-content {
+        font-size: 14px; } }
+    #depute-template .tab-content h2 {
+      border-bottom: 1px dashed #82cde2;
+      margin: 50px 15px 25px;
+      padding: 8px 15px; }
+      @media (max-width: 767px) {
+        #depute-template .tab-content h2 {
+          font-size: 20px;
+          margin-top: 30px; } }
+    #depute-template .tab-content li {
+      line-height: 1.6em; }
+    #depute-template .tab-content a {
+      color: #213558;
+      text-decoration: underline; }
+      #depute-template .tab-content a:hover {
+        color: #82cde2; }
+
+.depute-header {
+  display: flex;
+  margin-bottom: 60px; }
+  @media (max-width: 767px) {
+    .depute-header {
+      display: block;
+      margin-bottom: 40px; } }
+
+.depute-photo {
+  margin-top: 32px; }
+  @media (max-width: 767px) {
+    .depute-photo {
+      margin: 0 auto;
+      width: 40%; }
+      .depute-photo img {
+        width: 100%; } }
+
+.depute-identite {
+  margin: 0 15px; }
+  .depute-identite header {
+    color: white;
+    margin: 0 -15px; }
+    @media (max-width: 767px) {
+      .depute-identite header {
+        text-align: center; } }
+  .depute-identite h2 span {
+    background: #ff0052;
+    display: inline-block;
+    font-size: 16px;
+    padding: 4px 6px; }
+  .depute-identite h1 {
+    background: #213558;
+    display: inline-block;
+    font-size: 24px;
+    padding: 3px 5px; }
+
+.depute-contacts {
+  margin: 10px -5px 20px; }
+  @media (max-width: 767px) {
+    .depute-contacts {
+      margin: 0 0 15px;
+      text-align: center; } }
+  .depute-contacts i {
+    background: #82cde2;
+    color: #fffefa;
+    padding: 8px;
+    transition: .2s; }
+    .depute-contacts i:hover {
+      background: #ff0052; }
+  .depute-contacts .fa-facebook-square {
+    background: #4867AA; }
+  .depute-contacts .fa-twitter {
+    background: #1DA1F2; }
+
+.depute-groupe {
+  font-size: 18px;
+  margin-bottom: 15px; }
+  @media (max-width: 767px) {
+    .depute-groupe {
+      font-size: 16px;
+      margin-bottom: 10px; } }
+  .depute-groupe a {
+    color: #213558; }
+
+.depute-infos {
+  font-size: 15px;
+  line-height: 1.5em; }
+  @media (max-width: 767px) {
+    .depute-infos {
+      font-size: 13px; } }
+
+.depute-hemicycle {
+  margin: 50px auto 30px;
+  width: 40%; }
+  @media (max-width: 767px) {
+    .depute-hemicycle {
+      display: none; } }
+
+.depute-watch .flex {
+  align-items: flex-start; }
+  @media (max-width: 767px) {
+    .depute-watch .flex {
+      padding-left: 10px; } }
+
+.depute-watch img {
+  margin-right: 15px; }
+  @media (max-width: 767px) {
+    .depute-watch img {
+      display: none; } }
+
+.depute-interventions-recap {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 60px 0 0;
+  text-align: center; }
+  .depute-interventions-recap span {
+    color: #ff0052; }
+
+.depute-interventions-cloud {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 50px; }
+  @media (max-width: 1023px) {
+    .depute-interventions-cloud {
+      display: block; } }
+  .depute-interventions-cloud > div {
+    width: 48%; }
+    @media (max-width: 1023px) {
+      .depute-interventions-cloud > div {
+        width: 100%; } }
+  .depute-interventions-cloud .cloud {
+    height: 250px;
+    margin: auto;
+    width: 90%; }
+
+.depute-interventions-search {
+  background: #97d5e7;
+  margin: 0 15px 30px;
+  padding: 6px 12px; }
+  .depute-interventions-search i {
+    color: white;
+    width: 20px; }
+  .depute-interventions-search input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 254, 250, 0.5);
+    font-size: 15px;
+    padding-bottom: 4px;
+    width: calc(100% - 25px); }
+
+/* GENERIC */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; }
+
+:focus {
+  outline: 0; }
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: rgba(33, 53, 88, 0.75); }
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: rgba(33, 53, 88, 0.75); }
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: rgba(33, 53, 88, 0.75); }
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: rgba(33, 53, 88, 0.75); }
+
+h1, h2, h3, h4,
+p {
+  margin: 0; }
+
+a {
+  text-decoration: none;
+  transition: .2s; }
+  a:hover {
+    color: #82cde2;
+    text-decoration: underline; }
+
+input {
+  color: #213558;
+  font-family: Montserrat, sans-serif; }
+
+.container {
+  margin: auto;
+  width: 980px; }
+  @media (max-width: 1023px) {
+    .container {
+      width: 700px; } }
+  @media (max-width: 767px) {
+    .container {
+      width: calc(100% - 20px); } }
+
+.flex {
+  display: flex; }
+
+.tab-container {
+  background: #fffefa;
+  border: 1px solid #ffeda4;
+  padding: 20px 15px; }
+  @media (max-width: 767px) {
+    .tab-container {
+      padding: 10px 5px; } }
+  .tab-container header {
+    display: flex;
+    margin: 0 -30px; }
+    @media (max-width: 767px) {
+      .tab-container header {
+        margin: 0 -10px; } }
+    .tab-container header input {
+      display: none; }
+    .tab-container header label {
+      background: #213558;
+      border: 1px solid #fffefa;
+      color: white;
+      cursor: pointer;
+      display: block;
+      font-weight: 600;
+      padding: 12px 0;
+      text-align: center;
+      transition: .2s;
+      width: calc(100% / 3); }
+      @media (max-width: 767px) {
+        .tab-container header label {
+          padding: 8px 0; }
+          .tab-container header label span {
+            display: none; } }
+    .tab-container header label:hover,
+    .tab-container header input:checked + label {
+      background: #ff0052; }
+    .tab-container header i {
+      margin-right: 0.4em; }
+
+/* MAIN TEMPLATE */
+body {
+  background: #fffcf0;
+  color: #213558;
+  font-family: Montserrat, sans-serif;
+  line-height: 1.5em;
+  padding-bottom: 120px; }
+
+#main-nav {
+  background: #213558;
+  height: 60px; }
+  #main-nav img {
+    height: 40px;
+    margin: 10px 15px; }
+  #main-nav ul {
+    display: none;
+    padding: 0 20px; }
+    @media (max-width: 767px) {
+      #main-nav ul {
+        display: none; } }
+  #main-nav li {
+    display: inline-block;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 2px 20px 0 0;
+    text-transform: uppercase; }
+
+#header {
+  background: #82cde2;
+  font-size: 30px;
+  font-weight: 700;
+  height: 300px;
+  line-height: 300px;
+  text-align: center; }
+  @media (max-width: 767px) {
+    #header {
+      font-size: 13px;
+      height: 200px;
+      line-height: 200px; } }
+
+#sub-nav {
+  background: #fffefa;
+  border-bottom: 1px solid #ffeda4;
+  height: 40px; }
+  #sub-nav ul {
+    padding: 0;
+    text-align: center; }
+  #sub-nav li {
+    display: inline-block;
+    font-size: 14px;
+    margin-right: 20px; }
+    @media (max-width: 767px) {
+      #sub-nav li {
+        font-size: 13px; } }

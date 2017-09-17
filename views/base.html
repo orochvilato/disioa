@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>ObsAss</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ =URL('static','css/main.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav id="main-nav" class="flex">
+        <img src="{{ =URL('static','assets/logo.png') }}" alt="Observatoire Insoumis">
+        <ul>
+            <li>Programme Présidentiel</li>
+            <li>Gouvernement</li>
+            <li>Assemblée Nationale</li>
+        </ul>
+    </nav>
+    <header id="header">
+        Header super chouette sisi !
+    </header>
+    <nav id="sub-nav">
+        <ul>
+            <li><i class="fa fa-users" aria-hidden="true"></i> Groupes</li>
+            <li><i class="fa fa-user-circle-o" aria-hidden="true"></i> Députés</li>
+            <li><i class="fa fa-thumbs-up" aria-hidden="true"></i> Suivi FI</li>
+        </ul>
+    </nav>
+    {{ block content }}
+    {{ end }}
+    {{ block script }}
+    {{ end }}
+</body>
+</html>

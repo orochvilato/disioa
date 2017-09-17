@@ -394,7 +394,7 @@ def updateScrutins():
 def updateDeputesRanks():
     ops = []
     ranks = {}
-    
+    nb = mdb.deputes.find({'depute_actif':True}).count()
     for dep in mdb.deputes.find({'depute_actif':True}):
         if 'positions' in dep['stats'].keys():
             for stat,val in dep['stats']['positions'].iteritems():
@@ -408,7 +408,7 @@ def updateDeputesRanks():
         
     for dep in mdb.deputes.find({'depute_actif':True}):
         dep_ranks = dict((stat,ranks[stat].get(dep['depute_uid'],None)) for stat in ranks.keys())
-        
+        dep_ranks['nb'] = nb
         ops.append(UpdateOne({'depute_uid':dep['depute_uid']},{'$set':{'stats.ranks':dep_ranks}}))
     if ops:
         mdb.deputes.bulk_write(ops)        
