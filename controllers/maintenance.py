@@ -197,7 +197,7 @@ def updateSessions():
 
     def countWords(txt):
         words = {'noms':{},'verbes':{}}
-        txt = txt.replace('\n',' ').replace('.',' ').replace(':',' ').replace(',',' ').replace(';',' ').replace('-',' ').replace('  ',' ').replace(u'\xa0','').replace(u'\u2019',' ').lower().split(' ')
+        txt = txt.replace('\n',' ').replace('!','').replace('?','').replace('.',' ').replace(':',' ').replace(',',' ').replace(';',' ').replace('-',' ').replace('  ',' ').replace(u'\xa0','').replace(u'\u2019',' ').lower().split(' ')
         for lex in _lexiques.keys():
             _words = [ _lexiques[lex][x] for x in txt if x in _lex[lex] ]
             for w in _words:
@@ -267,6 +267,8 @@ def updateSessions():
                                    {'$set':{'depute_mots':deputes[d['depute_id']]['mots'],
                                             'depute_nuages':genNuages(deputes[d['depute_id']]['mots']),
                                             'stats':deputes[d['depute_id']]['stats']}})
+
+    updateStats()
 
 def updateScrutins():
     _scrutins = {}
@@ -387,10 +389,8 @@ def updateScrutins():
         mdb.scrutins.insert_many(scrutins)
 
     updateScrutinsStats()
-    updateDeputesStats()
-    updateGroupesStats()
-    updateDeputesRanks()
-
+    updateStats()
+    
 def updateDeputesRanks():
     ops = []
     ranks = {}
@@ -414,6 +414,12 @@ def updateDeputesRanks():
         mdb.deputes.bulk_write(ops)        
     return json.dumps(ranks)
 
+
+def updateStats():
+    updateDeputesStats()
+    updateGroupesStats()
+    updateDeputesRanks()
+    
 def updateDeputesStats():
     groupe_depute = dict((d['depute_uid'],d['groupe_abrev']) for d in mdb.deputes.find())
     pgroup = dict((g,{'$sum':'$vote_compat.'+g}) for g in mdb.groupes.distinct('groupe_abrev'))

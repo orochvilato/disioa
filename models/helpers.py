@@ -2,26 +2,31 @@
 
 def svggauge(typeg,pct,unit='%'):
     if typeg=='compfi':
-        color = '#0cc3d6'
+        circlecolor = "#82cde2"
+        symbolcolor = "#213558"
         symbol = 'compfi'
         transp = '0.24'
     elif typeg=='compem':
-        color = '#ffc000'
+        circlecolor = "#82cde2"
+        symbolcolor = "#213558"
         symbol ='compem'
         transp ='0.33'
     elif typeg=='diss':
-        color = '#d6210c'
+        circlecolor = "#82cde2"
+        symbolcolor = "#213558"
         symbol ='diss'
         transp ='0.23'
     elif typeg=="vote":
-        color = "#999999"
+        circlecolor = "#82cde2"
+        symbolcolor = "#213558"
         symbol ='vote'
         transp ='0.33'
     else:
-        color = "#999999"
+        circlecolor = "#82cde2"
+        symbolcolor = "#213558"
         symbol = typeg
         transp ='0.33'
-    return XML(response.render('svg/gauge.svg',color=color,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=color)),pct=pct,transp=transp,unit=unit))
+    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=int(pct),transp=transp,unit=unit))
 
 def svgtop(typet):
     if typet=='top10':

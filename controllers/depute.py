@@ -4,4 +4,5 @@ deputesFI = cache.ram('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}
 def index():
     shortid = request.args(0)
     depute = mdb.deputes.find_one({'depute_shortid':shortid}) or mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
-    return dict(**depute)
+    itvs = sorted(list(mdb.interventions.find({'depute_uid':depute['depute_uid']})),key=lambda x:(x['itv_date'],-x['itv_n']),reverse=True)
+    return dict(itvs=itvs,**depute)
