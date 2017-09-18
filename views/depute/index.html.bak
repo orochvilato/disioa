@@ -1,4 +1,12 @@
 {{ extend "base.html" }}
+{{ block style }}
+<style>
+    high {
+        background-color: lightskyblue;
+        color: white;
+    }
+</style>
+{{ end }}
 {{ block content }}
     <div id="depute-template" class="container">
         <div class="depute-header">
@@ -130,15 +138,8 @@
                         <label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>
                         <input class="search" placeholder="Rechercher une intervention">
                     </div>
-                    <ul class="fa-ul">
-                        {{ for iv in itvs: }}
-                        <li>
-                            <i class="fa fa-list fa-comment"></i>
-                            <a href="{{ =iv['itv_url']}}" target="_blank">
-                                <h3>{{ =' / '.join(iv['itv_ctx']) }}</h3>
-                            </a>
-                            <blockquote>{{ =XML(iv['itv_contenu']) }}</blockquote>
-                        </li>{{ pass }}
+                    <ul id="itv-items" class="fa-ul">
+
                     </ul>
                 </div>
 			</section>
@@ -173,28 +174,8 @@
                         <label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>
                         <input class="search" placeholder="Rechercher un vote">
                     </div>
-                    <ul>
-                        {{ genres = {'loi':'e','motion':'e'} }}
-                        {{ icons = {'pour':'fa-thumbs-up','contre':'fa-thumbs-down','abstention':'fa-microphone-slash','absent':'fa-question'} }}
-                        {{ icons_s = {'amendement':'fa-pencil-square','loi':'fa-book','article':'fa-file','motion':'fa-undo','declaration':'fa-microphone','autre':''} }}
-                        {{ for v in votes: }}
-                        <li>
-                            <div class="ico {{ =v['vote_position']}}">
-                                <i class="fa {{ =icons_s[v['scrutin_typedetail']] }}"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>{{ =v['scrutin_dossierLibelle'] }} - {{ =v['scrutin_typedetail'][0].upper()+v['scrutin_typedetail'][1:] }}{{ if v['scrutin_groupe']: }} proposé{{ =genres.get(v['scrutin_typedetail'],'')}} par le groupe {{ =v['scrutin_groupe'] }}{{ pass }}</span></h3>
-                                        <a href="{{ =URL('scrutin','index',args=[v['scrutin_id']])}}">Scrutin n°{{ ="%d du %s (%s)" % (v['scrutin_num'],v['scrutin_date'],v['scrutin_sort']) }}</a>
-                                    </div>
-                                    <div class="vote {{ =v['vote_position'] }}"><i class="fa {{ =icons[v['vote_position']] }}"></i> {{ =v['vote_position'][0].upper()+v['vote_position'][1:] }}</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> {{ =v['scrutin_desc'] }}</p>
-                            </div>
-                        </li>
-                        {{ pass }}
-                      
+                    <ul id="vote-items">
+
                     </ul>
                 </div>
             </section>
@@ -205,8 +186,59 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="{{ =URL('static','js/wordcloud2.js') }}"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+  <script src="{{=URL('static','js/depute.js')}}"></script>
   <script>
+    // Votes
+    var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item');
+    
+    function searchvote() {
+        vote_IS.element.innerHTML = '';
+         vote_IS.destroy();
+         search = $('.depute-votes-search input.search').val();
+         vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.vote-item');
+    }
+    
+    $('.depute-votes-search').keypress(function(e) {
+    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+        e.preventDefault();
+        searchvote();
+    }
+    });
+      
+    // Interventions
+    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item');
+    
+    function searchitv() {
+        itv_IS.element.innerHTML = '';
+         itv_IS.destroy();
+         search = $('.depute-interventions-search input.search').val();
+         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item');
+    }
+    
+    $('.depute-interventions-search').keypress(function(e) {
+    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+        e.preventDefault();
+        searchitv();
+    }
+    });
+    
+    // Init Calendrier
+    var csv = JSON.parse('{{ =XML(dates) }}');
+
+
+    // Init Nuages
+    {{ import json }}
+    var wordlist = {};
+    {{ if depute_nuages: }}
+    {{ for lex in depute_nuages.keys(): }}
+       wordlist['{{=lex}}'] = JSON.parse('{{ =XML(json.dumps(depute_nuages[lex])) }}');
+    {{ pass }}
+    {{ pass }}
+
+    var svg = document.getElementById('hemicycle');
     $(document).ready(function() {
+        
         var visible = $('.tab-container input:checked').val();
         $('#' + visible).addClass('visible');
 
@@ -214,148 +246,16 @@
             $('.tab-content').removeClass('visible');
             $('#' + e.target.value).addClass('visible');
         });
-        /* position hemicycle */
-        var svg = document.getElementById('hemicycle');
-        svg.addEventListener('load', function () {
-          //var svg = document.getElementById('hemicycle');
-          var svgDoc = svg.contentDocument;
-          $.each(svgDoc.getElementsByTagName('a'), function() {
-              $(this).attr('href',"depute/index/"+$(this).attr('href'));
-          });
-          var styleElement = svgDoc.createElementNS("http://www.w3.org/2000/svg", "style");
-          styleElement.textContent = "#p{{ =depute_place }} { fill:  #ff0052; stroke-width:5px; stroke: black;}"; // add whatever you need here
-          svgDoc.getElementById('defs').appendChild(styleElement);
-
-        });
-        // Nuages
-        {{ import json }}
-        var wordlist = {};
-        {{ if depute_nuages: }}
-        {{ for lex in depute_nuages.keys(): }}
-           wordlist['{{=lex}}'] = JSON.parse('{{ =XML(json.dumps(depute_nuages[lex])) }}');
-        {{ pass }}
-        {{ pass }}
         
+        /* position hemicycle */
+        
+        svg.addEventListener('load', function () {
+          initHemicycle("{{ =depute_place }}");
+        });
 
-        function showNuage(lex) {
-            if (lex=='verbatim') {
-                return
-            }
-            var div = document.getElementById("sourrounding_div_"+lex);
-            var canvas = document.getElementById("wordcanvas_"+lex);
-
-            canvas.height = div.offsetHeight;
-            canvas.width  = div.offsetWidth;
-
-            WordCloud(document.getElementById('wordcanvas_'+lex), {
-                gridSize: Math.round(16 * document.getElementById('wordcanvas_'+lex).offsetWidth / 1024),
-                weightFactor: function (size) {
-                    return 0.3*size;
-                },
-                list: wordlist[lex],
-                color: function(word, weight) {
-                    if (weight < 50) {
-                        return '#82cde2';
-                    } else if (weight < 130) {
-                        return '#213558';
-                    }
-                    return '#ff0052';
-                },
-                backgroundColor: 'transparent'
-            });
-        }
-
-        function drawNuages() {
-            showNuage('noms');
-            showNuage('verbes');
-        }
-
-        // Calendrier
-        function genCalendar() {
-            var width = document.getElementById('calendar').offsetWidth+20,
-                yearHeight = width / 7,
-                height = yearHeight,
-                cellSize = yearHeight / 8;
-
-            var percent = d3.format(".1%"),
-                format = d3.timeFormat("%Y-%m-%d");
-
-            var color = d3.scaleQuantize()
-                .domain([.0, 1.0])
-                .range(d3.range(5).map(function(d) { return "q" + d + "-5"; }));
-
-            var svgcal = d3.select("#calendar").selectAll("svg")
-                .data(d3.range(2017, 2018))
-              .enter().append("svg")
-                .attr("width", width)
-                .attr("height", height+20)
-                .attr("class", "RdYlGn")
-              .append("g")
-                .attr("transform", "translate(" + ((width - cellSize * 53) / 2) + "," + (20+height - cellSize * 7 - 1) + ")");
-
-            svgcal.append("text")
-                .attr("transform", "translate(-6," + cellSize * 3.5 + ")rotate(-90)")
-                .style("text-anchor", "middle")
-                .text(function(d) { return d; });
-
-            var rect = svgcal.selectAll(".day")
-                .data(function(d) { return d3.timeDays(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-              .enter().append("rect")
-                .attr("class", "day")
-                .attr("width", cellSize)
-                .attr("height", cellSize)
-                .attr("x", function(d) { return d3.timeMonday.count(d3.timeYear(d), d) * cellSize; })
-                .attr("y", function(d) { return ((d.getDay()+6)%7) * cellSize; })
-                .datum(format);
-
-            rect.append("title")
-                .text(function(d) { return d; });
-
-            svgcal.selectAll(".month")
-                .data(function(d) { return d3.timeMonths(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-              .enter().append("text").text(monthLabel).style("font-size:10px;", "middle").attr("transform",monthLabelTransform);
-            function monthLabel(t0) {
-                return Array('JAN','FEV','MAR','AVR','MAI','JUN','JUI','AOU','SEP','OCT','NOV','DEC')[t0.getMonth()];
-            }
-            function monthLabelTransform(t0) {
-              var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-                  d0 = ((t0.getDay()+6)%7), w0 = d3.timeMonday.count(d3.timeYear(t0), t0)
-                  d1 = ((t1.getDay()+6)%7), w1 = d3.timeMonday.count(d3.timeYear(t1), t1);
-              return "translate("+(2+w0)*cellSize+",-5)";
-            }
-
-            svgcal.selectAll(".month")
-                .data(function(d) { return d3.timeMonths(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-              .enter().append("path")
-                .attr("class", "month")
-                .attr("d", monthPath);
-
-
-            var csv = JSON.parse('[{"date": "2017-07-04", "pct": 1.0}, {"date": "2017-07-06", "pct": 0.0}, {"date": "2017-07-10", "pct": 1.0}, {"date": "2017-07-11", "pct": 0.9411764705882353}, {"date": "2017-07-12", "pct": 0.6666666666666666}, {"date": "2017-07-13", "pct": 0.8333333333333334}, {"date": "2017-07-18", "pct": 0.5}, {"date": "2017-07-19", "pct": 0.0}, {"date": "2017-07-24", "pct": 1.0}, {"date": "2017-07-25", "pct": 0.23076923076923078}, {"date": "2017-07-26", "pct": 0.0}, {"date": "2017-07-27", "pct": 0.375}, {"date": "2017-07-28", "pct": 0.6}, {"date": "2017-08-01", "pct": 1.0}, {"date": "2017-08-03", "pct": 0.5454545454545454}, {"date": "2017-08-09", "pct": 1.0}]');
-            var data = d3.nest()
-                .key(function(d) { return d.date; })
-                .rollup(function(d) { return d[0].pct; })
-                .map(csv);
-
-              rect.filter(function(d) { return data.has(d); })
-                  .attr("class", function(d) { return "day " + color(data.get(d)); })
-                .select("title")
-                  .text(function(d) { return d + ": " + percent(data.get(d)); });
-
-            function monthPath(t0) {
-              var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-                  d0 = ((t0.getDay()+6)%7), w0 = d3.timeMonday.count(d3.timeYear(t0), t0)
-                  d1 = ((t1.getDay()+6)%7), w1 = d3.timeMonday.count(d3.timeYear(t1), t1);
-              return "M" + (w0 + 1) * cellSize + "," + d0 * cellSize
-                  + "H" + w0 * cellSize + "V" + 7 * cellSize
-                  + "H" + w1 * cellSize + "V" + (d1 + 1) * cellSize
-                  + "H" + (w1 + 1) * cellSize + "V" + 0
-                  + "H" + (w0 + 1) * cellSize + "Z";
-            }
-        }
-
-        drawNuages();
         genCalendar();
+        drawNuages();  
+
         var resizeDebounce;
         $(window).resize(function() {
             clearTimeout(resizeDebounce);
@@ -368,5 +268,5 @@
             }, 100);
         });
     });
-    </script>
+</script>
 {{ end }}

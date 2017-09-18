@@ -43,7 +43,7 @@
            
            var s = circo.getBBox();
            var zoomCirco = "" + (s.x-s.width/6) + " " + (s.y-s.height/6) + " " + (s.width+s.width/3) + " " + (s.height+s.height/3);
-           tl = new TimelineMax({oncomplete:function() { if (circocircle) { circocircle.style.fillOpacity=0;} }});
+           tl = new TimelineMax({onComplete:function() { if (circocircle) { circocircle.style.fillOpacity=0;} }});
            tl.add("zIn");
            var timing = 0;
             if (circocircle) {
@@ -94,7 +94,7 @@
            #svgcirco path.circo { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;fill:#e9debb; stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }} }
            #svgcirco path.autres { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }}  }
            #svgcirco path.outville { fill:white; stroke:#12678e; }
-           #svgcirco path.inville { fill:#afdff5;}
+           #svgcirco path.inville { fill:white; stroke:#12678e;}
            
            </style>
       </defs>

@@ -54,7 +54,7 @@ def ajax():
     groupe = request.vars.get('gp','ALL')
     tri = request.vars.get('tr','depute_nom_tri')
     direction = int(request.vars.get('di',1))
-    text = request.vars.get('txt',None)
+    text = request.vars.get('txt','').decode('utf8')
     region = request.vars.get('rg',None)
     top = request.vars.get('top',None)
 

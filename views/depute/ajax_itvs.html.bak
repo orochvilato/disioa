@@ -1,0 +1,10 @@
+{{ for iv in itvs: }}
+    {{ =iv['itv_contenu'] }}
+    <li class="itv-item">
+        <i class="fa fa-list fa-comment"></i>
+        <a href="{{ =iv['itv_url']}}" target="_blank">
+            <h3>{{ =' / '.join(iv['itv_ctx']) }}</h3>
+        </a>
+        <blockquote>{{ =XML(iv['itv_contenu']) }}</blockquote>
+    </li>
+{{ pass }}

@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav id="main-nav" class="flex">
-        <img src="assets/logo.png" alt="Observatoire Insoumis">
+        <img src="{{ =URL('static','assets/logo.png') }}" alt="Observatoire Insoumis">
         <ul>
             <li>Programme Présidentiel</li>
             <li>Gouvernement</li>

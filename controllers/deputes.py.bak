@@ -2,7 +2,7 @@
 # essayez quelque chose comme
 import re
 
-def index(): return dict(message="hello from pages.py")
+
 mdb = client.obsass
 
 # cache
@@ -13,7 +13,7 @@ cache_regions = cache.ram('regions',lambda: sorted(mdb.deputes.distinct('depute_
 # Page députés
 # ---------------------------------
 
-def deputes():
+def index():
     groupe = request.vars.get('gp','ALL')
     tri = request.vars.get('tr','depute_nom_tri')
     direction = int(request.vars.get('di',1))
@@ -46,7 +46,7 @@ def deputes():
             ]
     return locals()
 
-def deputes_ajax():
+def ajax():
     # ajouter des index (aux differentes collections)
     nb = 25
     minpart_top = 30

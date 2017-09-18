@@ -93,8 +93,8 @@
            #svgcirco path {fill-opacity:1;fill-rule:evenodd;stroke-opacity:0;fill:#d9c89e}
            #svgcirco path.circo { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;fill:#e9debb; stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }} }
            #svgcirco path.autres { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }}  }
-           #svgcirco path.outville { fill:white; stroke:#12678e; }
-           #svgcirco path.inville { fill:#afdff5;}
+           #svgcirco path.outville { fill:white; stroke:#213558; }
+           #svgcirco path.inville { fill:white; stroke:#213558;}
            
            </style>
       </defs>
