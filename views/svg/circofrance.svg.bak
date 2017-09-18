@@ -8,7 +8,8 @@
      <script type="text/ecmascript"><![CDATA[
        var svgcircoDoc;
        var circo;
-       var zin = false;
+        var circocircle;
+    
        var tl;
        function svgcirco_init(evt) {
           svgcircoDoc = evt.target;
@@ -16,16 +17,17 @@
           circo=svgcircoDoc.getElementById("{{=circo['id']}}");
           box=circo.getBBox();
         if ((box.width<50) && (box.height<50)) {
-          var circocircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+          circocircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
           circocircle.setAttributeNS(null, 'id', 'circocircle');
-          circocircle.setAttributeNS(null, 'cx', box.x);
-          circocircle.setAttributeNS(null, 'cy', box.y);
+          circocircle.setAttributeNS(null, 'cx', box.x+box.width/2);
+          circocircle.setAttributeNS(null, 'cy', box.y+box.height/2);
           circocircle.setAttributeNS(null, 'r', 25);
           circocircle.setAttributeNS(null, 'style', 'fill: #ff0052;'  );
           svgcircoDoc.appendChild(circocircle);
         }
         circo.style.fill = "#ff0052";
-          svgcircoDoc.addEventListener("click", function() {  if (zin) { zoomOut();} else { zoomIn();}; zin = !zin; });
+           svgcircoDoc.addEventListener("mouseenter", zoomIn);
+          svgcircoDoc.addEventListener("mouseleave", zoomOut);
        }
        function zoomIn() {
            var dep = circo.getAttribute('dep');
@@ -41,30 +43,43 @@
            
            var s = circo.getBBox();
            var zoomCirco = "" + (s.x-s.width/6) + " " + (s.y-s.height/6) + " " + (s.width+s.width/3) + " " + (s.height+s.height/3);
-           tl = new TimelineMax();
+           tl = new TimelineMax({oncomplete:function() { if (circocircle) { circocircle.style.fillOpacity=0;} }});
            tl.add("zIn");
            var timing = 0;
-           tl.fromTo(svgcircoDoc, 1, {
+            if (circocircle) {
+               tl.to(circocircle, 2, {
+                 attr: { r: (25/899)*s.width*1.2}
+               }, "zIn");
+           }
+           tl.fromTo(svgcircoDoc, 2, {
               attr: { viewBox: "0 0 1136.4137 1088.9165"}
            }, {
-              attr: { viewBox: zoomDep }
-           }, "zIn");
-           timing += 1.9
-           if (ville != undefined) {
-                tl.to(svgcircoDoc,1, {
-                  attr: { viewBox: zoomVille }
-                }, "zIn+="+timing);
-                timing += 1.9;
-           }
-           tl.to(svgcircoDoc,1,{
               attr: { viewBox: zoomCirco }
-           }, "zIn+="+timing);
+           }, "zIn");
+           //timing += 1.9
+           //if (ville != undefined) {
+           //     tl.to(svgcircoDoc,1, {
+           //       attr: { viewBox: zoomVille }
+           //     }, "zIn+="+timing);
+           //     timing += 1.9;
+           //}
+           //tl.to(svgcircoDoc,1,{
+           //   attr: { viewBox: zoomCirco }
+           //}, "zIn+="+timing);
         }
     function zoomOut() {
            tl.kill();
+           
            tl = new TimelineMax({ onComplete:function() { where = '';}});
            tl.add("zOut");
            var timing = 0;
+           if (circocircle) {
+               circocircle.style.fillOpacity=1;
+               tl.to(circocircle, 1.5, {
+                 attr: { r: 25}
+               }, "zOut");
+           }
+    
            tl.to(svgcircoDoc, 1.5, {
               attr: { viewBox: "0 0 1136.4137 1088.9165", overwrite:"all"}
            }, "zOut");
