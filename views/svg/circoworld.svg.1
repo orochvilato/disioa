@@ -9,7 +9,7 @@
        version="1.2"
 
        width="100%"
-
+      
        viewBox="0 0 898.96026 440.10331"
        id="svgcirco"
        inkscape:version="0.48.4 r9939"
@@ -18,7 +18,7 @@
      <script type="text/ecmascript"><![CDATA[
        var svgcircoDoc;
        var circo;
-
+      
        var tl;
        function svgcirco_init(evt) {
           svgcircoDoc = evt.target;
@@ -34,17 +34,17 @@
               circocircle.setAttributeNS(null, 'style', 'fill: #ff0052;'  );
               svgcircoDoc.appendChild(circocircle);
           }
-          svgcircoDoc.addEventListener("mouseenter", zoomIn);
+          svgcircoDoc.addEventListener("mouseover", zoomIn);
           svgcircoDoc.addEventListener("mouseleave", zoomOut);
           circo.style.fill = "#ff0052";
-
+          
        }
        function zoomIn() {
            var dep = circo.getAttribute('dep');
            if (dep!=undefined) {
                 circo = document.getElementById(dep);
            }
-
+           
            var s = circo.getBBox();
            var viewCirco = "" + (s.x-s.width/10) + " " + (s.y-s.height/10) + " " + (s.width+s.width/5) + " " + (s.height+s.height/5);
            tl = new TimelineMax();
@@ -73,7 +73,7 @@
               attr: { viewBox: "0 0 898.96026 440.10331"}, overwrite:"all"
            }, "zOut");
     }
-
+    
       ]]></script>
       <defs id="defs362">
         <style id="style1">

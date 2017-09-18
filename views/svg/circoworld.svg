@@ -9,7 +9,7 @@
        version="1.2"
 
        width="100%"
-       height="100%"
+
        viewBox="0 0 898.96026 440.10331"
        id="svgcirco"
        inkscape:version="0.48.4 r9939"
@@ -18,42 +18,68 @@
      <script type="text/ecmascript"><![CDATA[
        var svgcircoDoc;
        var circo;
+
+       var tl;
        function svgcirco_init(evt) {
           svgcircoDoc = evt.target;
           circo=svgcircoDoc.getElementById("{{=circo}}");
+          svgcircoDoc.style.height = svgcircoDoc.getBoundingClientRect().height;
           box=circo.getBBox();
           if ((box.width<50) && (box.height<50)) {
               var circocircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
               circocircle.setAttributeNS(null, 'id', 'circocircle');
-              circocircle.setAttributeNS(null, 'cx', box.x);
-              circocircle.setAttributeNS(null, 'cy', box.y);
-              circocircle.setAttributeNS(null, 'r', 20);
+              circocircle.setAttributeNS(null, 'cx', box.x+box.width/2);
+              circocircle.setAttributeNS(null, 'cy', box.y+box.height/2);
+              circocircle.setAttributeNS(null, 'r', 15);
               circocircle.setAttributeNS(null, 'style', 'fill: #ff0052;'  );
               svgcircoDoc.appendChild(circocircle);
           }
-          svgcircoDoc.addEventListener("click", function() { if (circocircle) {circocircle.style.fillOpacity=0;} zoomIn();});
+          svgcircoDoc.addEventListener("mouseenter", zoomIn);
+          svgcircoDoc.addEventListener("mouseleave", zoomOut);
           circo.style.fill = "#ff0052";
+
        }
        function zoomIn() {
            var dep = circo.getAttribute('dep');
            if (dep!=undefined) {
                 circo = document.getElementById(dep);
            }
-           
+
            var s = circo.getBBox();
            var viewCirco = "" + (s.x-s.width/10) + " " + (s.y-s.height/10) + " " + (s.width+s.width/5) + " " + (s.height+s.height/5);
-           tl = new TimelineMax({ onComplete:function() { where = '';}});
+           tl = new TimelineMax();
            tl.add("zIn");
+           if (circocircle) {
+               tl.to(circocircle, 1.5, {
+                 attr: { r: (15/899)*s.width*1.2}
+               }, "zIn");
+           }
            tl.fromTo(svgcircoDoc, 1.5, {
               attr: { viewBox: "0 0 898.96026 440.10331"}
            }, {
               attr: { viewBox: viewCirco }
            }, "zIn");
         }
+        function zoomOut() {
+          tl.kill();
+          tl = new TimelineMax();
+           tl.add("zOut");
+           if (circocircle) {
+               tl.to(circocircle, 1.5, {
+                 attr: { r: 15 }, overwrite:"all"
+               }, "zOut");
+           }
+           tl.to(svgcircoDoc, 1.5, {
+              attr: { viewBox: "0 0 898.96026 440.10331"}, overwrite:"all"
+           }, "zOut");
+    }
+
       ]]></script>
       <defs id="defs362">
         <style id="style1">
            #svgcirco path {fill-opacity:1;fill-rule:evenodd;stroke-opacity:0;fill:#d9c89e}
+           
+           #svgcirco path[dep="{{=dep}}"] { fill:#e9debb;}}
            #svgcirco path.wideborder { stroke-width:0.3; stroke-opacity:1; stroke:white;}
            #svgcirco path.domtom {  stroke-opacity:1; stroke:white; stroke-width:1; vector-effect:non-scaling-stroke; }
         </style>

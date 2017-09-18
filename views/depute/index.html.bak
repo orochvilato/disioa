@@ -194,111 +194,7 @@
                             </div>
                         </li>
                         {{ pass }}
-                        <li>
-                            <div class="ico abstention">
-                                <i class="fa fa-book"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Loi proposée par LREM</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_119">Scrutin n°119 du 09/08/2017 (adopté)</a>
-                                    </div>
-                                    <div class="vote abstention"><i class="fa fa-microphone-slash"></i> Abstention</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;ensemble du projet de loi organique pour la confiance dans la vie politique (lecture définitive).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico contre">
-                                <i class="fa fa-pencil-square"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Amendement proposé par LFI</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_118">Scrutin n°118 du 09/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote contre"><i class="fa fa-thumbs-down"></i> Contre</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 1 de M. Saddier et les amendements identiques suivants au projet de loi organique pour la confiance dans la vie politique (lecture définitive).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico pour">
-                                <i class="fa fa-file"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Loi proposée par LR</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_117">Scrutin n°117 du 03/08/2017 (adopté)</a>
-                                    </div>
-                                    <div class="vote pour"><i class="fa fa-thumbs-up"></i> Pour</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;ensemble du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-undo"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Motion proposée par le PCF</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-microphone"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Déclaration</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-undo"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Motion proposée par le MODEM</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-undo"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Motion proposée par le PS</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
+                      
                     </ul>
                 </div>
             </section>
@@ -327,7 +223,7 @@
               $(this).attr('href',"depute/index/"+$(this).attr('href'));
           });
           var styleElement = svgDoc.createElementNS("http://www.w3.org/2000/svg", "style");
-          styleElement.textContent = "#p{{ =depute_place }} { fill:  black; stroke-width:5px; stroke: black;}"; // add whatever you need here
+          styleElement.textContent = "#p{{ =depute_place }} { fill:  #ff0052; stroke-width:5px; stroke: black;}"; // add whatever you need here
           svgDoc.getElementById('defs').appendChild(styleElement);
 
         });

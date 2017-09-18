@@ -397,7 +397,6 @@ template {
   #depute-template .tab-container header i {
     margin-right: 0.4em; }
   #depute-template .tab-content {
-    display: none;
     padding: 0 5px 15px; }
     @media (max-width: 767px) {
       #depute-template .tab-content {
@@ -417,136 +416,265 @@ template {
       text-decoration: underline; }
       #depute-template .tab-content a:hover {
         color: #82cde2; }
-
-.depute-header {
-  display: flex;
-  margin-bottom: 60px; }
-  @media (max-width: 767px) {
-    .depute-header {
-      display: block;
-      margin-bottom: 40px; } }
-
-.depute-photo {
-  margin-top: 32px; }
-  @media (max-width: 767px) {
-    .depute-photo {
-      margin: 0 auto;
-      width: 40%; }
-      .depute-photo img {
-        width: 100%; } }
-
-.depute-identite {
-  margin: 0 15px; }
-  .depute-identite header {
-    color: white;
-    margin: 0 -15px; }
+  #depute-template .depute-header {
+    display: flex;
+    margin-bottom: 60px; }
     @media (max-width: 767px) {
-      .depute-identite header {
-        text-align: center; } }
-  .depute-identite h2 span {
-    background: #ff0052;
-    display: inline-block;
-    font-size: 16px;
-    padding: 4px 6px; }
-  .depute-identite h1 {
-    background: #213558;
-    display: inline-block;
-    font-size: 24px;
-    padding: 3px 5px; }
-
-.depute-contacts {
-  margin: 10px -5px 20px; }
-  @media (max-width: 767px) {
-    .depute-contacts {
-      margin: 0 0 15px;
-      text-align: center; } }
-  .depute-contacts i {
-    background: #82cde2;
-    color: #fffefa;
-    padding: 8px;
-    transition: .2s; }
-    .depute-contacts i:hover {
-      background: #ff0052; }
-  .depute-contacts .fa-facebook-square {
-    background: #4867AA; }
-  .depute-contacts .fa-twitter {
-    background: #1DA1F2; }
-
-.depute-groupe {
-  font-size: 18px;
-  margin-bottom: 15px; }
-  @media (max-width: 767px) {
-    .depute-groupe {
+      #depute-template .depute-header {
+        display: block;
+        margin-bottom: 40px; } }
+  #depute-template .depute-photo {
+    margin-top: 32px; }
+    @media (max-width: 767px) {
+      #depute-template .depute-photo {
+        margin: 0 auto;
+        width: 40%; }
+        #depute-template .depute-photo img {
+          width: 100%; } }
+  #depute-template .depute-identite {
+    margin: 0 15px; }
+    #depute-template .depute-identite header {
+      color: white;
+      margin: 0 -15px; }
+      @media (max-width: 767px) {
+        #depute-template .depute-identite header {
+          text-align: center; } }
+    #depute-template .depute-identite h2 span {
+      background: #ff0052;
+      display: inline-block;
       font-size: 16px;
-      margin-bottom: 10px; } }
-  .depute-groupe a {
-    color: #213558; }
-
-.depute-infos {
-  font-size: 15px;
-  line-height: 1.5em; }
-  @media (max-width: 767px) {
-    .depute-infos {
-      font-size: 13px; } }
-
-.depute-hemicycle {
-  margin: 50px auto 30px;
-  width: 40%; }
-  @media (max-width: 767px) {
-    .depute-hemicycle {
-      display: none; } }
-
-.depute-watch .flex {
-  align-items: flex-start; }
-  @media (max-width: 767px) {
-    .depute-watch .flex {
-      padding-left: 10px; } }
-
-.depute-watch img {
-  margin-right: 15px; }
-  @media (max-width: 767px) {
-    .depute-watch img {
-      display: none; } }
-
-.depute-interventions-recap {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 60px 0 0;
-  text-align: center; }
-  .depute-interventions-recap span {
-    color: #ff0052; }
-
-.depute-interventions-cloud {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 50px; }
-  @media (max-width: 1023px) {
-    .depute-interventions-cloud {
-      display: block; } }
-  .depute-interventions-cloud > div {
-    width: 48%; }
-    @media (max-width: 1023px) {
-      .depute-interventions-cloud > div {
-        width: 100%; } }
-  .depute-interventions-cloud .cloud {
-    height: 250px;
-    margin: auto;
-    width: 90%; }
-
-.depute-interventions-search {
-  background: #97d5e7;
-  margin: 0 15px 30px;
-  padding: 6px 12px; }
-  .depute-interventions-search i {
-    color: white;
-    width: 20px; }
-  .depute-interventions-search input {
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid rgba(255, 254, 250, 0.5);
+      padding: 4px 6px; }
+    #depute-template .depute-identite h1 {
+      background: #213558;
+      display: inline-block;
+      font-size: 24px;
+      padding: 3px 5px; }
+  #depute-template .depute-contacts {
+    margin: 10px -5px 20px; }
+    @media (max-width: 767px) {
+      #depute-template .depute-contacts {
+        margin: 0 0 15px;
+        text-align: center; } }
+    #depute-template .depute-contacts i {
+      background: #82cde2;
+      color: #fffefa;
+      padding: 8px;
+      transition: .2s; }
+      #depute-template .depute-contacts i:hover {
+        background: #ff0052; }
+    #depute-template .depute-contacts .fa-facebook-square {
+      background: #4867AA; }
+    #depute-template .depute-contacts .fa-twitter {
+      background: #1DA1F2; }
+  #depute-template .depute-groupe {
+    font-size: 18px;
+    margin-bottom: 15px; }
+    @media (max-width: 767px) {
+      #depute-template .depute-groupe {
+        font-size: 16px;
+        margin-bottom: 10px; } }
+    #depute-template .depute-groupe a {
+      color: #213558; }
+  #depute-template .depute-infos {
     font-size: 15px;
-    padding-bottom: 4px;
-    width: calc(100% - 25px); }
+    line-height: 1.5em; }
+    @media (max-width: 767px) {
+      #depute-template .depute-infos {
+        font-size: 13px; } }
+  #depute-template .depute-hemicycle {
+    margin: 50px auto 30px;
+    width: 40%; }
+    @media (max-width: 767px) {
+      #depute-template .depute-hemicycle {
+        display: none; } }
+  #depute-template .depute-watch .flex {
+    align-items: flex-start; }
+    @media (max-width: 767px) {
+      #depute-template .depute-watch .flex {
+        padding-left: 10px; } }
+  #depute-template .depute-watch img {
+    margin-right: 15px; }
+    @media (max-width: 767px) {
+      #depute-template .depute-watch img {
+        display: none; } }
+  #depute-template .depute-interventions-recap {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 60px 0 0;
+    text-align: center; }
+    #depute-template .depute-interventions-recap span {
+      color: #ff0052; }
+  #depute-template .depute-interventions-cloud {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 50px; }
+    @media (max-width: 1023px) {
+      #depute-template .depute-interventions-cloud {
+        display: block; } }
+    #depute-template .depute-interventions-cloud > div {
+      width: 48%; }
+      @media (max-width: 1023px) {
+        #depute-template .depute-interventions-cloud > div {
+          width: 100%; } }
+    #depute-template .depute-interventions-cloud .cloud {
+      height: 250px;
+      margin: auto;
+      width: 90%; }
+  #depute-template .depute-interventions-search,
+  #depute-template .depute-votes-search {
+    background: #213558;
+    margin: 0 15px 45px;
+    padding: 4px 4px 4px 0; }
+    #depute-template .depute-interventions-search i,
+    #depute-template .depute-votes-search i {
+      color: #fffefa;
+      padding-left: 12px;
+      width: 33px; }
+    #depute-template .depute-interventions-search input,
+    #depute-template .depute-votes-search input {
+      background: #fffefa;
+      border: 0;
+      font-size: 15px;
+      padding: 4px 8px;
+      width: calc(100% - 38px); }
+  #depute-template #itvlist {
+    margin-top: 80px; }
+    #depute-template #itvlist .fa-ul a {
+      text-decoration: none; }
+    #depute-template #itvlist li {
+      margin-bottom: 40px; }
+      #depute-template #itvlist li i {
+        color: #ff0052; }
+    #depute-template #itvlist h3 {
+      display: inline;
+      font-size: 16px;
+      font-weight: 600;
+      padding-left: 5px; }
+      @media (max-width: 767px) {
+        #depute-template #itvlist h3 {
+          font-size: 14px; } }
+    #depute-template #itvlist blockquote {
+      background: #fffdf5;
+      border: 1px solid #fff4c7;
+      font-size: 14px;
+      font-style: italic;
+      padding: 8px 16px; }
+  #depute-template .depute-votes-recap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 60px 30px 0; }
+    @media (max-width: 1023px) {
+      #depute-template .depute-votes-recap {
+        margin: 40px 10px 0; } }
+    #depute-template .depute-votes-recap .gauge {
+      width: calc(100% / 4 - 50px); }
+      @media (max-width: 1023px) {
+        #depute-template .depute-votes-recap .gauge {
+          width: calc(100% / 4 - 30px); } }
+      @media (max-width: 767px) {
+        #depute-template .depute-votes-recap .gauge {
+          margin-bottom: 30px;
+          width: 60%; } }
+    #depute-template .depute-votes-recap h2 {
+      font-size: 16px;
+      margin: 0 0 20px;
+      padding: 0 0 5px;
+      text-align: center; }
+      @media (max-width: 1023px) {
+        #depute-template .depute-votes-recap h2 {
+          font-size: 13px; } }
+  #depute-template .depute-votes-calendar {
+    margin-top: 80px; }
+    @media (max-width: 767px) {
+      #depute-template .depute-votes-calendar {
+        display: none; } }
+    #depute-template .depute-votes-calendar text {
+      fill: #213558; }
+    #depute-template .depute-votes-calendar .day {
+      fill: none;
+      stroke: #82cde2; }
+    #depute-template .depute-votes-calendar .month {
+      fill: none;
+      stroke: #213558;
+      stroke-width: 2px; }
+    #depute-template .depute-votes-calendar .RdYlGn .q0-5 {
+      fill: #ff0052; }
+    #depute-template .depute-votes-calendar .RdYlGn .q1-5 {
+      fill: #901b55; }
+    #depute-template .depute-votes-calendar .RdYlGn .q2-5 {
+      fill: #901b55; }
+    #depute-template .depute-votes-calendar .RdYlGn .q3-5 {
+      fill: #4a2b57; }
+    #depute-template .depute-votes-calendar .RdYlGn .q4-5 {
+      fill: #213558; }
+  #depute-template .depute-votes-list {
+    margin-top: 80px; }
+    #depute-template .depute-votes-list h2 {
+      margin-bottom: 40px; }
+    #depute-template .depute-votes-list ul {
+      margin: 40px 15px 0;
+      padding: 0; }
+    #depute-template .depute-votes-list li {
+      display: flex;
+      margin-bottom: 40px; }
+    #depute-template .depute-votes-list .ico {
+      background: #82cde2;
+      color: white;
+      height: 56px;
+      line-height: 56px;
+      margin-top: 2px;
+      margin-right: 2px;
+      min-width: 56px;
+      text-align: center;
+      width: 56px; }
+    #depute-template .depute-votes-list li > div:last-child {
+      width: 100%; }
+    #depute-template .depute-votes-list header {
+      display: flex;
+      justify-content: space-between; }
+      @media (max-width: 1023px) {
+        #depute-template .depute-votes-list header {
+          display: block; } }
+    #depute-template .depute-votes-list h3 span {
+      background: #ff0052;
+      display: inline-block;
+      color: white;
+      font-size: 13px;
+      padding: 0 6px; }
+    #depute-template .depute-votes-list a {
+      background: #213558;
+      color: white;
+      display: inline-block;
+      font-weight: 700;
+      padding: 3px 6px;
+      text-decoration: none; }
+      #depute-template .depute-votes-list a:hover {
+        background: #82cde2;
+        color: white; }
+    #depute-template .depute-votes-list .vote {
+      align-self: flex-start;
+      display: inline-block;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 0 6px; }
+      @media (max-width: 1023px) {
+        #depute-template .depute-votes-list .vote {
+          margin-top: 2px; } }
+      #depute-template .depute-votes-list .vote.abstention {
+        background: #213558; }
+      #depute-template .depute-votes-list .vote.contre {
+        background: #E23D21; }
+      #depute-template .depute-votes-list .vote.pour {
+        background: #25a87e; }
+      #depute-template .depute-votes-list .vote.absent {
+        background: #aaa; }
+    #depute-template .depute-votes-list p {
+      font-size: 14px;
+      margin-top: 10px; }
+      #depute-template .depute-votes-list p i {
+        margin-right: 4px; }
 
 /* GENERIC */
 *,
@@ -606,19 +734,20 @@ input {
 .tab-container {
   background: #fffefa;
   border: 1px solid #ffeda4;
-  padding: 20px 15px; }
+  padding: 20px 15px;
+  position: relative; }
   @media (max-width: 767px) {
     .tab-container {
       padding: 10px 5px; } }
-  .tab-container header {
+  .tab-container > header {
     display: flex;
     margin: 0 -30px; }
     @media (max-width: 767px) {
-      .tab-container header {
+      .tab-container > header {
         margin: 0 -10px; } }
-    .tab-container header input {
+    .tab-container > header input {
       display: none; }
-    .tab-container header label {
+    .tab-container > header label {
       background: #213558;
       border: 1px solid #fffefa;
       color: white;
@@ -630,15 +759,31 @@ input {
       transition: .2s;
       width: calc(100% / 3); }
       @media (max-width: 767px) {
-        .tab-container header label {
+        .tab-container > header label {
           padding: 8px 0; }
-          .tab-container header label span {
+          .tab-container > header label span {
             display: none; } }
-    .tab-container header label:hover,
-    .tab-container header input:checked + label {
+    .tab-container > header label:hover,
+    .tab-container > header input:checked + label {
       background: #ff0052; }
-    .tab-container header i {
+    .tab-container > header i {
       margin-right: 0.4em; }
+
+.tab-content {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  transform: translateY(-20px);
+  transition: .2s;
+  width: 100%;
+  z-index: -1; }
+  .tab-content.visible {
+    height: auto;
+    opacity: 1;
+    position: static;
+    transform: translateY(0); }
 
 /* MAIN TEMPLATE */
 body {

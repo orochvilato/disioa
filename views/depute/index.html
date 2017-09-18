@@ -223,7 +223,7 @@
               $(this).attr('href',"depute/index/"+$(this).attr('href'));
           });
           var styleElement = svgDoc.createElementNS("http://www.w3.org/2000/svg", "style");
-          styleElement.textContent = "#p{{ =depute_place }} { fill:  black; stroke-width:5px; stroke: black;}"; // add whatever you need here
+          styleElement.textContent = "#p{{ =depute_place }} { fill:  #ff0052; stroke-width:5px; stroke: #ff0052;}"; // add whatever you need here
           svgDoc.getElementById('defs').appendChild(styleElement);
 
         });

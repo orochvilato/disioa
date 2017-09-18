@@ -2,25 +2,30 @@
        viewBox="0 0 1136.4137 1088.9165"
        preserveAspectRation="xMaxYMax meet"
        width="100%"
-       height="100%"
        id="svgcirco"
        version="1.1">
      <script type="text/ecmascript" xlink:href="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.4/TweenMax.min.js"></script>
      <script type="text/ecmascript"><![CDATA[
        var svgcircoDoc;
        var circo;
+       var zin = false;
+       var tl;
        function svgcirco_init(evt) {
           svgcircoDoc = evt.target;
+          svgcircoDoc.style.height = svgcircoDoc.getBoundingClientRect().height;
           circo=svgcircoDoc.getElementById("{{=circo['id']}}");
           box=circo.getBBox();
+        if ((box.width<50) && (box.height<50)) {
           var circocircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
           circocircle.setAttributeNS(null, 'id', 'circocircle');
           circocircle.setAttributeNS(null, 'cx', box.x);
           circocircle.setAttributeNS(null, 'cy', box.y);
-          circocircle.setAttributeNS(null, 'r', 50);
+          circocircle.setAttributeNS(null, 'r', 25);
           circocircle.setAttributeNS(null, 'style', 'fill: #ff0052;'  );
           svgcircoDoc.appendChild(circocircle);
-          svgcircoDoc.addEventListener("click", function() { circocircle.style.fillOpacity=0; zoomIn();});
+        }
+        circo.style.fill = "#ff0052";
+          svgcircoDoc.addEventListener("click", function() {  if (zin) { zoomOut();} else { zoomIn();}; zin = !zin; });
        }
        function zoomIn() {
            var dep = circo.getAttribute('dep');
@@ -33,17 +38,17 @@
                s = villezone.getBBox();
                var zoomVille = "" + (s.x-s.width/10) + " " + (s.y-s.height/10) + " " + (s.width+s.width/5) + " " + (s.height+s.height/5);
            }
-           circo.style.fill = "#82cde2";
+           
            var s = circo.getBBox();
            var zoomCirco = "" + (s.x-s.width/6) + " " + (s.y-s.height/6) + " " + (s.width+s.width/3) + " " + (s.height+s.height/3);
-           tl = new TimelineMax({ onComplete:function() { where = '';}});
+           tl = new TimelineMax();
            tl.add("zIn");
            var timing = 0;
            tl.fromTo(svgcircoDoc, 1, {
               attr: { viewBox: "0 0 1136.4137 1088.9165"}
            }, {
               attr: { viewBox: zoomDep }
-           }, "zIn+=1");
+           }, "zIn");
            timing += 1.9
            if (ville != undefined) {
                 tl.to(svgcircoDoc,1, {
@@ -55,6 +60,15 @@
               attr: { viewBox: zoomCirco }
            }, "zIn+="+timing);
         }
+    function zoomOut() {
+           tl.kill();
+           tl = new TimelineMax({ onComplete:function() { where = '';}});
+           tl.add("zOut");
+           var timing = 0;
+           tl.to(svgcircoDoc, 1.5, {
+              attr: { viewBox: "0 0 1136.4137 1088.9165", overwrite:"all"}
+           }, "zOut");
+        }
         
       ]]></script>
       <defs
@@ -62,7 +76,7 @@
         <style
            id="style1">
            #svgcirco path {fill-opacity:1;fill-rule:evenodd;stroke-opacity:0;fill:#d9c89e}
-           #svgcirco path.circo { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;fill:#d3edf9; stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }} }
+           #svgcirco path.circo { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;fill:#e9debb; stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }} }
            #svgcirco path.autres { fill-opacity:1;fill-rule:evenodd;stroke-opacity:1; stroke:white;stroke-width:{{ =float(max(circo['w'],circo['h']))*0.0136 }}  }
            #svgcirco path.outville { fill:white; stroke:#12678e; }
            #svgcirco path.inville { fill:#afdff5;}
