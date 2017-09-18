@@ -174,111 +174,27 @@
                         <input class="search" placeholder="Rechercher un vote">
                     </div>
                     <ul>
+                        {{ genres = {'loi':'e','motion':'e'} }}
+                        {{ icons = {'pour':'fa-thumbs-up','contre':'fa-thumbs-down','abstention':'fa-microphone-slash','absent':'fa-question'} }}
+                        {{ icons_s = {'amendement':'fa-pencil-square','loi':'fa-book','article':'fa-file','motion':'fa-undo','declaration':'fa-microphone','autre':''} }}
+                        {{ for v in votes: }}
                         <li>
-                            <div class="ico abstention">
-                                <i class="fa fa-book"></i>
+                            <div class="ico {{ =v['vote_position']}}">
+                                <i class="fa {{ =icons_s[v['scrutin_typedetail']] }}"></i>
                             </div>
                             <div>
                                 <header>
                                     <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Loi proposée par LREM</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_119">Scrutin n°119 du 09/08/2017 (adopté)</a>
+                                        <h3><span>{{ =v['scrutin_dossierLibelle'] }} - {{ =v['scrutin_typedetail'][0].upper()+v['scrutin_typedetail'][1:] }}{{ if v['scrutin_groupe']: }} proposé{{ =genres.get(v['scrutin_typedetail'],'')}} par le groupe {{ =v['scrutin_groupe'] }}{{ pass }}</span></h3>
+                                        <a href="{{ =URL('scrutin','index',args=[v['scrutin_id']])}}">Scrutin n°{{ ="%d du %s (%s)" % (v['scrutin_num'],v['scrutin_date'],v['scrutin_sort']) }}</a>
                                     </div>
-                                    <div class="vote abstention"><i class="fa fa-microphone-slash"></i> Abstention</div>
+                                    <div class="vote {{ =v['vote_position'] }}"><i class="fa {{ =icons[v['vote_position']] }}"></i> {{ =v['vote_position'][0].upper()+v['vote_position'][1:] }}</div>
                                 </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;ensemble du projet de loi organique pour la confiance dans la vie politique (lecture définitive).</p>
+                                <p><i class="fa fa-arrow-circle-o-right"></i> {{ =v['scrutin_desc'] }}</p>
                             </div>
                         </li>
-                        <li>
-                            <div class="ico contre">
-                                <i class="fa fa-pencil-square"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Amendement proposé par LFI</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_118">Scrutin n°118 du 09/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote contre"><i class="fa fa-thumbs-down"></i> Contre</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 1 de M. Saddier et les amendements identiques suivants au projet de loi organique pour la confiance dans la vie politique (lecture définitive).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico pour">
-                                <i class="fa fa-file"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Loi proposée par LR</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_117">Scrutin n°117 du 03/08/2017 (adopté)</a>
-                                    </div>
-                                    <div class="vote pour"><i class="fa fa-thumbs-up"></i> Pour</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;ensemble du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-undo"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Motion proposée par le PCF</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-microphone"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Déclaration</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-undo"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Motion proposée par le MODEM</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="ico absent">
-                                <i class="fa fa-undo"></i>
-                            </div>
-                            <div>
-                                <header>
-                                    <div>
-                                        <h3><span>Pouvoirs publics : confiance dans l&#x27;action publique - Motion proposée par le PS</span></h3>
-                                        <a href="/obsas_dev/fiches/scrutin?id=15_116">Scrutin n°116 du 03/08/2017 (rejeté)</a>
-                                    </div>
-                                    <div class="vote absent"><i class="fa fa-question"></i> Absent</div>
-                                </header>
-                                <p><i class="fa fa-arrow-circle-o-right"></i> l&#x27;amendement n° 59 de Mme Batho à l&#x27;article 12 du projet de loi organique pour la confiance dans la vie politique (nouvelle lecture).</p>
-                            </div>
-                        </li>
+                        {{ pass }}
+                      
                     </ul>
                 </div>
             </section>

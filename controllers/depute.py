@@ -5,4 +5,8 @@ def index():
     shortid = request.args(0)
     depute = mdb.deputes.find_one({'depute_shortid':shortid}) or mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
     itvs = sorted(list(mdb.interventions.find({'depute_uid':depute['depute_uid']})),key=lambda x:(x['itv_date'],-x['itv_n']),reverse=True)
-    return dict(itvs=itvs,**depute)
+    votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
+    scrutins = dict((s['scrutin_id'],s) for s in mdb.scrutins.find({'scrutin_id':{'$in':[v['scrutin_id'] for v in votes]}}))
+    for v in votes:
+        v.update(scrutins[v['scrutin_id']])
+    return dict(itvs=itvs,votes=votes,**depute)

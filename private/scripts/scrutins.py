@@ -27,7 +27,8 @@ def strip_accents(s):
    return ''.join(c for c in unicodedata.normalize('NFD', s)
                   if unicodedata.category(c) != 'Mn')
 def normalize(s):
-    return strip_accents(s).encode('utf8').replace(' ','').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').lower() if s else s
+    return strip_accents(s).replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
+    
 
 
 
@@ -144,13 +145,13 @@ class ScrutinsSpider(scrapy.Spider):
             _abs = int(scr.xpath('td[contains(@class,"abs")]/text()').extract()[0])
             _desc = scr.xpath('td[contains(@class,"desc")]/text()').extract()[0].replace('  [','')
             _date = scr.xpath('td/text()').extract()[1]
-            if _desc[:12]=="l'amendement":
+            if "amendement" in _desc[:12]:
                 _typedetail = 'amendement'
             elif _desc[:9]=="la motion":
                 _typedetail = 'motion'
             elif _desc[:27] =="l'ensemble du projet de loi":
                 _typedetail = 'loi'
-            elif _desc[:9] =="l'article":
+            elif "article" in _desc[:9]:
                 _typedetail = 'article'
             elif _desc[:14] ==u'la déclaration':
                 _typedetail = 'declaration'

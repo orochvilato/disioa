@@ -16,7 +16,8 @@ def strip_accents(s):
    return ''.join(c for c in unicodedata.normalize('NFD', s)
                   if unicodedata.category(c) != 'Mn')
 def normalize(s):
-    return strip_accents(s).replace(' ','').replace('-','').lower() if s else s
+    return strip_accents(s).replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
+    
 
 
 deputywatch = {}

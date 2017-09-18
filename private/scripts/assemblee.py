@@ -21,7 +21,8 @@ def strip_accents(s):
    return ''.join(c for c in unicodedata.normalize('NFD', s)
                   if unicodedata.category(c) != 'Mn')
 def normalize(s):
-    return strip_accents(s).encode('utf8').replace(' ','').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').lower() if s else s
+    return strip_accents(s).replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
+    
 
 groupes = {}
 commissions = {}
@@ -157,6 +158,8 @@ class AssembleeSpider(scrapy.Spider):
                 if elts:
                     elts_quals = elts[0].xpath('span/text()').extract()
                     elts_ids = elts[0].xpath('li/ul/li/a')
+                    if len(elts_quals)<len(elts_ids):
+                        elts_quals = elts_quals*len(elts_ids)
                     for i,c in enumerate(elts_ids):
                         clink = self.base_url+c.xpath('@href').extract()[0]
                         clib = c.xpath('text()').extract()[0]

@@ -13,6 +13,11 @@ import xmltodict
 mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
+
+def updataAll():
+    updateAssemblee()
+    updateSessions()
+    
 # ---------------------
 # Helpers
 # ---------------------
@@ -180,8 +185,7 @@ def updateSessions():
         mdb.interventions.remove()
         mdb.deputes.update_many({},{'$set':{'depute_mots':{},'depute_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}})
         mdb.groupes.update_many({},{'$set':{'groupe_mots':{},'groupe_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}})
-    
-    
+        
     lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
 
     with open(lexiques_path,'r') as f:
@@ -219,7 +223,7 @@ def updateSessions():
                     w1[k][mot] = w1[k].get(mot,0) + n
 
     exclude = mdb.interventions.distinct('session_id')
-    #launchScript('sessions',"'%s'" % (json.dumps(exclude)))
+    launchScript('sessions',"'%s'" % (json.dumps(exclude)))
     sessions = getJson('sessions')
     scrutins = list(mdb.scrutins.find())
     for s in scrutins:
@@ -269,7 +273,7 @@ def updateSessions():
                                             'stats':deputes[d['depute_id']]['stats']}})
 
     updateStats()
-    
+
 def updateScrutins():
     _scrutins = {}
     if 'rebuild' in request.args:
@@ -307,7 +311,7 @@ def updateScrutins():
                 'vote_position_ori':posori }
 
     for s in _scrutins.values():
-        desc = s['desc'].replace('.[','.')
+        desc = s['desc'].replace('. [','.')
         types = s.get('libelleType','N/A')
         fulldesc = u"Scrutin n° %d du %s : %s" % (s[u'num'],s[u'date'],desc)
         scrutin = { 'scrutin_num':s['num'],
@@ -388,7 +392,7 @@ def updateScrutins():
         mdb.scrutins.create_index([('scrutin_id', pymongo.ASCENDING)], unique = True)
         mdb.scrutins.insert_many(scrutins)
 
-    updateScrutinsStats()
+    
     updateStats()
     
 def updateDeputesRanks():
@@ -416,10 +420,48 @@ def updateDeputesRanks():
 
 
 def updateStats():
+    updateScrutinsStats()
+    updateScrutinsSignataires()
     updateDeputesStats()
     updateGroupesStats()
     updateDeputesRanks()
-    
+
+def updateScrutinsSignataires():
+    groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find())
+    for s in mdb.scrutins.find():
+        desc = s['scrutin_desc'].replace('. [','')
+        siggp = None
+        sigs = None
+        if 'scrutin_ref' in s.keys() and not isinstance(s['scrutin_ref'],unicode) and 'signataires' in s['scrutin_ref'].keys():
+            sigs = [ normalize(sig) for sig in s['scrutin_ref']['signataires'].replace(' et ',', ').split(', ') ]
+            import re
+            siggp = sigs[0]
+            
+        if 'M. ' in s['scrutin_desc'] or 'Mme ' in s['scrutin_desc']:
+            print s['scrutin_desc'].encode('utf8')
+            mtch = re.search(r' (M.|Mme) (.*)(,| et les amende| et l.amende)',s['scrutin_desc'],re.UNICODE)
+            if not mtch:
+                mtch =  re.search(r' (M.|Mme) (.*)( . l.article| après l.article)',s['scrutin_desc'],re.UNICODE)
+
+            if mtch:
+                print mtch.groups()
+                siggp = normalize(mtch.groups()[0]+mtch.groups()[1])
+                print siggp.encode('utf8')
+        if siggp:
+            gp = groupe_depute.get(siggp,None)
+            if not gp:
+                for k in groupe_depute.keys():
+                    if k[:2]=='m.':
+                        if k[:2]==siggp[:2] and siggp[2:]==k[len(k)-len(siggp)+2:]:
+                            gp = groupe_depute[k]
+                            break
+                    if k[:3]=='mme':
+                        if k[:3]==siggp[:3] and siggp[3:]==k[len(k)-len(siggp)+3:]:
+                            gp = groupe_depute[k]
+                            break
+            siggp = gp
+        mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
+        
 def updateDeputesStats():
     groupe_depute = dict((d['depute_uid'],d['groupe_abrev']) for d in mdb.deputes.find())
     pgroup = dict((g,{'$sum':'$vote_compat.'+g}) for g in mdb.groupes.distinct('groupe_abrev'))
@@ -470,6 +512,8 @@ def updateScrutinsStats():
     if 'rebuild' in request.args:
         mdb.votes.update_many({},{'$set':{'vote_compat':None}})
 
+        
+    
     # decomptes positions par scrutin, par groupe, par position
     pipeline = [
         {"$match":{'vote_compat':None}},
