@@ -1,4 +1,4 @@
-function setInfiniteScroll(id,path,args,append) {
+function setInfiniteScroll(id,path,args,append, emptyMsg) {
   if (infScroll!=undefined) {
       elem.innerHTML = "";
       infScroll.destroy()
@@ -9,12 +9,14 @@ function setInfiniteScroll(id,path,args,append) {
   }).join('&');
   var infScroll = new InfiniteScroll( elem, {
   // options
-  path: path+'?'+urlargs,
+  path: path+'/{{#}}?'+urlargs,
   checkLastPage: '.pagination__next',
   append: append,
   history: false,
   prefill: true
   });
+  
+  console.log(infScroll);
   return infScroll
 }
 
@@ -64,7 +66,7 @@ function drawNuages() {
 
     // Calendrier
         function genCalendar() {
-            var width = document.getElementById('calendar').offsetWidth+20,
+            var width = document.getElementById('calendar').offsetWidth,
                 yearHeight = width / 7,
                 height = yearHeight,
                 cellSize = yearHeight / 8;

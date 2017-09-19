@@ -15,6 +15,7 @@ function setInfiniteScroll(id,path,args,append) {
   history: false,
   prefill: true
   });
+
   return infScroll
 }
 
@@ -64,7 +65,7 @@ function drawNuages() {
 
     // Calendrier
         function genCalendar() {
-            var width = document.getElementById('calendar').offsetWidth+20,
+            var width = document.getElementById('calendar').offsetWidth,
                 yearHeight = width / 7,
                 height = yearHeight,
                 cellSize = yearHeight / 8;

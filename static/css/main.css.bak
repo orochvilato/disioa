@@ -389,33 +389,128 @@ template {
 [hidden] {
   display: none; }
 
+#deputes-template {
+  margin-top: 40px; }
+  #deputes-template #deputes-search {
+    background: #213558;
+    border-radius: 5px;
+    padding: 4px 4px 4px 0;
+    margin-bottom: 20px; }
+    #deputes-template #deputes-search i {
+      color: #fffefa;
+      padding-left: 12px;
+      width: 33px; }
+    #deputes-template #deputes-search input {
+      background: #fffefa;
+      border: 0;
+      border-radius: 5px;
+      font-size: 15px;
+      height: 30px;
+      padding: 4px 8px;
+      width: calc(100% - 38px); }
+  #deputes-template .deputes-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; }
+    @media (max-width: 767px) {
+      #deputes-template .deputes-filters {
+        display: none; } }
+    #deputes-template .deputes-filters select {
+      font-size: 14px;
+      width: calc(100% / 5 - 8px); }
+      @media (max-width: 1023px) {
+        #deputes-template .deputes-filters select {
+          font-size: 13px;
+          margin-bottom: 10px;
+          width: calc(100% / 3 - 15px); } }
+  #deputes-template #deputes-liste {
+    margin-top: 80px; }
+    @media (max-width: 767px) {
+      #deputes-template #deputes-liste {
+        margin-top: 50px; } }
+    #deputes-template #deputes-liste article {
+      display: flex;
+      margin-bottom: 70px; }
+      @media (max-width: 767px) {
+        #deputes-template #deputes-liste article {
+          display: block;
+          text-align: center; } }
+      #deputes-template #deputes-liste article > div {
+        width: 100%; }
+    #deputes-template #deputes-liste img {
+      margin-top: 32px; }
+      @media (max-width: 767px) {
+        #deputes-template #deputes-liste img {
+          display: block;
+          margin: 0 auto 5px;
+          width: 40%; } }
+    #deputes-template #deputes-liste a:hover > header h1,
+    #deputes-template #deputes-liste a:hover > header h2 span {
+      background: #82cde2; }
+    #deputes-template #deputes-liste header {
+      color: white;
+      display: inline-block; }
+    #deputes-template #deputes-liste h2 span {
+      background: #ff0052;
+      display: inline-block;
+      font-size: 16px;
+      padding: 4px 6px;
+      transition: .2s; }
+    #deputes-template #deputes-liste h1 {
+      background: #213558;
+      display: inline-block;
+      font-size: 24px;
+      padding: 3px 5px;
+      transition: .2s; }
+  #deputes-template .deputes-infos {
+    font-size: 15px;
+    margin: 12px 15px 0; }
+  #deputes-template .deputes-groupe {
+    color: #213558;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 6px; }
+  #deputes-template .deputes-interventions span {
+    color: #ff0052; }
+  #deputes-template .deputes-votes {
+    background: #fffefa;
+    border: 1px solid #fff4c7;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 5px;
+    padding: 5px;
+    text-align: center; }
+    @media (max-width: 767px) {
+      #deputes-template .deputes-votes > div {
+        margin: 0 5px 10px;
+        width: calc(50% - 10px); } }
+    #deputes-template .deputes-votes h3 {
+      border-bottom: 1px dashed #82cde2;
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600; }
+      @media (max-width: 767px) {
+        #deputes-template .deputes-votes h3 {
+          font-size: 12px; } }
+    #deputes-template .deputes-votes div div {
+      background: url("../assets/ico-participation.svg") no-repeat center 10px;
+      background-size: 40px;
+      color: #ff0052;
+      padding-top: 55px; }
+    #deputes-template .deputes-votes .deputes-dissidence div {
+      background-image: url("../assets/ico-dissidence.svg");
+      background-size: 24px; }
+    #deputes-template .deputes-votes .deputes-fi div {
+      background-image: url("../assets/ico-ficompat.svg"); }
+    #deputes-template .deputes-votes .deputes-em div {
+      background-image: url("../assets/ico-emcompat.svg"); }
+
 #depute-template {
   padding-top: 60px; }
   @media (max-width: 767px) {
     #depute-template {
       padding-top: 40px; } }
-  #depute-template .tab-container header i {
-    margin-right: 0.4em; }
-  #depute-template .tab-content {
-    padding: 0 5px 15px; }
-    @media (max-width: 767px) {
-      #depute-template .tab-content {
-        font-size: 14px; } }
-    #depute-template .tab-content h2 {
-      border-bottom: 1px dashed #82cde2;
-      margin: 50px 15px 25px;
-      padding: 8px 15px; }
-      @media (max-width: 767px) {
-        #depute-template .tab-content h2 {
-          font-size: 20px;
-          margin-top: 30px; } }
-    #depute-template .tab-content li {
-      line-height: 1.6em; }
-    #depute-template .tab-content a {
-      color: #213558;
-      text-decoration: underline; }
-      #depute-template .tab-content a:hover {
-        color: #82cde2; }
   #depute-template .depute-header {
     display: flex;
     margin-bottom: 60px; }
@@ -481,10 +576,36 @@ template {
     @media (max-width: 767px) {
       #depute-template .depute-infos {
         font-size: 13px; } }
+  #depute-template .tab-container header i {
+    margin-right: 0.4em; }
+  #depute-template .tab-content {
+    padding: 0 5px 15px; }
+    @media (max-width: 767px) {
+      #depute-template .tab-content {
+        font-size: 14px; } }
+    #depute-template .tab-content h2 {
+      border-bottom: 1px dashed #82cde2;
+      margin: 50px 15px 25px;
+      padding: 8px 15px; }
+      @media (max-width: 767px) {
+        #depute-template .tab-content h2 {
+          font-size: 20px;
+          margin-top: 30px; } }
+    #depute-template .tab-content li {
+      line-height: 1.6em; }
+    #depute-template .tab-content a {
+      color: #213558;
+      text-decoration: underline; }
+      #depute-template .tab-content a:hover {
+        color: #82cde2; }
   #depute-template .depute-hemicycle {
-    margin: 50px auto 30px;
-    width: 60%;
-    display: inline-block;}
+    display: flex;
+    margin: 60px auto;
+    justify-content: space-between;
+    width: 78%; }
+    #depute-template .depute-hemicycle svg,
+    #depute-template .depute-hemicycle object {
+      width: 42%; }
     @media (max-width: 767px) {
       #depute-template .depute-hemicycle {
         display: none; } }
@@ -524,27 +645,34 @@ template {
   #depute-template .depute-interventions-search,
   #depute-template .depute-votes-search {
     background: #213558;
-    margin: 0 15px 45px;
-    padding: 4px 4px 4px 0; }
-    #depute-template .depute-interventions-search i,
-    #depute-template .depute-votes-search i {
-      color: #fffefa;
-      padding-left: 12px;
-      width: 33px; }
+    border-radius: 35px;
+    margin: 0 15px 50px;
+    padding: 3px; }
     #depute-template .depute-interventions-search input,
     #depute-template .depute-votes-search input {
       background: #fffefa;
       border: 0;
+      border-bottom-left-radius: 35px;
+      border-top-left-radius: 35px;
       font-size: 15px;
-      padding: 4px 8px;
-      width: calc(100% - 38px); }
+      height: 36px;
+      padding: 0 15px;
+      width: calc(100% - 45px); }
+    #depute-template .depute-interventions-search button,
+    #depute-template .depute-votes-search button {
+      background: transparent;
+      border: 0;
+      width: 35px; }
+    #depute-template .depute-interventions-search i,
+    #depute-template .depute-votes-search i {
+      color: #fffefa; }
   #depute-template #itvlist {
     margin-top: 80px; }
     #depute-template #itvlist .fa-ul a {
       text-decoration: none; }
     #depute-template #itvlist li {
       margin-bottom: 40px; }
-      #depute-template #itvlist li i {
+      #depute-template #itvlist li > i {
         color: #ff0052; }
     #depute-template #itvlist h3 {
       display: inline;
@@ -719,6 +847,28 @@ input {
   color: #213558;
   font-family: Montserrat, sans-serif; }
 
+select {
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: url("../assets/ico-down.svg") #213558 no-repeat right 20px center;
+  background-size: 12px;
+  border: 0;
+  border-radius: 35px;
+  color: white;
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  height: 38px;
+  padding-left: 20px; }
+
+button {
+  cursor: pointer; }
+
+.fa-li {
+  color: #ff0052; }
+
 .container {
   margin: auto;
   width: 980px; }
@@ -777,14 +927,14 @@ input {
   position: absolute;
   top: 0;
   transform: translateY(-20px);
-  transition: .2s;
-  width: 100%;
-  z-index: -1; }
+  transition: opacity .2s, transform .2s;
+  width: calc(100% - 30px); }
   .tab-content.visible {
     height: auto;
     opacity: 1;
     position: static;
-    transform: translateY(0); }
+    transform: translateY(0);
+    width: 100%; }
 
 /* MAIN TEMPLATE */
 body {
@@ -796,10 +946,10 @@ body {
 
 #main-nav {
   background: #213558;
-  height: 60px; }
+  height: 70px; }
   #main-nav img {
-    height: 40px;
-    margin: 10px 15px; }
+    height: 45px;
+    margin: 10px 15px 15px; }
   #main-nav ul {
     display: none;
     padding: 0 20px; }
@@ -830,8 +980,9 @@ body {
 #sub-nav {
   background: #fffefa;
   border-bottom: 1px solid #ffeda4;
-  height: 40px; }
+  padding: 16px 0; }
   #sub-nav ul {
+    margin: 0;
     padding: 0;
     text-align: center; }
   #sub-nav li {
@@ -841,3 +992,11 @@ body {
     @media (max-width: 767px) {
       #sub-nav li {
         font-size: 13px; } }
+  #sub-nav a {
+    color: #213558; }
+    #sub-nav a i {
+      transition: .2s; }
+    #sub-nav a.active, #sub-nav a:hover {
+      text-decoration: none; }
+      #sub-nav a.active i, #sub-nav a:hover i {
+        color: #82cde2; }

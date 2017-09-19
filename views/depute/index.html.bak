@@ -21,8 +21,8 @@
                 </header>
 
                 <div class="depute-contacts">
-                    {{ for contact in depute_contacts: }}{{ if (contact['type']==u'mail'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-envelope-o"></i></a>
-                    {{ elif (contact['type']=='twitter'): }}<a class="depute-contact" href="{{ =contact['lien'][2:] }}"><i class="fa fa-twitter"></i></a>
+                    {{ for contact in depute_contacts: }}{{ if (contact['type']==u'mail'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-envelope"></i></a>
+                    {{ elif (contact['type']=='twitter'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-twitter"></i></a>
                     {{ elif (contact['type']=='facebook'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-facebook-square"></i></a>
                     {{ elif (contact['type']=='site'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-globe"></i></a>
                     {{ pass }}
@@ -31,17 +31,16 @@
 
                 <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="{{ =URL('groupe','index',args=[groupe_abrev]) }}">{{ =groupe_libelle }}</a></div>
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance) }}</span></div>
-                <div class="depute-infos"><span>Participation : {{ ="%s/%s" % (stats['ranks']['exprimes'] or '-', 577) }}</span><br /><span>Dissidence : {{ ="%s/%s" % (stats['ranks']['dissidence'] or '-', 577) }}</span></div>
                 <div class="depute-infos"><span>Suppléant : {{ =depute_suppleant }}</span></div>
             </div>
         </div>
 
         <div class="tab-container">
             <header>
-                <input id="tab1" type="radio" name="tabs" value="presentation" checked>
+                <input id="tab1" type="radio" name="tabs" value="presentation">
                 <label for="tab1"><i class="fa fa-id-card-o"></i><span>Présentation</span></label>
 
-                <input id="tab2" type="radio" name="tabs" value="interventions">
+                <input id="tab2" type="radio" name="tabs" value="interventions" checked>
                 <label for="tab2"><i class="fa fa-comment-o"></i><span>Interventions</span></label>
 
                 <input id="tab3" type="radio" name="tabs" value="votes">
@@ -136,8 +135,8 @@
                 <div id="itvlist">
                     <h2>Ses interventions</h2>
                     <div class="depute-interventions-search">
-                        <label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>
                         <input class="search" placeholder="Rechercher une intervention">
+                        <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
                     <ul id="itv-items" class="fa-ul">
 
@@ -172,8 +171,8 @@
                 <div class="depute-votes-list">
                     <h2>Ses votes</h2>
                     <div class="depute-votes-search">
-                        <label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>
                         <input class="search" placeholder="Rechercher un vote">
+                        <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
                     <ul id="vote-items">
 
@@ -190,6 +189,34 @@
   <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
   <script src="{{=URL('static','js/depute.js')}}"></script>
   <script>
+      
+      
+    // Interventions
+    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item');
+    
+    function searchitv() {
+        itv_IS.element.innerHTML = '';
+         itv_IS.destroy();
+         search = $('.depute-interventions-search input.search').val();
+         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item', emptyMsg='<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>');
+        itv_IS.on('append', function(response) {
+            console.log('append');
+            if (itv_IS.element.childElementCount === 0) {
+                itv_IS.element.innerHTML = '<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>';
+            }
+        });
+    }
+      
+    $('.depute-interventions-search button').click(function() {
+        searchitv();
+    });
+    
+    $('.depute-interventions-search').keypress(function(e) {
+    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+        e.preventDefault();
+        searchitv();
+    }
+    });
 
     // Votes
     var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item');
@@ -199,29 +226,19 @@
          vote_IS.destroy();
          search = $('.depute-votes-search input.search').val();
          vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.vote-item');
+        if (vote_IS.element.childElementCount === 0) {
+            vote_IS.element.innerHTML = '<li>Aucun vote n\'a été trouvé pour cette recherche.</li>';
+        }
     }
     
+    $('.depute-votes-search button').click(function() {
+        searchvote();
+    });
+      
     $('.depute-votes-search').keypress(function(e) {
     if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
         e.preventDefault();
         searchvote();
-    }
-    });
-      
-    // Interventions
-    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item');
-    
-    function searchitv() {
-        itv_IS.element.innerHTML = '';
-         itv_IS.destroy();
-         search = $('.depute-interventions-search input.search').val();
-         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item');
-    }
-    
-    $('.depute-interventions-search').keypress(function(e) {
-    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-        e.preventDefault();
-        searchitv();
     }
     });
     
@@ -244,7 +261,7 @@
         var visible = $('.tab-container input:checked').val();
         $('#' + visible).addClass('visible');
 
-        $('.tab-container input').change(function(e) {
+        $('.tab-container header input[name=tabs]').change(function(e) {
             $('.tab-content').removeClass('visible');
             $('#' + e.target.value).addClass('visible');
         });

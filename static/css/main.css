@@ -645,22 +645,27 @@ template {
   #depute-template .depute-interventions-search,
   #depute-template .depute-votes-search {
     background: #213558;
-    border-radius: 5px;
-    margin: 0 15px 45px;
-    padding: 4px 4px 4px 0; }
-    #depute-template .depute-interventions-search i,
-    #depute-template .depute-votes-search i {
-      color: #fffefa;
-      padding-left: 12px;
-      width: 33px; }
+    border-radius: 35px;
+    margin: 0 15px 50px;
+    padding: 3px; }
     #depute-template .depute-interventions-search input,
     #depute-template .depute-votes-search input {
       background: #fffefa;
       border: 0;
-      border-radius: 5px;
+      border-bottom-left-radius: 35px;
+      border-top-left-radius: 35px;
       font-size: 15px;
-      padding: 4px 8px;
-      width: calc(100% - 38px); }
+      height: 36px;
+      padding: 0 15px;
+      width: calc(100% - 45px); }
+    #depute-template .depute-interventions-search button,
+    #depute-template .depute-votes-search button {
+      background: transparent;
+      border: 0;
+      width: 35px; }
+    #depute-template .depute-interventions-search i,
+    #depute-template .depute-votes-search i {
+      color: #fffefa; }
   #depute-template #itvlist {
     margin-top: 80px; }
     #depute-template #itvlist .fa-ul a {
@@ -782,7 +787,9 @@ template {
       color: white;
       font-size: 13px;
       font-weight: 600;
-      padding: 0 6px; }
+      margin-left: 10px;
+      padding: 0 6px;
+      white-space: nowrap; }
       @media (max-width: 1023px) {
         #depute-template .depute-votes-list .vote {
           margin-top: 2px; } }
@@ -858,6 +865,9 @@ select {
   height: 38px;
   padding-left: 20px; }
 
+button {
+  cursor: pointer; }
+
 .fa-li {
   color: #ff0052; }
 
@@ -919,13 +929,14 @@ select {
   position: absolute;
   top: 0;
   transform: translateY(-20px);
-  transition: .2s;
-  width: 100%; }
+  transition: opacity .2s, transform .2s;
+  width: calc(100% - 30px); }
   .tab-content.visible {
     height: auto;
     opacity: 1;
     position: static;
-    transform: translateY(0); }
+    transform: translateY(0);
+    width: 100%; }
 
 /* MAIN TEMPLATE */
 body {
