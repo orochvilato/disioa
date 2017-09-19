@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+def getdot(e,k):
+    for _k in k.split('.'):
+        e = e[_k]
+    return e
 
 def svggauge(typeg,pct,unit='%'):
     if typeg=='compfi':

@@ -400,12 +400,14 @@ def updateDeputesRanks():
     ranks = {}
     
     for dep in mdb.deputes.find({'depute_actif':True}):
+        for stat in ['nbitvs','nbmots']:
+            ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],dep['stats'][stat]) ]
         if 'positions' in dep['stats'].keys():
             for stat,val in dep['stats']['positions'].iteritems():
                 ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],val)]
         if 'compat' in dep['stats'].keys():
             for stat,val in dep['stats']['compat'].iteritems():
-                ranks['compat'+stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],val)]
+                ranks['compat'+stat] = ranks.get('compat'+stat,[]) + [ (dep['depute_uid'],val)]
     for rank in ranks.keys():
         ranks[rank].sort(key=lambda x:x[1], reverse=True)
         ranks[rank] = dict([ (r[0],i+1) for i,r in enumerate(ranks[rank]) ])

@@ -1,13 +1,15 @@
 var infScroll;
 var elem = document.getElementById('deputes-liste');
 
-function setInfiniteScroll(){
+function setInfiniteScroll(urlupdate){
   if (infScroll!=undefined) {
       elem.innerHTML = "";
       infScroll.destroy()
   }
   var args='gp='+deputes_groupe+'&tr='+deputes_tri+'&di='+deputes_dir+'&txt='+deputes_searchtext+'&rg='+deputes_region+'&top='+deputes_top;
-  window.history.pushState({},"","?"+args);
+  if urlupdate {
+      window.history.pushState({},"","?"+args);
+  }
   infScroll = new InfiniteScroll( elem, {
   // options
   path: 'deputes/ajax/{{#}}?'+args,
