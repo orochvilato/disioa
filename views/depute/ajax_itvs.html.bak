@@ -1,5 +1,4 @@
 {{ for iv in itvs: }}
-    {{ =iv['itv_contenu'] }}
     <li class="itv-item">
         <i class="fa fa-list fa-comment"></i>
         <a href="{{ =iv['itv_url']}}" target="_blank">

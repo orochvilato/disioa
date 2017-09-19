@@ -483,7 +483,8 @@ template {
         font-size: 13px; } }
   #depute-template .depute-hemicycle {
     margin: 50px auto 30px;
-    width: 40%; }
+    width: 60%;
+    display: inline-block;}
     @media (max-width: 767px) {
       #depute-template .depute-hemicycle {
         display: none; } }

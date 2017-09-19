@@ -20,7 +20,7 @@ def index():
         dates[sdat]['e']+= 1 if v['vote_position']!='absent' else 0
         
         
-    return dict(dates=json.dumps(sorted([{"date": dat,"pct":round(100*float(v['e'])/v['n'],1)} for dat,v in dates.iteritems()],key=lambda x:x['date'])),**depute)
+    return dict(dates=json.dumps(sorted([{"date": dat,"pct":round(float(v['e'])/v['n'],1)} for dat,v in dates.iteritems()],key=lambda x:x['date'])),**depute)
 
 def ajax_votes():
     nb = 25

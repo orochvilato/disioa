@@ -1,8 +1,9 @@
 {{ extend "base.html" }}
+{{ block title }}{{ =' '.join(depute_nom.split(' ')[1:]) }} | Observatoire Insoumis{{ end }}
 {{ block style }}
 <style>
     high {
-        background-color: lightskyblue;
+        background-color: #82cde2;
         color: white;
     }
 </style>
@@ -20,10 +21,10 @@
                 </header>
 
                 <div class="depute-contacts">
-                    {{ for contact in depute_contacts: }}{{ if (contact['type']==u'mail'): }}<a class="depute-contact" href="mailto:{{ =contact['lien'] }}"><i class="fa fa-envelope-o"></i></a>
-                    {{ elif (contact['type']=='twitter'): }}<a class="depute-contact" href="https://twitter.com/{{ =contact['lien'][2:] }}"><i class="fa fa-twitter"></i></a>
-                    {{ elif (contact['type']=='facebook'): }}<a class="depute-contact" href="https://fr-fr.facebook.com/{{ =contact['lien'] }}"><i class="fa fa-facebook-square"></i></a>
-                    {{ elif (contact['type']=='site'): }}<a class="depute-contact" href="http://{{ =contact['lien'] }}"><i class="fa fa-globe"></i></a>
+                    {{ for contact in depute_contacts: }}{{ if (contact['type']==u'mail'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-envelope-o"></i></a>
+                    {{ elif (contact['type']=='twitter'): }}<a class="depute-contact" href="{{ =contact['lien'][2:] }}"><i class="fa fa-twitter"></i></a>
+                    {{ elif (contact['type']=='facebook'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-facebook-square"></i></a>
+                    {{ elif (contact['type']=='site'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-globe"></i></a>
                     {{ pass }}
                     {{ pass }}
                 </div>
@@ -37,20 +38,20 @@
 
         <div class="tab-container">
             <header>
-                <input id="tab1" type="radio" name="tabs" value="presentation">
+                <input id="tab1" type="radio" name="tabs" value="presentation" checked>
                 <label for="tab1"><i class="fa fa-id-card-o"></i><span>Présentation</span></label>
 
                 <input id="tab2" type="radio" name="tabs" value="interventions">
                 <label for="tab2"><i class="fa fa-comment-o"></i><span>Interventions</span></label>
 
-                <input id="tab3" type="radio" name="tabs" value="votes" checked>
+                <input id="tab3" type="radio" name="tabs" value="votes">
                 <label for="tab3"><i class="fa fa-hand-paper-o"></i><span>Votes</span></label>
             </header>
 
             <section id="presentation" class="tab-content"> <!-- Présentation -->
                 <div class="depute-hemicycle">
-                    <object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>
                     {{ =svgcirco(depute_circo_id) }}
+                    <object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>
                 </div>
                 <div class="depute-fonctions">
                     <h2>Fonctions / Mandats</h2>
@@ -189,6 +190,7 @@
   <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
   <script src="{{=URL('static','js/depute.js')}}"></script>
   <script>
+
     // Votes
     var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item');
     

@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>ObsAss</title>
+    <title>{{ block title}}ObsAss{{ end }}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ =URL('static','css/main.css') }}" rel="stylesheet">
+    {{ block style }}
+    {{ end }}
 </head>
 <body>
     <nav id="main-nav" class="flex">
-        <img src="{{ =URL('static','assets/logo.png') }}" alt="Observatoire Insoumis">
+        <img src="{{ =URL('static','assets/logo.svg') }}" alt="Observatoire Insoumis">
         <ul>
             <li>Programme Présidentiel</li>
             <li>Gouvernement</li>

@@ -60,6 +60,6 @@ def ajax_itvs():
     itvs = list(mdb.interventions.find(itv_filter).sort([('itv_date',-1),('itv_n',-1)]).skip(skip).limit(nb))
     if search:
         for itv in itvs:
-            regx.subn('<high>'+search+'</high>',itv['itv_contenu'])
+            itv['itv_contenu']=regx.sub('<high>'+search+'</high>',itv['itv_contenu'])
     
     return dict(itvs=itvs, next=(nb == len(itvs)))

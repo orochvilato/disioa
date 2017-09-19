@@ -31,7 +31,7 @@
           </div>
           <div class="deputes-em">
             <h3>EM-Compatibilité</h3>
-            <div>{{=emphasize('stats.compat.REM',d['stats']['compat']['REM']) }} %</div>
+            <div>{{=emphasize('stats.compat.FI',d['stats']['compat']['EM']) }} %</div>
           </div>
         </div>
         {{ pass }}
