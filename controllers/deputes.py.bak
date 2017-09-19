@@ -95,12 +95,12 @@ def ajax():
 
 # Tests
 from collections import OrderedDict
-tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes'}),
-            ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence'}),
-            ('stats.compat.FI',{'label':'FI-Compatibilité','classe':'deputes-fi','rank':'compatFI'}),
-            ('stats.compat.REM',{'label':'EM-Compatibilité','classe':'deputes-em','rank':'compatREM'}),
-            ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs'}),
-            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mot','rank':'nbmots'}),
+tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes','unit':'%'}),
+            ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence','unit':'%'}),
+            ('stats.compat.FI',{'label':'FI-Compatibilité','classe':'deputes-fi','rank':'compatFI','unit':'%'}),
+            ('stats.compat.REM',{'label':'EM-Compatibilité','classe':'deputes-em','rank':'compatREM','unit':'%'}),
+            ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','unit':''}),
+            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mot','rank':'nbmots','unit':''}),
             ])
     
 top_choices = [('top','Top'),
@@ -146,6 +146,6 @@ def ajax_top():
 
     skip = nb*page
 
-    deputes = list(mdb.deputes.find(filter).sort([(tri,direction)]).skip(skip).limit(nb))
+    deputes = list(mdb.deputes.find(filter).sort([(tri,direction),('stats.ranks.'+tri_choices[tri]['rank'],-1 if top=='top' else 1)]).skip(skip).limit(nb))
 
-    return dict(deputes=deputes, tri = tri, top=tri_choices[tri], skip = skip, next=(nb == len(deputes) ))
+    return dict(deputes=deputes, tri = tri, top=tri_choices[tri], tf=top, skip = skip, next=(nb == len(deputes) ))

@@ -146,6 +146,6 @@ def ajax_top():
 
     skip = nb*page
 
-    deputes = list(mdb.deputes.find(filter).sort([(tri,direction)]).skip(skip).limit(nb))
+    deputes = list(mdb.deputes.find(filter).sort([(tri,direction),('stats.ranks.'+tri_choices[tri]['rank'],1 if top=='top' else -1)]).skip(skip).limit(nb))
 
-    return dict(deputes=deputes, tri = tri, top=tri_choices[tri], skip = skip, next=(nb == len(deputes) ))
+    return dict(deputes=deputes, tri = tri, top=tri_choices[tri], tf=top, skip = skip, next=(nb == len(deputes) ))
