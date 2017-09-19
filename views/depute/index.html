@@ -6,6 +6,7 @@
         background-color: #82cde2;
         color: white;
     }
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.0.1/billboard.min.css" rel="stylesheet">
 </style>
 {{ end }}
 {{ block content }}
@@ -167,6 +168,10 @@
                     <h2>Calendrier des votes</h2>
                     <div id="calendar"></div>
                 </div>
+                 <div class="depute-votes-calendar">
+                    <h2>Présences aux votes</h2>
+                    <div id="presenceChart"></div>
+                </div>
 
                 <div class="depute-votes-list">
                     <h2>Ses votes</h2>
@@ -186,6 +191,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="{{ =URL('static','js/wordcloud2.js') }}"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.0.1/billboard.min.js"></script>
   <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
   <script src="{{=URL('static','js/depute.js')}}"></script>
   <script>
@@ -242,9 +248,13 @@
         searchvote();
     }
     });
-    
+     
     // Init Calendrier
-    var csv = JSON.parse('{{ =XML(dates) }}');
+    {{ import json }}
+    var csv = JSON.parse('{{ =XML(json.dumps(dates)) }}');
+    // test areachart
+   
+
 
 
     // Init Nuages
@@ -272,8 +282,45 @@
         svg.addEventListener('load', function () {
           initHemicycle("{{ =depute_place }}");
         });
-
-        genCalendar();
+        
+        var chart = bb.generate({
+          "data": {
+            "x":"x",
+            "columns": [
+                JSON.parse('{{ =XML(json.dumps(["x"]+[w['week'] for w in weeks])) }}'),
+                JSON.parse('{{ =XML(json.dumps(["data"]+[w['pct'] for w in weeks])) }}')
+            ],
+            "types": {
+              "data": "bar"
+            },
+          },
+          "bar": {
+              "width": {
+                  "ratio": 0.9,
+              },
+              "zerobased": true,
+          },
+          "axis": {
+            "y": {
+                "label":"%"
+            },
+            "x": {
+              "label": "Semaine",
+              "type": "category",
+              "tick": {
+                "culling": 14,
+                "rotate": 90,
+                "multiline": false
+              },
+              "height": 100
+            }
+          },
+         "legend": {
+            "show": false
+          },
+          "bindto": "#presenceChart"
+        });
+      genCalendar();
         drawNuages();  
 
         var resizeDebounce;
