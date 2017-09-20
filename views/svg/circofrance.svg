@@ -3,6 +3,7 @@
        preserveAspectRation="xMaxYMax meet"
        width="100%"
        id="svgcirco"
+       style="height:300px;"
        version="1.1">
      <script type="text/ecmascript" xlink:href="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.4/TweenMax.min.js"></script>
      <script type="text/ecmascript"><![CDATA[
@@ -13,7 +14,7 @@
        var tl;
        function svgcirco_init(evt) {
           svgcircoDoc = evt.target;
-          svgcircoDoc.style.height = svgcircoDoc.getBoundingClientRect().height;
+          //svgcircoDoc.style.height = svgcircoDoc.getBoundingClientRect().height;
           circo=svgcircoDoc.getElementById("{{=circo['id']}}");
           box=circo.getBBox();
         if ((box.width<50) && (box.height<50)) {

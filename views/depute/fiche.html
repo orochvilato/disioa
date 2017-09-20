@@ -51,7 +51,8 @@
             <section id="presentation" class="tab-content"> <!-- Présentation -->
                 <div class="depute-hemicycle">
                     {{ =svgcirco(depute_circo_id) }}
-                    <object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>
+                    {{ =hemicycle(depute_place,URL(c='depute',f='fiche')) }}
+                    <!--<object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>-->
                 </div>
                 <div class="depute-fonctions">
                     <h2>Fonctions / Mandats</h2>
@@ -266,7 +267,7 @@
     {{ pass }}
     {{ pass }}
 
-    var svg = document.getElementById('hemicycle');
+    //var svg = document.getElementById('hemicycle');
     $(document).ready(function() {
         
         var visible = $('.tab-container input:checked').val();
@@ -279,9 +280,9 @@
         
         /* position hemicycle */
         
-        svg.addEventListener('load', function () {
-          initHemicycle("{{ =depute_place }}");
-        });
+        //svg.addEventListener('load', function () {
+        //  initHemicycle("{{ =depute_place }}");
+        //});
         function addGraphPresences() {
             var chart = bb.generate({
               "data": {

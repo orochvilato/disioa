@@ -39,12 +39,27 @@ def updateCircos():
         circo = dict(ville=(c['@id'] in villes),paris=(c['@id'] in paris),carte='france',d=c['@d'],id=c['@id'],dep=c['@id'].split('-')[0],title=c['title']['#text'],desc=c['desc']['#text'])
         mdb.circonscriptions.update({'id':c['@id']},{'$set':circo},upsert=True)
     return "ok"
-def test():
-
-    circos = list(mdb.circonscriptions.find())
 
 
-    return dict(circos=circos)
+def updateHemicycle():
+    hemipath = os.path.join(request.folder, 'views/svg/hemicyclelight.svg')
+    svg = xmltodict.parse(open(hemipath,'r'))
+    places_deputes = dict((d['depute_place'],d) for d in mdb.deputes.find())
+    for p in svg['svg']['a']:
+        place = p['path']['@id'][1:]
+        depute = places_deputes.get(place,None)
+        if depute:
+            p['@href'] = "{{ =base_url[1:]+'/"+depute['depute_shortid']+"' if 'base_url' in locals() else '#' }}"
+            p['@title'] = "place %s : %s (%s)" % (depute['depute_place'],depute['depute_nom'],depute['groupe_abrev'])
+            p['title']={'#text':p['@title']}
+            if '@target' in p.keys():
+                del p['@target']
+    
+    import codecs
+    file = codecs.open(hemipath, "w", "utf-8")
+    file.write(xmltodict.unparse(svg,pretty=True))
+        
+    return 'ok'
 
 def launchScript(name,params=""):
     fp = os.path.join(request.folder, 'private/scripts', name +'.py '+output_path+' '+params)
