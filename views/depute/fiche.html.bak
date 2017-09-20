@@ -168,10 +168,10 @@
                     <h2>Calendrier des votes</h2>
                     <div id="calendar"></div>
                 </div>
-                 <div class="depute-votes-calendar">
+                 <!--<div class="depute-votes-calendar">
                     <h2>Présences aux votes</h2>
                     <div id="presenceChart"></div>
-                </div>
+                </div>-->
 
                 <div class="depute-votes-list">
                     <h2>Ses votes</h2>
@@ -282,52 +282,54 @@
         svg.addEventListener('load', function () {
           initHemicycle("{{ =depute_place }}");
         });
-        
-        var chart = bb.generate({
-          "data": {
-            "x":"x",
-            "columns": [
-                JSON.parse('{{ =XML(json.dumps(["x"]+[w['week'] for w in weeks])) }}'),
-                JSON.parse('{{ =XML(json.dumps(["data"]+[w['pct'] for w in weeks])) }}')
-            ],
-            "types": {
-              "data": "area"
-            },
-          },
-         "area": {
-           "zerobased": true,
-           
-         },
+        function addGraphPresences() {
+            var chart = bb.generate({
+              "data": {
+                "x":"x",
+                "columns": [
+                    JSON.parse('{{ =XML(json.dumps(["x"]+[w['week'] for w in weeks])) }}'),
+                    JSON.parse('{{ =XML(json.dumps(["data"]+[w['pct'] for w in weeks])) }}')
+                ],
+                "types": {
+                  "data": "area"
+                },
+              },
+             "area": {
+               "zerobased": true,
 
-          "bar": {
-              "width": {
-                  "ratio": 0.9,
+             },
+
+              "bar": {
+                  "width": {
+                      "ratio": 0.9,
+                  },
+                  "zerobased": true,
               },
-              "zerobased": true,
-          },
-          "axis": {
-            "y": {
-                "label":"%",
-                "max": 100,
-                 "min": 0,
-                "padding": {"top": 10, "bottom":10},
-            },
-            "x": {
-              "label": "Semaine",
-              "type": "category",
-              "tick": {
-                "culling": 14,
-                "rotate": 90,
-                "multiline": false
+              "axis": {
+                "y": {
+                    "label":"%",
+                    "max": 100,
+                     "min": 0,
+                    "padding": {"top": 10, "bottom":0},
+                },
+                "x": {
+                  "label": "Semaine",
+                  "type": "category",
+                  "tick": {
+                    "culling": 14,
+                    "rotate": 90,
+                    "multiline": false
+                  },
+                  "height": 100
+                }
               },
-              "height": 100
-            }
-          },
-         "legend": {
-            "show": false
-          },
-          "bindto": "#presenceChart"
-        });
+             "legend": {
+                "show": false
+              },
+              "bindto": "#presenceChart"
+            });
+        }
+      //addGraphPresences()
       genCalendar();
         drawNuages();  
 

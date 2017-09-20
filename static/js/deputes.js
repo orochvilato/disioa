@@ -7,7 +7,7 @@ function setInfiniteScroll(urlupdate){
       infScroll.destroy()
   }
   var args='gp='+deputes_groupe+'&tr='+deputes_tri+'&di='+deputes_dir+'&txt='+deputes_searchtext+'&rg='+deputes_region+'&top='+deputes_top;
-  if urlupdate {
+  if (urlupdate) {
       window.history.pushState({},"","?"+args);
   }
   infScroll = new InfiniteScroll( elem, {

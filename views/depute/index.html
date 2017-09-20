@@ -291,9 +291,14 @@
                 JSON.parse('{{ =XML(json.dumps(["data"]+[w['pct'] for w in weeks])) }}')
             ],
             "types": {
-              "data": "bar"
+              "data": "area"
             },
           },
+         "area": {
+           "zerobased": true,
+           
+         },
+
           "bar": {
               "width": {
                   "ratio": 0.9,
@@ -302,7 +307,10 @@
           },
           "axis": {
             "y": {
-                "label":"%"
+                "label":"%",
+                "max": 100,
+                 "min": 0,
+                "padding": {"top": 10, "bottom":0},
             },
             "x": {
               "label": "Semaine",

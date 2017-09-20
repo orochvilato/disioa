@@ -1,18 +1,25 @@
-function setInfiniteScroll(id,path,args,append,urlupdate) {
+function setInfiniteScroll(id,path,args,append,urlupdate,countid) {
   var elem = document.getElementById(id);
   var urlargs = '';
-  console.log(args);
+  
   if (!jQuery.isEmptyObject(args) ){
-      urlargs = '?'+Object.keys(args).map(function(k) {
+      urlargs = Object.keys(args).filter(function(k) { return args[k]!='';}).map(function(k) {
         return encodeURIComponent(k) + "=" + encodeURIComponent(args[k]);
       }).join('&');
   }
-  if (urlupdate && (!jQuery.isEmptyObject(args) )) {
-      window.history.pushState({},"",urlargs);
+  if (urlupdate) {
+      console.log('push');
+      window.history.pushState({},"",'?'+urlargs);
+  }
+  // récupère le nombre de résultats
+  if (countid) {
+      $.getJSON( path+'?'+urlargs+"&count=1", function( data ) {
+          $("#"+countid).html(data['count']);
+      });
   }
   var infScroll = new InfiniteScroll( elem, {
   // options
-  path: path+'/{{#}}'+urlargs,
+  path: path+'/{{#}}?'+urlargs,
   checkLastPage: '.pagination__next',
   append: append,
   history: false,

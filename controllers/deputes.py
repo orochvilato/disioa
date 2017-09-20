@@ -8,7 +8,9 @@ mdb = client.obsass
 # cache
 CACHE_EXPIRE = 3600
 cache_groupes = cache.ram('groupes', lambda: [(g['groupe_abrev'],g['groupe_libelle']) for g in mdb.groupes.find()], time_expire=CACHE_EXPIRE)
-cache_regions = cache.ram('regions',lambda: sorted(mdb.deputes.distinct('depute_region'),key=lambda x:x), time_expire=CACHE_EXPIRE)
+cache_regions = cache.ram('regions',lambda: sorted([(r,r) for r in mdb.deputes.distinct('depute_region')],key=lambda x:x), time_expire=CACHE_EXPIRE)
+cache_ages = cache.ram('ages',lambda: sorted([(a,a) for a in mdb.deputes.distinct('depute_classeage')],key=lambda x:x), time_expire=CACHE_EXPIRE)
+cache_csp = cache.ram('csp',lambda: sorted([(c,c) for c in mdb.deputes.distinct('depute_csp')],key=lambda x:x), time_expire=CACHE_EXPIRE)
 # ---------------------------------
 # Page députés
 # ---------------------------------
@@ -23,7 +25,7 @@ def index():
 
     groupes = cache_groupes
     regions = cache_regions
-    tris = [('depute_nom_tri','Tri par nom'),
+    tris_liste = [('depute_nom_tri','Tri par nom'),
             ('stats.positions.exprimes','Tri par participation'),
             ('stats.positions.dissidence','Tri par Opposition à son groupe'),
             ('stats.compat.FI','Tri par FI-Compatibilité'),
@@ -100,24 +102,40 @@ tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation',
             ('stats.compat.FI',{'label':'FI-Compatibilité','classe':'deputes-fi','rank':'compatFI','unit':'%'}),
             ('stats.compat.REM',{'label':'EM-Compatibilité','classe':'deputes-em','rank':'compatREM','unit':'%'}),
             ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','unit':''}),
-            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mot','rank':'nbmots','unit':''}),
+            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','unit':''}),
+            ('depute_nom_tri',{'label':"Nom",'classe':'','rank':'N/A','unit':''})
             ])
-    
+tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots'),
+             'liste': ('depute_nom_tri','stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM')}    
 top_choices = [('top','Top'),
             ('flop','Flop'),
             ]
+
+def liste():
+    params = dict(request.vars)
+    return dict(params=params,tris=tri_choices,groupes = cache_groupes,regions = cache_regions, csp=cache_csp, ages=cache_ages)
+
+
+def ajax_liste():
+    return _ajax('liste')
 
 def tops():
     params = dict(request.vars)
     params['top'] = params.get('top','top')
 
     return dict(params=params,tops=top_choices,tris=tri_choices,groupes = cache_groupes,regions = cache_regions)
-
 def ajax_top():
+    return _ajax('tops')
+
+
+def _ajax(type_page):
     # ajouter des index (aux differentes collections)
     nb = 25
+    count = request.vars.get('count',None)
+    age = request.vars.get('age',None)
+    csp = request.vars.get('csp',None)
     page = int(request.args(0) or 2)-2
-    groupe = request.vars.get('gp','ALL')
+    groupe = request.vars.get('gp',None)
     direction = int(request.vars.get('di',1))
     text = request.vars.get('txt','').decode('utf8')
     region = request.vars.get('rg',None)
@@ -133,19 +151,30 @@ def ajax_top():
 
     filter = {'$and':[ {'depute_actif':True}]}
 
-    if groupe and groupe!='ALL':
+    if csp:
+        filter['$and'].append({'depute_csp':csp})
+    if age:
+        filter['$and'].append({'depute_classeage':age})
+    if groupe:
         filter['$and'].append({'groupe_abrev':groupe})
-    if region and region!='ALL':
+    if region:
         filter['$and'].append({'depute_region':region})
     if text:
         regx = re.compile(text, re.IGNORECASE)
         filter['$and'].append({'depute_nom':regx})
 
+    sort = []
     if top:
         direction = tops_dir[tri] * (1 if top=='top' else -1)
+        sort += [ (tri,direction),('stats.ranks.'+tri_choices[tri]['rank'],1 if top=='top' else -1)]
+    else:
+        sort += [ (tri,direction)]
 
     skip = nb*page
+    mreq = mdb.deputes.find(filter).sort(sort)
+    if count:
+        return json.dumps(dict(count=mreq.count()))
+    
+    deputes = list(mreq.skip(skip).limit(nb))
 
-    deputes = list(mdb.deputes.find(filter).sort([(tri,direction),('stats.ranks.'+tri_choices[tri]['rank'],1 if top=='top' else -1)]).skip(skip).limit(nb))
-
-    return dict(deputes=deputes, tri = tri, top=tri_choices[tri], tf=top, skip = skip, next=(nb == len(deputes) ))
+    return dict(deputes=deputes, count=count,tri = tri, top=tri_choices[tri], tf=top, skip = skip, next=(nb == len(deputes) ))
