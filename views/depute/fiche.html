@@ -33,6 +33,8 @@
                 <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="#">{{ =groupe_libelle }}</a></div>
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance) }}</span></div>
                 <div class="depute-infos"><span>Suppléant : {{ =depute_suppleant }}</span></div>
+                 <div class="depute-infos"><span>Elu avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],1)}}% des voix face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}</span></div>                    
+                <div class="depute-infos"><span>Elu par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],1)}}% des inscrits de sa circonscription</span></div>
             </div>
         </div>
 

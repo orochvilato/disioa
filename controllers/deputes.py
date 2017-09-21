@@ -7,10 +7,10 @@ mdb = client.obsass
 
 # cache
 CACHE_EXPIRE = 3600
-cache_groupes = cache.ram('groupes', lambda: [(g['groupe_abrev'],g['groupe_libelle']) for g in mdb.groupes.find()], time_expire=CACHE_EXPIRE)
-cache_regions = cache.ram('regions',lambda: sorted([(r,r) for r in mdb.deputes.distinct('depute_region')],key=lambda x:x), time_expire=CACHE_EXPIRE)
-cache_ages = cache.ram('ages',lambda: sorted([(a,a) for a in mdb.deputes.distinct('depute_classeage')],key=lambda x:x), time_expire=CACHE_EXPIRE)
-cache_csp = cache.ram('csp',lambda: sorted([(c,c) for c in mdb.deputes.distinct('depute_csp')],key=lambda x:x), time_expire=CACHE_EXPIRE)
+cache_groupes = cache.disk('groupes', lambda: [(g['groupe_abrev'],g['groupe_libelle']) for g in mdb.groupes.find()], time_expire=CACHE_EXPIRE)
+cache_regions = cache.disk('regions',lambda: sorted([(r,r) for r in mdb.deputes.distinct('depute_region')],key=lambda x:x), time_expire=CACHE_EXPIRE)
+cache_ages = cache.disk('ages',lambda: sorted([(a,a) for a in mdb.deputes.distinct('depute_classeage')],key=lambda x:x), time_expire=CACHE_EXPIRE)
+cache_csp = cache.disk('csp',lambda: sorted([(c,c) for c in mdb.deputes.distinct('depute_csp')],key=lambda x:x), time_expire=CACHE_EXPIRE)
 # ---------------------------------
 # Page députés
 # ---------------------------------

@@ -4,8 +4,8 @@ import json
 import datetime
 import re
 
-scrutins_by_id = cache.ram('scrutins_by_id',lambda: dict((s['scrutin_id'],s) for s in mdb.scrutins.find()), time_expire=0)
-deputesFI = cache.ram('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}).distinct('depute_shortid'),time_expire=3600)
+scrutins_by_id = cache.disk('scrutins_by_id',lambda: dict((s['scrutin_id'],s) for s in mdb.scrutins.find()), time_expire=0)
+deputesFI = cache.disk('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}).distinct('depute_shortid'),time_expire=3600)
 def index():
     redirect(URL('fiche'))
     
