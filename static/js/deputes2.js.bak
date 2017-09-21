@@ -9,7 +9,7 @@ function setInfiniteScroll(id,path,args,append,urlupdate,countid) {
   }
   if (urlupdate) {
       console.log('push');
-      window.history.pushState({},"",urlargs);
+      window.history.pushState({},"",'');
   }
   // récupère le nombre de résultats
   if (countid) {

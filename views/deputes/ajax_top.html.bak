@@ -3,7 +3,7 @@
 {{ pass }}
 {{ for i,d in enumerate(deputes): }}
   <article class="depute-item">
-    <a href="#">
+    <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
       <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/{{ =d['depute_uid'][2:] }}.jpg" />
     </a>
     <div>
@@ -14,7 +14,7 @@
         </header>
       </a>
       <div class="deputes-infos">
-        <a href="#" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>
+        <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>
         {{ if 'positions' in d['stats'].keys(): }}
         <div class="deputes-votes">
           <h2>{{ = d['stats']['ranks'][top['rank']] if tf=='top' else (578-d['stats']['ranks'][top['rank']]) }}</h2>

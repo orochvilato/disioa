@@ -16,37 +16,7 @@ cache_csp = cache.disk('csp',lambda: sorted([(c,c) for c in mdb.deputes.distinct
 # ---------------------------------
 
 def index():
-    groupe = request.vars.get('gp','ALL')
-    tri = request.vars.get('tr','depute_nom_tri')
-    direction = int(request.vars.get('di',1))
-    text = request.vars.get('txt',"")
-    region = request.vars.get('rg',"")
-    top = request.vars.get('top',"")
-
-    groupes = cache_groupes
-    regions = cache_regions
-    tris_liste = [('depute_nom_tri','Tri par nom'),
-            ('stats.positions.exprimes','Tri par participation'),
-            ('stats.positions.dissidence','Tri par Opposition à son groupe'),
-            ('stats.compat.FI','Tri par FI-Compatibilité'),
-            ('stats.compat.REM','Tri par EM-Compatibilité'),
-            ('stats.nbitvs',"Tri par nombre d'interventions"),
-            ('stats.nbmots',"Tri par nombre de mots"),
-            ('depute_circo_id',"Tri par circonscription")]
-    tops = [('top10part','Top 10 Participation'),
-            ('top10diss','Top 10 Opposition à son groupe'),
-            ('top10compFI','Top 10 FI-Compatible'),
-            ('top10compREM','Top 10 EM-Compatible'),
-            ('top10itvs','Top 10 Interventions'),
-            ('top10mots','Top 10 Mots'),
-            ('flop10part','Flop 10 Participation'),
-            ('flop10diss','Flop 10 Opposition à son groupe'),
-            ('flop10compFI','Flop 10 FI-Compatible'),
-            ('flop10compREM','Flop 10 EM-Compatible'),
-            ('flop10itvs','Flop 10 Interventions'),
-            ('flop10mots','Flop 10 Mots'),
-            ]
-    return locals()
+    redirect(URL('liste'))
 
 def ajax():
     # ajouter des index (aux differentes collections)

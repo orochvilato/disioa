@@ -33,10 +33,14 @@
         {{ pass }}
     
 </svg>
+<div id="output">
+    
+</div>
 <script>
     var e = document.getElementsByClassName('circo');
+    var o = document.getElementById('output');
     for (var i=0;i<e.length;i++) {
         var c = e[i].getBBox();
-        console.log(e[i].getAttribute('id'),c.width,c.height);
+        o.innerHTML = o.innerHTML + e[i].getAttribute('id') +',' + c.width +',' + c.height +'|';
     }
 </script>

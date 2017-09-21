@@ -14,12 +14,12 @@
         </header>
       </a>
       <div class="deputes-infos">
-        <div><i class="fa fa-briefcase" aria-hidden="true"></i> {{=d['depute_csp'] }}  {{ / =d['depute_profession'] }}</div>
-        <div><i class="fa fa-birthday-cake" aria-hidden="true"></i> {{=d['depute_age'] }} ans</div>
-        <a href="#" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>     
+        <a href="#" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>
         <div class="deputes-votes">
-       
-         {{ if 'positions' in d['stats'].keys(): }}
+          <p>{{=d['depute_csp'] }} / {{ =d['depute_profession'] }}</p>
+          <p>{{=d['depute_age'] }} ans</p>
+            {{ if 'positions' in d['stats'].keys(): }}
+        <div class="deputes-votes">
           <div class="deputes-participation">
             <h3>Participation</h3>
             <div>{{=emphasize('stats.positions.exprimes',d['stats']['positions']['exprimes']) }} %</div>
@@ -36,6 +36,7 @@
             <h3>EM-Compatibilité</h3>
             <div>{{=emphasize('stats.compat.REM',d['stats']['compat']['REM']) }} %</div>
           </div>
+        </div>
         {{ pass }}
       </div>
     </div>

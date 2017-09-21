@@ -393,75 +393,85 @@ template {
   margin-top: 40px; }
   #deputes-template #deputes-search {
     background: #213558;
-    border-radius: 5px;
-    padding: 4px 4px 4px 0;
+    border-radius: 35px;
+    padding: 3px;
     margin-bottom: 20px; }
-    #deputes-template #deputes-search i {
-      color: #fffefa;
-      padding-left: 12px;
-      width: 33px; }
     #deputes-template #deputes-search input {
       background: #fffefa;
       border: 0;
-      border-radius: 5px;
+      border-bottom-left-radius: 35px;
+      border-top-left-radius: 35px;
       font-size: 15px;
-      height: 30px;
-      padding: 4px 8px;
-      width: calc(100% - 38px); }
+      height: 34px;
+      padding: 0 15px;
+      width: calc(100% - 45px); }
+    #deputes-template #deputes-search button {
+      background: transparent;
+      border: 0;
+      width: 35px; }
+    #deputes-template #deputes-search i {
+      color: #fffefa; }
   #deputes-template .deputes-filters {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around; }
+    justify-content: space-between; }
     @media (max-width: 767px) {
       #deputes-template .deputes-filters {
         display: none; } }
     #deputes-template .deputes-filters select {
       font-size: 14px;
-      width: calc(100% / 5 - 8px); }
+      width: calc(100% / 4 - 15px); }
       @media (max-width: 1023px) {
         #deputes-template .deputes-filters select {
           font-size: 13px;
           margin-bottom: 10px;
-          width: calc(100% / 3 - 15px); } }
-  #deputes-template #deputes-liste {
-    margin-top: 80px; }
+          width: calc(100% / 2 - 15px); } }
+  #deputes-template .deputes-count {
+    border-bottom: 1px dashed #82cde2;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 20px 0 60px; }
     @media (max-width: 767px) {
-      #deputes-template #deputes-liste {
-        margin-top: 50px; } }
-    #deputes-template #deputes-liste article {
-      display: flex;
-      margin-bottom: 70px; }
-      @media (max-width: 767px) {
-        #deputes-template #deputes-liste article {
-          display: block;
-          text-align: center; } }
-      #deputes-template #deputes-liste article > div {
-        width: 100%; }
-    #deputes-template #deputes-liste img {
-      margin-top: 32px; }
-      @media (max-width: 767px) {
-        #deputes-template #deputes-liste img {
-          display: block;
-          margin: 0 auto 5px;
-          width: 40%; } }
-    #deputes-template #deputes-liste a:hover > header h1,
-    #deputes-template #deputes-liste a:hover > header h2 span {
-      background: #82cde2; }
-    #deputes-template #deputes-liste header {
-      color: white;
-      display: inline-block; }
-    #deputes-template #deputes-liste h2 span {
-      background: #ff0052;
-      display: inline-block;
-      font-size: 16px;
-      padding: 4px 6px;
-      transition: .2s; }
-    #deputes-template #deputes-liste h1 {
-      background: #213558;
-      display: inline-block;
-      font-size: 24px;
-      padding: 3px 5px;
-      transition: .2s; }
+      #deputes-template .deputes-count {
+        display: none; } }
+  @media (max-width: 767px) {
+    #deputes-template #deputes-liste {
+      margin-top: 50px; } }
+  #deputes-template #deputes-liste article {
+    display: flex;
+    margin-bottom: 70px; }
+    @media (max-width: 767px) {
+      #deputes-template #deputes-liste article {
+        display: block;
+        text-align: center; } }
+    #deputes-template #deputes-liste article > div {
+      width: 100%; }
+  #deputes-template #deputes-liste img {
+    margin-top: 32px; }
+    @media (max-width: 767px) {
+      #deputes-template #deputes-liste img {
+        display: block;
+        margin: 0 auto 5px;
+        width: 40%; } }
+  #deputes-template #deputes-liste a:hover > header h1,
+  #deputes-template #deputes-liste a:hover > header h2 span {
+    background: #82cde2; }
+  #deputes-template #deputes-liste header {
+    color: white;
+    display: inline-block; }
+  #deputes-template #deputes-liste h2 span {
+    background: #ff0052;
+    display: inline-block;
+    font-size: 16px;
+    padding: 4px 6px;
+    transition: .2s; }
+  #deputes-template #deputes-liste h1 {
+    background: #213558;
+    display: inline-block;
+    font-size: 24px;
+    padding: 3px 5px;
+    transition: .2s; }
   #deputes-template .deputes-infos {
     font-size: 15px;
     margin: 12px 15px 0; }
@@ -787,7 +797,9 @@ template {
       color: white;
       font-size: 13px;
       font-weight: 600;
-      padding: 0 6px; }
+      margin-left: 10px;
+      padding: 0 6px;
+      white-space: nowrap; }
       @media (max-width: 1023px) {
         #depute-template .depute-votes-list .vote {
           margin-top: 2px; } }

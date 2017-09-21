@@ -7,6 +7,9 @@ import re
 scrutins_by_id = cache.ram('scrutins_by_id',lambda: dict((s['scrutin_id'],s) for s in mdb.scrutins.find()), time_expire=0)
 deputesFI = cache.ram('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}).distinct('depute_shortid'),time_expire=3600)
 def index():
+    redirect(URL('fiche'))
+    
+def fiche():
     shortid = request.args(0)
     depute = mdb.deputes.find_one({'depute_shortid':shortid}) or mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
     

@@ -9,6 +9,7 @@
        version="1.2"
 
        width="100%"
+       height="300px"
 
        viewBox="0 0 898.96026 440.10331"
        id="svgcirco"
@@ -18,6 +19,7 @@
      <script type="text/ecmascript"><![CDATA[
        var svgcircoDoc;
        var circo;
+       var circocircle
 
        var tl;
        function svgcirco_init(evt) {
@@ -26,7 +28,7 @@
           svgcircoDoc.style.height = svgcircoDoc.getBoundingClientRect().height;
           box=circo.getBBox();
           if ((box.width<50) && (box.height<50)) {
-              var circocircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+              circocircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
               circocircle.setAttributeNS(null, 'id', 'circocircle');
               circocircle.setAttributeNS(null, 'cx', box.x+box.width/2);
               circocircle.setAttributeNS(null, 'cy', box.y+box.height/2);
@@ -78,7 +80,7 @@
       <defs id="defs362">
         <style id="style1">
            #svgcirco path {fill-opacity:1;fill-rule:evenodd;stroke-opacity:0;fill:#d9c89e}
-           #svgcirco path.circo { fill-opacity:1;fill-rule:evenodd;fill:#e9debb; }
+           
            #svgcirco path[dep="{{=dep}}"] { fill:#e9debb;}}
            #svgcirco path.wideborder { stroke-width:0.3; stroke-opacity:1; stroke:white;}
            #svgcirco path.domtom {  stroke-opacity:1; stroke:white; stroke-width:1; vector-effect:non-scaling-stroke; }

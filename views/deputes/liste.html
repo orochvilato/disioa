@@ -2,9 +2,9 @@
 {{ block title }}Les députés | Observatoire Insoumis{{ end }}
 {{ block content }}
 <div id="deputes-template" class="container">
-    <div id="deputes-search">
-      <label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>
+    <div id="deputes-search">      
       <input id="deputes-searchtext" placeholder="Rechercher ..." value="{{ =params.get('text','')}}">
+      <button><i class="fa fa-search" aria-hidden="true"></i></button>
     </div>
     <div class="deputes-filters">
        <select id="deputes-groupe-filter" name="gp">{{ for id,lib in [('','Tous les groupes')]+groupes: }}<option value="{{ =id }}" {{ if params.get('gp','')==id:}}selected{{pass}}>{{ =lib }}</option>{{ pass }}</select>
@@ -13,7 +13,7 @@
         <select id="deputes-age-filter" name="age">{{ for k,r in [('','Tous les âges')]+ages: }}<option value="{{ =k }}" {{ if params.get('age','')==k:}}selected{{pass}}>{{ =r }}</option>{{ pass }}</select>
          
     </div>
-    <h2 id="deputes-liste-count" style="text-align:center;margin-top:20px;"><span id="deputes-count"></span> député(s)</h2>
+    <div class="deputes-count"><span id="deputes-count"></span> député(s)</div>
     <div id="deputes-liste">
 
     </div>

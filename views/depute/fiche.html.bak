@@ -30,9 +30,12 @@
                     {{ pass }}
                 </div>
 
-                <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="{{ =URL('groupe','index',args=[groupe_abrev]) }}">{{ =groupe_libelle }}</a></div>
-                <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance) }}</span></div>
-                <div class="depute-infos"><span>Suppléant : {{ =depute_suppleant }}</span></div>
+                <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="#">{{ =groupe_libelle }}</a></div>
+                <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance[0].lower()+depute_naissance[1:]) }}</span></div>
+                <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
+                
+                 <div class="depute-infos"><span>Elu(e) avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{else:}} au 1er tour{{pass}}</span></div>                    
+                <div class="depute-infos"><span>Elu(e) par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],2)}}% des inscrits de sa circonscription</span></div>
             </div>
         </div>
 
@@ -51,7 +54,8 @@
             <section id="presentation" class="tab-content"> <!-- Présentation -->
                 <div class="depute-hemicycle">
                     {{ =svgcirco(depute_circo_id) }}
-                    <object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>
+                    {{ =hemicycle(depute_place,URL(c='depute',f='fiche')) }}
+                    <!--<object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>-->
                 </div>
                 <div class="depute-fonctions">
                     <h2>Fonctions / Mandats</h2>
@@ -266,7 +270,7 @@
     {{ pass }}
     {{ pass }}
 
-    var svg = document.getElementById('hemicycle');
+    //var svg = document.getElementById('hemicycle');
     $(document).ready(function() {
         
         var visible = $('.tab-container input:checked').val();
@@ -279,9 +283,9 @@
         
         /* position hemicycle */
         
-        svg.addEventListener('load', function () {
-          initHemicycle("{{ =depute_place }}");
-        });
+        //svg.addEventListener('load', function () {
+        //  initHemicycle("{{ =depute_place }}");
+        //});
         function addGraphPresences() {
             var chart = bb.generate({
               "data": {
