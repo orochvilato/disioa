@@ -17,9 +17,12 @@ output_path = os.path.join(request.folder, 'private', 'scrapy')
 def updateDeputesStatsElection():
     from openpyxl import load_workbook
     path = os.path.join(request.folder, 'private','legislatives.xlsx')
-    wb = cache.ram('circo.xls',lambda:load_workbook(path),time_expire=3600)
+    wb = cache.ram('circo.xls',lambda:load_workbook(path),time_expire=0)
     circos = dict((d['depute_departement_id'],d['depute_departement']) for d in mdb.deputes.find())
-    deputes = dict((d['depute_circo_id'],d['depute_shortid']) for d in mdb.deputes.find())
+    deputes = {}
+    for d in mdb.deputes.find():
+        deputes[d['depute_circo_id']] = deputes.get(d['depute_circo_id'],[])+[d['depute_shortid']]
+    
     ws = wb['Circo. leg. T2']
     updates = {}
     cv = { "ZA":"971", "ZB":"972", "ZC":"973", "ZD":"974", "ZS":"975", "ZM":"976", "ZX":"977", "ZW":"986", "ZP":"987", "ZN":"988", "ZZ":"999"}
@@ -28,11 +31,14 @@ def updateDeputesStatsElection():
         advs = []
         dep = ('000'+cv.get(str(r[0].value),str(r[0].value)))[-3:]
         t = dep +"-"+('00'+str(r[2].value))[-2:]
+       
         i=28
         while i<len(r) and r[i].value:
             advs.append({'nom':{'M':'M. ','F':'Mme '}[r[i].value]+r[i+2].value+' '+r[i+1].value+' ('+r[i+3].value+')','voix':r[i+4].value})
             i += 9
-        mdb.deputes.update({'depute_shortid':deputes[t]},{'$set':{'depute_election':{'inscrits':r[4].value, 'adversaires':advs, 'abstentions':r[5].value,'votants':r[7].value,'blancs':r[9].value,'nuls':r[12].value,'exprimes':r[15].value,'voix':r[23].value}}})
+
+        for d in deputes[t]:
+            mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election':{'inscrits':r[4].value, 'adversaires':advs, 'abstentions':r[5].value,'votants':r[7].value,'blancs':r[9].value,'nuls':r[12].value,'exprimes':r[15].value,'voix':r[23].value}}})
     
     return json.dumps(advs)
 
