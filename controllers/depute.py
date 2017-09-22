@@ -11,7 +11,7 @@ def index():
     
 def fiche():
     shortid = request.args(0)
-    obsas_log('fiches',shortid)
+    obsass_log('fiches',shortid)
     tab = request.args(1) if request.args(1) in ['votes','presentation','interventions'] else 'presentation'
     depute = mdb.deputes.find_one({'depute_shortid':shortid}) or mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
     
