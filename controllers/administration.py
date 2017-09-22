@@ -5,7 +5,7 @@ def updateLogs():
     from geoip import geolite2
     import pycountry
     for l in mdb.logs.find({'geoip':None}):
-        match = geolite2.lookup('83.203.177.254')
+        match = geolite2.lookup(l['client'])
         pays = ""
         if match:
             country = match.country
