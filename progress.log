@@ -5366,3 +5366,15 @@
 [2017-09-22 17:10:22] EDIT oadev/controllers/depute.py: 0
 [2017-09-22 17:12:02] EDIT oadev/views/depute/fiche.html: 0
 [2017-09-22 17:12:41] EDIT oadev/controllers/depute.py: 0
+[2017-09-22 17:32:32] EDIT oadev/controllers/maintenance.py: 2
+[2017-09-22 17:32:55] EDIT oadev/controllers/maintenance.py: 0
+[2017-09-22 17:38:45] EDIT oadev/models/helpers.py: 6
+[2017-09-22 17:39:21] EDIT oadev/controllers/maintenance.py: 1
+[2017-09-22 17:41:05] EDIT oadev/controllers/depute.py: 1
+[2017-09-22 17:53:29] EDIT oadev/models/helpers.py: 2
+[2017-09-22 17:53:40] EDIT oadev/models/helpers.py: 0
+[2017-09-22 18:00:17] EDIT oadev/controllers/deputes.py: 11
+[2017-09-22 18:00:23] EDIT oadev/controllers/deputes.py: 0
+[2017-09-22 18:02:33] EDIT oadev/controllers/deputes.py: -39
+[2017-09-22 18:08:48] EDIT oadev/controllers/deputes.py: 2
+[2017-09-22 19:13:25] EDIT oadev/models/helpers.py: 1

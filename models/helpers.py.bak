@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+import datetime
+def obsass_log(domaine,page):
+    mdb.logs.insert_one({'date':datetime.datetime.now(),
+                         'client':request.client,
+                         'agent':request.env.HTTP_USER_AGENT,
+                         'referer':request.env.HTTP_REFERER,
+                         'page':page,
+                         'domaine':domaine})
+
 def getdot(e,k):
     for _k in k.split('.'):
         e = e[_k]
@@ -63,4 +72,4 @@ def svgcirco(circo):
     return XML(response.render('svg/circofrance.svg',dep=dep,circo=circosel,circos=circos))
 
 def hemicycle(place,base_url=""):
-    return XML(response.render('svg/hemicyclelight.svg',place='p'+place,base_url=base_url))
+    return XML(response.render('svg/hemicyclelight.svg',place='p'+place,base_url='/'+base_url))

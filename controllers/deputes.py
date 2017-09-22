@@ -33,56 +33,8 @@ cache_csp = cache.disk('csp',lambda: sorted([(c,c) for c in mdb.deputes.distinct
 def index():
     redirect(URL('liste'))
 
-def ajax():
-    # ajouter des index (aux differentes collections)
-    nb = 25
-    minpart_top = 30
-    page = int(request.args(0) or 2)-2
-    groupe = request.vars.get('gp','ALL')
-    tri = request.vars.get('tr','depute_nom_tri')
-    direction = int(request.vars.get('di',1))
-    text = request.vars.get('txt','').decode('utf8')
-    region = request.vars.get('rg',None)
-    top = request.vars.get('top',None)
-
-    tops_sorts = {'part':'stats.positions.exprimes',
-                  'diss':'stats.positions.dissidence',
-                  'itvs':'stats.nbitvs',
-                  'mots':'stats.nbmots',
-                  'compFI':'stats.compat.FI',
-                  'compREM':'stats.compat.REM'}
-
-    filter = {'depute_actif':True}
-
-
-    if text:
-        regx = re.compile(text, re.IGNORECASE)
-        filter['depute_nom'] = regx
-    if groupe and groupe!='ALL':
-        filter['groupe_abrev'] = groupe
-    if region and region!='ALL':
-        filter['depute_region'] = region
-
-    if top:
-        rtop = re.match(r'(top|flop)(\d+)([a-z]{4})([A-Z]*)',top)
-        if rtop:
-            tf,n,typ,gp = rtop.groups()
-            nb = int(n)
-            page = 0
-            direction = -1 if tf=='top' else 1
-            tri = tops_sorts[typ+gp]
-            filter = {'$and':[ {'stats.positions':{'$ne':None}},filter ]}
-            if gp:
-                filter['$and'].append({'groupe_abrev':{'$ne':gp}})
-    skip = nb*page
-    deputes = list(mdb.deputes.find(filter).sort([(tri,direction)]).skip(skip).limit(nb))
-
-    return dict(deputes=deputes, tri = tri, skip = skip, next=((nb == len(deputes)) and not top ))
-
-
-
-
 def liste():
+    
     params = dict(request.vars)
     return dict(params=params,tris=tri_choices,tri_items=tri_items['liste'],groupes = cache_groupes,regions = cache_regions, csp=cache_csp, ages=cache_ages)
 
@@ -112,7 +64,20 @@ def _ajax(type_page):
     region = request.vars.get('rg',None)
     top = request.vars.get('top',None)
     tri = request.vars.get('tri','stats.positions.exprimes' if top else 'depute_nom_tri')
-    
+    if (page==0):
+        filters = []
+        if groupe:
+            filters.append(groupe)
+        if csp:
+            filters.append(csp)
+        if region:
+            filters.append(region)
+        if age:
+            filters.append(age)
+        if top:
+            filters.append(tri_choices[tri]['rank'])
+        obsass_log((top if top else 'liste')+'_depute',filters)
+        
     tops_dir = {'stats.positions.exprimes':-1,
                   'stats.positions.dissidence':-1,
                   'stats.nbitvs':-1,

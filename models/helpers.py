@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+import datetime
+def obsass_log(domaine,page):
+    if request.env.REQUEST_SCHEME=='http':
+        mdb.logs.insert_one({'date':datetime.datetime.now(),
+                             'client':request.client,
+                             'agent':request.env.HTTP_USER_AGENT,
+                             'referer':request.env.HTTP_REFERER,
+                             'page':page,
+                             'domaine':domaine})
+
 def getdot(e,k):
     for _k in k.split('.'):
         e = e[_k]
