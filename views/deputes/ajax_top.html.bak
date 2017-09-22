@@ -1,26 +1,29 @@
 {{ def emphasize(itemtype,value): }}
 {{   return SPAN(value,_class='emphasize' if itemtype==tri else None) }}
 {{ pass }}
+
 {{ for i,d in enumerate(deputes): }}
+
   <article class="depute-item">
+      {{ =rank }}
     <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
       <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/{{ =d['depute_uid'][2:] }}.jpg" />
     </a>
     <div>
-      <a href="#">
+      <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
         <header>
           <h2><span>{{ =d['depute_region'] }} / {{ =d['depute_departement'] }} / {{ =d['depute_circo'] }}</span></h2>
           <h1>{{ =d['depute_nom'] }}</h1>
         </header>
       </a>
       <div class="deputes-infos">
-        <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>
+        <a href="#" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>
         {{ if 'positions' in d['stats'].keys(): }}
         <div class="deputes-votes">
-          <h2>{{ = d['stats']['ranks'][top['rank']] if tf=='top' else (578-d['stats']['ranks'][top['rank']]) }}</h2>
+          <h2>{{ = d['stats']['ranks'][top_dir][top['rank']] }}</h2>
           <div class="{{ =top['classe'] }}">
             <h3>{{ =top['label'] }}</h3>
-            <div>{{=getdot(d,tri) }} {{=top['unit']}}</div>
+            <div>{{=int(round(getdot(d,tri),0)) }} {{=top['unit']}}</div>
             
           </div>
           

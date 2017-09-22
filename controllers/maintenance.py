@@ -441,24 +441,30 @@ def updateScrutins():
 def updateDeputesRanks():
     ops = []
     ranks = {}
-    
+    out = []
     for dep in mdb.deputes.find({'depute_actif':True}):
+        compte = 'positions' in dep['stats'].keys()
         for stat in ['nbitvs','nbmots']:
-            ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],dep['stats'][stat]) ]
-        if 'positions' in dep['stats'].keys():
+            ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],dep['stats'][stat] if compte else None) ]
+        if compte:
             for stat,val in dep['stats']['positions'].iteritems():
                 ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],val)]
         if 'compat' in dep['stats'].keys():
             for stat,val in dep['stats']['compat'].iteritems():
                 ranks['compat'+stat] = ranks.get('compat'+stat,[]) + [ (dep['depute_uid'],val)]
+    topflop = {}
     for rank in ranks.keys():
-        ranks[rank].sort(key=lambda x:x[1], reverse=True)
-        ranks[rank] = dict([ (r[0],i+1) for i,r in enumerate(ranks[rank]) ])
+        topflop[rank] = {'down':{},'up':{}}
+        topflop[rank]['down'] = sorted(ranks[rank],key=lambda x:x[1], reverse=True)
+        topflop[rank]['up'] = sorted(ranks[rank],key=lambda x:x[1] if x[1]!=None else 'ZZZZ')
+        topflop[rank]['down'] = dict([ (r[0],i+1) for i,r in enumerate(topflop[rank]['down']) ])
+        topflop[rank]['up'] = dict([ (r[0],i+1) for i,r in enumerate(topflop[rank]['up']) ])
         
     for dep in mdb.deputes.find({'depute_actif':True}):
-        dep_ranks = dict((stat,ranks[stat].get(dep['depute_uid'],None)) for stat in ranks.keys())
+        dep_ranks = {'down': dict((stat,topflop[stat]['down'].get(dep['depute_uid'],None)) for stat in topflop.keys()),
+                     'up': dict((stat,topflop[stat]['up'].get(dep['depute_uid'],None)) for stat in topflop.keys())}
         
-        ops.append(UpdateOne({'depute_uid':dep['depute_uid']},{'$set':{'stats.ranks':dep_ranks}}))
+        ops.append(UpdateOne({'depute_uid':dep['depute_uid']},{'$set':{'stats.ranks':dep_ranks,'stats.nonclasse':not 'positions' in dep['stats'].keys()}}))
     if ops:
         mdb.deputes.bulk_write(ops)        
     return json.dumps(ranks)
@@ -524,11 +530,18 @@ def updateDeputesStats():
         {"$group":{'_id': {'depute':'$depute_uid','position':'$vote_position'}, 'n':{'$sum':1}}},
         {"$sort": SON([("_id.depute",1)])}
     ]
-
+    
     for p in list(mdb.votes.aggregate(pipeline)):
         uid = p['_id']['depute']
         deputes[uid]['depute_positions'][p['_id']['position']] = p['n']
     ops = []
+    
+    groupes_abrev = mdb.groupes.distinct('groupe_abrev')
+    gp_nbvotes = {}
+    for g in groupes_abrev:
+        pipeline = [ {'$redact': {'$cond': [{'$lt': ['$scrutin_positions.'+g+'.absent', '$scrutin_positions.'+g+'.total']}, '$$KEEP', '$$PRUNE']}}]
+        gp_nbvotes[g] = len(list(mdb.scrutins.aggregate(pipeline)))
+    
     for uid,dep in deputes.iteritems():
         dep['depute_positions']['total'] = sum(dep['depute_positions'].values())
         dep['depute_positions']['exprimes'] = dep['depute_positions']['total'] - dep['depute_positions'].get('absent',0)
@@ -540,17 +553,21 @@ def updateDeputesStats():
             if dep['depute_positions']['exprimes']>0:
                 dep['stats.positions'][pos] = round(100*float(dep['depute_positions'].get(pos,0)) / dep['depute_positions']['total'],3)
         # stats compat
+        
+        
+        
         dep['stats.compat'] = dict((g,0) for g in dep['depute_compat'].keys())
         for g,v in dep['depute_compat'].iteritems():
             if dep['depute_positions']['exprimes']>0:
-                dep['stats.compat'][g] = round(100*float(v) / dep['depute_positions']['exprimes'],3)
+                dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
         dep['stats.compat_sort'] = [ dict(g=g,p=p) for g,p in sorted(dep['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
+        
         ops.append(UpdateOne({'depute_uid':uid},{'$set':dep}))
 
     if ops:
         mdb.deputes.bulk_write(ops)
 
-    return json.dumps(deputes)
+    return json.dumps(gp_nbvotes)
 
 
 def updateScrutinsStats():

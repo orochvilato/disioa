@@ -35,7 +35,7 @@
                 <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
                 
                  <div class="depute-infos"><span>Elu(e) avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{else:}} au 1er tour{{pass}}</span></div>                    
-                <div class="depute-infos"><span>Elu(e) par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],2)}}% des inscrits de sa circonscription</span></div>
+                <div class="depute-infos"><span>Elu(e) par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],2)}}% des inscrits de sa circonscription ({{=depute_election['voix']}} voix)</span></div>
             </div>
         </div>
 
@@ -160,11 +160,11 @@
                         {{ =svggauge('diss',stats['positions']['dissidence']) }}
                     </div>
                     <div class="gauge">
-                        <h2>FI-Compatibilité</h2>
+                        <h2>Vote Insoumis</h2>
                         {{ =svggauge('compfi',stats['compat']['FI']) }}
                     </div>
                     <div class="gauge">
-                        <h2>EM-Compatibilité</h2>
+                        <h2>Vote En marche</h2>
                         {{ =svggauge('compem',stats['compat']['REM']) }}
                     </div>
                 </div>

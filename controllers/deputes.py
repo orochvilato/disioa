@@ -5,6 +5,21 @@ import json
 
 mdb = client.obsass
 
+from collections import OrderedDict
+tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes','unit':'%'}),
+            ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence','unit':'%'}),
+            ('stats.compat.FI',{'label':'Vote Insoumis','classe':'deputes-fi','rank':'compatFI','unit':'%'}),
+            ('stats.compat.REM',{'label':'Vote En marche','classe':'deputes-em','rank':'compatREM','unit':'%'}),
+            ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','unit':''}),
+            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','unit':''}),
+            ('depute_nom_tri',{'label':"Nom",'classe':'','rank':'N/A','unit':''})
+            ])
+tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots'),
+             'liste': ('depute_nom_tri','stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM')}    
+top_choices = [('top','Top'),
+            ('flop','Flop'),
+            ]
+
 # cache
 CACHE_EXPIRE = 3600
 cache_groupes = cache.disk('groupes', lambda: [(g['groupe_abrev'],g['groupe_libelle']) for g in mdb.groupes.find()], time_expire=CACHE_EXPIRE)
@@ -65,25 +80,11 @@ def ajax():
     return dict(deputes=deputes, tri = tri, skip = skip, next=((nb == len(deputes)) and not top ))
 
 
-# Tests
-from collections import OrderedDict
-tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes','unit':'%'}),
-            ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence','unit':'%'}),
-            ('stats.compat.FI',{'label':'FI-Compatibilité','classe':'deputes-fi','rank':'compatFI','unit':'%'}),
-            ('stats.compat.REM',{'label':'EM-Compatibilité','classe':'deputes-em','rank':'compatREM','unit':'%'}),
-            ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','unit':''}),
-            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','unit':''}),
-            ('depute_nom_tri',{'label':"Nom",'classe':'','rank':'N/A','unit':''})
-            ])
-tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots'),
-             'liste': ('depute_nom_tri','stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM')}    
-top_choices = [('top','Top'),
-            ('flop','Flop'),
-            ]
+
 
 def liste():
     params = dict(request.vars)
-    return dict(params=params,tris=tri_choices,groupes = cache_groupes,regions = cache_regions, csp=cache_csp, ages=cache_ages)
+    return dict(params=params,tris=tri_choices,tri_items=tri_items['liste'],groupes = cache_groupes,regions = cache_regions, csp=cache_csp, ages=cache_ages)
 
 
 def ajax_liste():
@@ -93,7 +94,7 @@ def tops():
     params = dict(request.vars)
     params['top'] = params.get('top','top')
 
-    return dict(params=params,tops=top_choices,tris=tri_choices,groupes = cache_groupes,regions = cache_regions)
+    return dict(params=params,tops=top_choices,tris=tri_choices, tri_items=tri_items['tops'],groupes = cache_groupes,regions = cache_regions)
 def ajax_top():
     return _ajax('tops')
 
@@ -136,7 +137,9 @@ def _ajax(type_page):
     sort = []
     if top:
         direction = tops_dir[tri] * (1 if top=='top' else -1)
-        sort += [ (tri,direction),('stats.ranks.'+tri_choices[tri]['rank'],1 if top=='top' else -1)]
+        rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='top') else 'up')+'.'+tri_choices[tri]['rank']
+        #sort += [ ('stats.nonclasse',1),(tri,direction),(rank,tops_dir[tri]*(-1 if top=='top' else 1))]
+        sort += [ ('stats.nonclasse',1),(rank,1)]
     else:
         sort += [ (tri,direction)]
 
@@ -147,4 +150,4 @@ def _ajax(type_page):
     
     deputes = list(mreq.skip(skip).limit(nb))
 
-    return dict(deputes=deputes, count=count,tri = tri, top=tri_choices[tri], tf=top, skip = skip, next=(nb == len(deputes) ))
+    return dict(deputes=deputes, count=count,tri = tri, top=tri_choices[tri], top_dir=('down' if (tops_dir.get(tri,0)==-1 and top=='top') else 'up'),tf=top, skip = skip, next=(nb == len(deputes) ))

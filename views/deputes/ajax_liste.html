@@ -1,6 +1,3 @@
-{{ def emphasize(itemtype,value): }}
-{{   return SPAN(value,_class='emphasize' if itemtype==tri else None) }}
-{{ pass }}
 {{ for i,d in enumerate(deputes): }}
   <article class="depute-item">
     <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
@@ -22,19 +19,19 @@
          {{ if 'positions' in d['stats'].keys(): }}
           <div class="deputes-participation">
             <h3>Participation</h3>
-            <div>{{=emphasize('stats.positions.exprimes',d['stats']['positions']['exprimes']) }} %</div>
+            <div>{{=int(round(d['stats']['positions']['exprimes'],0)) }} %</div>
           </div>
           <div class="deputes-dissidence">
             <h3>Contre son groupe</h3>
-            <div>{{=emphasize('stats.positions.dissidence',d['stats']['positions']['dissidence']) }} %</div>
+            <div>{{=int(round(d['stats']['positions']['dissidence'],0)) }} %</div>
           </div>
           <div class="deputes-fi">
-            <h3>FI-Compatibilité</h3>
-            <div>{{=emphasize('stats.compat.FI',d['stats']['compat']['FI']) }} %</div>
+            <h3>Vote Insoumis</h3>
+            <div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>
           </div>
           <div class="deputes-em">
-            <h3>EM-Compatibilité</h3>
-            <div>{{=emphasize('stats.compat.REM',d['stats']['compat']['REM']) }} %</div>
+            <h3>Vote En marche</h3>
+            <div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>
           </div>
         {{ pass }}
       </div>

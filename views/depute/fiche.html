@@ -41,13 +41,13 @@
 
         <div class="tab-container">
             <header>
-                <input id="tab1" type="radio" name="tabs" value="presentation">
+                <input id="tab1" type="radio" name="tabs" value="presentation" {{if tab=='presentation':}}checked{{pass}}>
                 <label for="tab1"><i class="fa fa-id-card-o"></i><span>Présentation</span></label>
 
-                <input id="tab2" type="radio" name="tabs" value="interventions" checked>
+                <input id="tab2" type="radio" name="tabs" value="interventions" {{if tab=='interventions':}}checked{{pass}}>
                 <label for="tab2"><i class="fa fa-comment-o"></i><span>Interventions</span></label>
 
-                <input id="tab3" type="radio" name="tabs" value="votes">
+                <input id="tab3" type="radio" name="tabs" value="votes" {{if tab=='votes':}}checked{{pass}}>
                 <label for="tab3"><i class="fa fa-hand-paper-o"></i><span>Votes</span></label>
             </header>
 
@@ -160,11 +160,11 @@
                         {{ =svggauge('diss',stats['positions']['dissidence']) }}
                     </div>
                     <div class="gauge">
-                        <h2>FI-Compatibilité</h2>
+                        <h2>Vote Insoumis</h2>
                         {{ =svggauge('compfi',stats['compat']['FI']) }}
                     </div>
                     <div class="gauge">
-                        <h2>EM-Compatibilité</h2>
+                        <h2>Vote En marche</h2>
                         {{ =svggauge('compem',stats['compat']['REM']) }}
                     </div>
                 </div>
