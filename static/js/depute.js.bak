@@ -1,4 +1,5 @@
-function setInfiniteScroll(id,path,args,append, emptyMsg) {
+function setInfiniteScroll(id,path,args,append,container) {
+  
   if (infScroll!=undefined) {
       elem.innerHTML = "";
       infScroll.destroy()
@@ -11,12 +12,12 @@ function setInfiniteScroll(id,path,args,append, emptyMsg) {
   // options
   path: path+'/{{#}}?'+urlargs,
   checkLastPage: '.pagination__next',
+  elementScroll: container,
   append: append,
   history: false,
   prefill: true
   });
-  
-  console.log(infScroll);
+
   return infScroll
 }
 

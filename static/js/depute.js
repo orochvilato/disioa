@@ -1,4 +1,5 @@
 function setInfiniteScroll(id,path,args,append) {
+  
   if (infScroll!=undefined) {
       elem.innerHTML = "";
       infScroll.destroy()

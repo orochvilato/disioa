@@ -8,13 +8,17 @@ scrutins_by_id = cache.disk('scrutins_by_id',lambda: dict((s['scrutin_id'],s) fo
 deputesFI = cache.disk('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}).distinct('depute_shortid'),time_expire=3600)
 def index():
     redirect(URL('fiche'))
-    
+
 def fiche():
     shortid = request.args(0)
-    obsass_log('fiches',shortid)
+
     tab = request.args(1) if request.args(1) in ['votes','presentation','interventions'] else 'presentation'
-    depute = mdb.deputes.find_one({'depute_shortid':shortid}) or mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
-    
+    depute = mdb.deputes.find_one({'depute_shortid':shortid})
+    if not depute:
+        depute = mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
+    else:
+        obsass_log('fiche',shortid)
+
     votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
     dates = {}
     weeks = {}
@@ -24,7 +28,7 @@ def fiche():
         sdat = pdat.strftime('%Y-%m-%d')
         if not wdat in weeks.keys():
             weeks[wdat] = {'e':0,'n':0}
-        
+
         if not sdat in dates.keys():
             dates[sdat] = {'e':0,'n':0}
         weeks[wdat]['n']+= 1

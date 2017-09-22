@@ -14,10 +14,10 @@
             </div>
             <div class="vote {{ =v['vote_position'] }}"><i class="fa {{ =icons[v['vote_position']] }}"></i> {{ =v['vote_position'][0].upper()+v['vote_position'][1:] }}</div>
         </header>
-        <p><i class="fa fa-arrow-circle-o-right"></i> {{ =v['scrutin_desc'] }}</p>
+        <p><i class="fa fa-arrow-circle-o-right"></i> {{ =XML(v['scrutin_desc']) }}</p>
     </div>
 </li>
 {{ pass }}
 {{ if next: }}
-    <div class="pagination__next"></div>
+    <div class="pagination__next__votes"></div>
 {{ pass }}

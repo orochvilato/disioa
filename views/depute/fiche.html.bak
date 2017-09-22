@@ -41,13 +41,13 @@
 
         <div class="tab-container">
             <header>
-                <input id="tab1" type="radio" name="tabs" value="presentation">
+                <input id="tab1" type="radio" name="tabs" value="presentation" {{if tab=='presentation':}}checked{{pass}}>
                 <label for="tab1"><i class="fa fa-id-card-o"></i><span>Présentation</span></label>
 
-                <input id="tab2" type="radio" name="tabs" value="interventions" checked>
+                <input id="tab2" type="radio" name="tabs" value="interventions" {{if tab=='interventions':}}checked{{pass}}>
                 <label for="tab2"><i class="fa fa-comment-o"></i><span>Interventions</span></label>
 
-                <input id="tab3" type="radio" name="tabs" value="votes">
+                <input id="tab3" type="radio" name="tabs" value="votes" {{if tab=='votes':}}checked{{pass}}>
                 <label for="tab3"><i class="fa fa-hand-paper-o"></i><span>Votes</span></label>
             </header>
 
@@ -183,9 +183,11 @@
                         <input class="search" placeholder="Rechercher un vote">
                         <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
+                    <div class="test"
                     <ul id="vote-items">
 
                     </ul>
+                    </div>
                 </div>
             </section>
         </div>
@@ -202,13 +204,13 @@
       
       
     // Interventions
-    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item');
+    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item',container="#itvlist");
     
     function searchitv() {
         itv_IS.element.innerHTML = '';
          itv_IS.destroy();
          search = $('.depute-interventions-search input.search').val();
-         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item', emptyMsg='<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>');
+         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item',container="#itvlist");
         itv_IS.on('append', function(response) {
             if (itv_IS.element.childElementCount === 0) {
                 itv_IS.element.innerHTML = '<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>';
@@ -228,13 +230,13 @@
     });
 
     // Votes
-    var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item');
+    var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item',container=".test");
     
     function searchvote() {
         vote_IS.element.innerHTML = '';
          vote_IS.destroy();
          search = $('.depute-votes-search input.search').val();
-         vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.vote-item');
+         vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.vote-item',container=".test");
         vote_IS.on('append', function(response) {
             if (vote_IS.element.childElementCount === 0) {
                 vote_IS.element.innerHTML = '<li>Aucun vote n\'a été trouvé pour cette recherche.</li>';

@@ -183,9 +183,11 @@
                         <input class="search" placeholder="Rechercher un vote">
                         <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
+                   
                     <ul id="vote-items">
 
                     </ul>
+                    
                 </div>
             </section>
         </div>
@@ -208,7 +210,7 @@
         itv_IS.element.innerHTML = '';
          itv_IS.destroy();
          search = $('.depute-interventions-search input.search').val();
-         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item', emptyMsg='<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>');
+         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item');
         itv_IS.on('append', function(response) {
             if (itv_IS.element.childElementCount === 0) {
                 itv_IS.element.innerHTML = '<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>';

@@ -14,6 +14,7 @@ mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
 def test():
+    obsass_log('domaine','test')
     return BEAUTIFY(request)
 
 def updateDeputesStatsElection():
@@ -319,6 +320,67 @@ def updateSessions():
 
     updateStats()
 
+def updateInterventions():
+    lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
+
+    with open(lexiques_path,'r') as f:
+        lexiques = json.loads(f.read())
+
+    lexiquenoms = lexiques['NOM']
+    #lexiquenoms.update(lexiques['ADV'])
+    lexiquenoms.update(lexiques['ADJ'])
+    lexiqueverbes = lexiques['VER']
+    _lexiques = {'noms':lexiquenoms,'verbes':lexiqueverbes}
+    _lex = {'noms':set(_lexiques['noms'].keys()),
+            'verbes':set(_lexiques['verbes'].keys()) }
+
+    def countWords(txt):
+        words = {'noms':{},'verbes':{}}
+        txt = txt.replace('\n',' ').replace('!','').replace('?','').replace('.',' ').replace(':',' ').replace(',',' ').replace(';',' ').replace('-',' ').replace('  ',' ').replace(u'\xa0','').replace(u'\u2019',' ').lower().split(' ')
+        for lex in _lexiques.keys():
+            _words = [ _lexiques[lex][x] for x in txt if x in _lex[lex] ]
+            for w in _words:
+                if not w.strip():
+                    continue
+                if not w in words[lex].keys():
+                    words[lex][w] = 1
+                else:
+                    words[lex][w] += 1
+
+        return words
+
+    def addWords(w1,w2):
+        for k in w2.keys():
+            if not k in w1.keys():
+                w1[k] = w2[k]
+            else:
+                for mot,n in w2[k].iteritems():
+                    w1[k][mot] = w1[k].get(mot,0) + n
+
+    deputes = dict((a['depute_id'],{ 'groupe_abrev':a['groupe_abrev'],'stats.nbmots':0, 'stats.nbitvs':0, 'depute_mots':{}, 'depute_nuages':{}}) for a in mdb.deputes.find())
+    groupes = dict((g['groupe_abrev'], {'groupe_mots':{},'groupe_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}) for g in mdb.groupes.find())
+    interventions = mdb.interventions.find()
+    for itv in interventions:
+        if itv['depute_id'] in deputes.keys():
+            _dep = deputes[itv['depute_id']]
+            _dep['stats.nbmots'] += itv['itv_nbmots']
+            _dep['stats.nbitvs'] += 1
+            addWords(_dep['depute_mots'],itv['mots'])
+        _grp = groupes[_dep['groupe_abrev']]
+        _grp['stats.nbmots'] += itv['itv_nbmots']
+        _grp['stats.nbitvs'] += 1
+        addWords(_grp['groupe_mots'],itv['mots'])
+    
+    for gid,g in groupes.iteritems():
+        g['groupe_nuages'] = genNuages(groupes[gid]['groupe_mots'])
+        mdb.groupes.update_one({'groupe_abrev':gid},
+                               {'$set':g})
+
+    for uid,d in deputes.iteritems():
+        d['depute_nuages'] = genNuages(deputes[uid]['depute_mots'])
+        mdb.deputes.update_one({'depute_id':uid},
+                                   {'$set':d})
+    return "ok"
 def updateScrutins():
     _scrutins = {}
     if 'rebuild' in request.args:

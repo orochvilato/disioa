@@ -227,11 +227,36 @@ def updateHATVP():
         f.write(json.dumps(declarations))
 
 def updateSessions():
-    if 'rebuild' in request.args:
-        mdb.interventions.remove()
-        mdb.deputes.update_many({},{'$set':{'depute_mots':{},'depute_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}})
-        mdb.groupes.update_many({},{'$set':{'groupe_mots':{},'groupe_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}})
-        
+
+    exclude = mdb.interventions.distinct('session_id')
+    launchScript('sessions',"'%s'" % (json.dumps(exclude)))
+    sessions = getJson('sessions')
+    scrutins = list(mdb.scrutins.find())
+    for s in scrutins:
+        if s['scrutin_typedetail']=='amendement' and 'scrutin_ref' in s.keys():
+            cptrd = s['scrutin_ref']['urlCompteRenduRef'].split('#')[0]
+            if cptrd in sessions.keys():
+                balises = sessions[cptrd]
+                bal = balises.get(s['scrutin_ref']['numAmend'],'')
+                s['scrutin_ref']['urlCompteRenduRef'] = cptrd + '#' + bal
+                mdb.scrutins.update_one({'scrutin_id': s['scrutin_id']}, {'$set': {'scrutin_ref': s['scrutin_ref']}})
+
+
+    interventions = getJson('interventions')
+    for itv in interventions:
+        for n,depid in enumerate(itv['depute_id'].split(u'|')):
+            new_itv=dict(itv)
+            new_itv['depute_id'] = depid
+            nid = deputes.get(depid,None)
+            if nid and nid['uid'] != new_itv['depute_uid']:
+                new_itv['depute_uid'] = nid['uid']
+            new_itv['mots'] = countWords(new_itv['itv_contenu_texte'])
+            new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
+            mdb.interventions.update_one({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True)
+
+    updateInterventions()
+
+def updateInterventions():
     lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
 
     with open(lexiques_path,'r') as f:
@@ -268,58 +293,30 @@ def updateSessions():
                 for mot,n in w2[k].iteritems():
                     w1[k][mot] = w1[k].get(mot,0) + n
 
-    exclude = mdb.interventions.distinct('session_id')
-    launchScript('sessions',"'%s'" % (json.dumps(exclude)))
-    sessions = getJson('sessions')
-    scrutins = list(mdb.scrutins.find())
-    for s in scrutins:
-        if s['scrutin_typedetail']=='amendement' and 'scrutin_ref' in s.keys():
-            cptrd = s['scrutin_ref']['urlCompteRenduRef'].split('#')[0]
-            if cptrd in sessions.keys():
-                balises = sessions[cptrd]
-                bal = balises.get(s['scrutin_ref']['numAmend'],'')
-                s['scrutin_ref']['urlCompteRenduRef'] = cptrd + '#' + bal
-                mdb.scrutins.update_one({'scrutin_id': s['scrutin_id']}, {'$set': {'scrutin_ref': s['scrutin_ref']}})
-
-
-    deputes = dict((a['depute_id'],{'gp':a['groupe_abrev'],'uid':a['depute_uid'],'mots':a['depute_mots'],'stats':a['stats']}) for a in mdb.deputes.find())
-    groupes = dict((g['groupe_abrev'], {'mots':g['groupe_mots'], 'stats':g['stats']}) for g in mdb.groupes.find())
-    interventions = getJson('interventions')
+    deputes = dict((a['depute_id'],{ 'groupe_abrev':a['groupe_abrev'],'stats.nbmots':0, 'stats.nbitvs':0, 'depute_mots':{}, 'depute_nuages':{}}) for a in mdb.deputes.find())
+    groupes = dict((g['groupe_abrev'], {'groupe_mots':{},'groupe_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}) for g in mdb.groupes.find())
+    interventions = mdb.interventions.find()
     for itv in interventions:
-        for n,depid in enumerate(itv['depute_id'].split(u'|')):
-            new_itv=dict(itv)
-            new_itv['depute_id'] = depid
-            nid = deputes.get(depid,None)
-            if nid and nid['uid'] != new_itv['depute_uid']:
-                new_itv['depute_uid'] = nid['uid']
-            new_itv['mots'] = countWords(new_itv['itv_contenu_texte'])
-            new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
-            mdb.interventions.update_one({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True)
-            if new_itv['depute_id'] in deputes.keys():
-                _dep = deputes[new_itv['depute_id']]
-                _dep['stats']['nbmots'] += new_itv['itv_nbmots']
-                _dep['stats']['nbitvs'] += 1
-                addWords(_dep['mots'],new_itv['mots'])
-                _grp = groupes[_dep['gp']]
-                _grp['stats']['nbmots'] += new_itv['itv_nbmots']
-                _grp['stats']['nbitvs'] += 1
-                addWords(_grp['mots'],new_itv['mots'])
-
+        if itv['depute_id'] in deputes.keys():
+            _dep = deputes[itv['depute_id']]
+            _dep['stats.nbmots'] += itv['itv_nbmots']
+            _dep['stats.nbitvs'] += 1
+            addWords(_dep['depute_mots'],itv['mots'])
+        _grp = groupes[_dep['groupe_abrev']]
+        _grp['stats.nbmots'] += itv['itv_nbmots']
+        _grp['stats.nbitvs'] += 1
+        addWords(_grp['groupe_mots'],itv['mots'])
+    
     for gid,g in groupes.iteritems():
+        g['groupe_nuages'] = genNuages(groupes[gid]['groupe_mots'])
         mdb.groupes.update_one({'groupe_abrev':gid},
-                               {'$set':{'groupe_mots':groupes[gid]['mots'],
-                                         'groupe_nuages':genNuages(groupes[gid]['mots']),
-                                         'stats':groupes[gid]['stats']}})
+                               {'$set':g})
 
-    for d in mdb.deputes.find():
-        if d['depute_id'] in deputes.keys():
-            mdb.deputes.update_one({'depute_id':d['depute_id']},
-                                   {'$set':{'depute_mots':deputes[d['depute_id']]['mots'],
-                                            'depute_nuages':genNuages(deputes[d['depute_id']]['mots']),
-                                            'stats':deputes[d['depute_id']]['stats']}})
-
-    updateStats()
-
+    for uid,d in deputes.iteritems():
+        d['depute_nuages'] = genNuages(deputes[uid]['depute_mots'])
+        mdb.deputes.update_one({'depute_id':uid},
+                                   {'$set':d})
+    return "ok"
 def updateScrutins():
     _scrutins = {}
     if 'rebuild' in request.args:
