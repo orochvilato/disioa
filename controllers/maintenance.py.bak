@@ -17,6 +17,18 @@ def test():
     obsass_log('domaine','test')
     return BEAUTIFY(request)
 
+def updateLogs():
+    from geoip import geolite2
+    import pycountry
+    for l in mdb.logs.find({'geoip':None}):
+        match = geolite2.lookup('83.203.177.254')
+        pays = ""
+        if match:
+            country = match.country
+            if country:
+                pays = pycountry.countries.get(alpha_2=country).name
+        mdb.logs.update({'_id':l['_id']},{'$set':{'geoip':pays}})
+
 def updateDeputesStatsElection():
     from openpyxl import load_workbook
     path = os.path.join(request.folder, 'private','legislatives.xlsx')
@@ -227,46 +239,6 @@ def updateHATVP():
         f.write(json.dumps(declarations))
 
 def updateSessions():
-    if 'rebuild' in request.args:
-        mdb.interventions.remove()
-        mdb.deputes.update_many({},{'$set':{'depute_mots':{},'depute_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}})
-        mdb.groupes.update_many({},{'$set':{'groupe_mots':{},'groupe_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}})
-        
-    lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
-
-    with open(lexiques_path,'r') as f:
-        lexiques = json.loads(f.read())
-
-    lexiquenoms = lexiques['NOM']
-    #lexiquenoms.update(lexiques['ADV'])
-    lexiquenoms.update(lexiques['ADJ'])
-    lexiqueverbes = lexiques['VER']
-    _lexiques = {'noms':lexiquenoms,'verbes':lexiqueverbes}
-    _lex = {'noms':set(_lexiques['noms'].keys()),
-            'verbes':set(_lexiques['verbes'].keys()) }
-
-    def countWords(txt):
-        words = {'noms':{},'verbes':{}}
-        txt = txt.replace('\n',' ').replace('!','').replace('?','').replace('.',' ').replace(':',' ').replace(',',' ').replace(';',' ').replace('-',' ').replace('  ',' ').replace(u'\xa0','').replace(u'\u2019',' ').lower().split(' ')
-        for lex in _lexiques.keys():
-            _words = [ _lexiques[lex][x] for x in txt if x in _lex[lex] ]
-            for w in _words:
-                if not w.strip():
-                    continue
-                if not w in words[lex].keys():
-                    words[lex][w] = 1
-                else:
-                    words[lex][w] += 1
-
-        return words
-
-    def addWords(w1,w2):
-        for k in w2.keys():
-            if not k in w1.keys():
-                w1[k] = w2[k]
-            else:
-                for mot,n in w2[k].iteritems():
-                    w1[k][mot] = w1[k].get(mot,0) + n
 
     exclude = mdb.interventions.distinct('session_id')
     launchScript('sessions',"'%s'" % (json.dumps(exclude)))
@@ -282,8 +254,6 @@ def updateSessions():
                 mdb.scrutins.update_one({'scrutin_id': s['scrutin_id']}, {'$set': {'scrutin_ref': s['scrutin_ref']}})
 
 
-    deputes = dict((a['depute_id'],{'gp':a['groupe_abrev'],'uid':a['depute_uid'],'mots':a['depute_mots'],'stats':a['stats']}) for a in mdb.deputes.find())
-    groupes = dict((g['groupe_abrev'], {'mots':g['groupe_mots'], 'stats':g['stats']}) for g in mdb.groupes.find())
     interventions = getJson('interventions')
     for itv in interventions:
         for n,depid in enumerate(itv['depute_id'].split(u'|')):
@@ -295,30 +265,8 @@ def updateSessions():
             new_itv['mots'] = countWords(new_itv['itv_contenu_texte'])
             new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
             mdb.interventions.update_one({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True)
-            if new_itv['depute_id'] in deputes.keys():
-                _dep = deputes[new_itv['depute_id']]
-                _dep['stats']['nbmots'] += new_itv['itv_nbmots']
-                _dep['stats']['nbitvs'] += 1
-                addWords(_dep['mots'],new_itv['mots'])
-                _grp = groupes[_dep['gp']]
-                _grp['stats']['nbmots'] += new_itv['itv_nbmots']
-                _grp['stats']['nbitvs'] += 1
-                addWords(_grp['mots'],new_itv['mots'])
 
-    for gid,g in groupes.iteritems():
-        mdb.groupes.update_one({'groupe_abrev':gid},
-                               {'$set':{'groupe_mots':groupes[gid]['mots'],
-                                         'groupe_nuages':genNuages(groupes[gid]['mots']),
-                                         'stats':groupes[gid]['stats']}})
-
-    for d in mdb.deputes.find():
-        if d['depute_id'] in deputes.keys():
-            mdb.deputes.update_one({'depute_id':d['depute_id']},
-                                   {'$set':{'depute_mots':deputes[d['depute_id']]['mots'],
-                                            'depute_nuages':genNuages(deputes[d['depute_id']]['mots']),
-                                            'stats':deputes[d['depute_id']]['stats']}})
-
-    updateStats()
+    updateInterventions()
 
 def updateInterventions():
     lexiques_path = os.path.join(request.folder, 'private','lexiques.json')

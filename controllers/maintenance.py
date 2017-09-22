@@ -17,6 +17,8 @@ def test():
     obsass_log('domaine','test')
     return BEAUTIFY(request)
 
+
+
 def updateDeputesStatsElection():
     from openpyxl import load_workbook
     path = os.path.join(request.folder, 'private','legislatives.xlsx')
