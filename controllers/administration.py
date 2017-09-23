@@ -6,7 +6,7 @@ def updateLogs():
     from geoip import geolite2
     import pycountry
     from user_agents import parse
-    for l in mdb.logs.find({'agent_pretty':None}):
+    for l in mdb.logs.find({'$or':[{'geoip':None},{'agent_pretty':None}]}):
         match = geolite2.lookup(l['client'])
         pays = ""
         if match:

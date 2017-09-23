@@ -1,4 +1,22 @@
 {{ extend "base.html" }}
+{{ block style }}
+<style>
+    td, th {
+        padding:10px;
+    }
+    .emphat {
+        font-size:20px;
+        font-weight:600;
+    }
+</style>
+{{ end }}
 {{ block content }}
-{{=BEAUTIFY(response._vars)}}
+<table>
+    <thead>
+        <tr><th></th>{{ for d in deputes:}}<th>{{=d['depute_nom']}}</th>{{pass}}</tr>    
+    </thead>
+    <tbody>
+        {{ for k,v in items.iteritems(): }}{{ if v['rank']!='N/A': }}<tr><td>{{ =v['label']}}</td>{{ for i,d in enumerate(deputes): }}<td class="{{ ='emphat' if items_pos[k][0][0]==i else ''}}">{{=getdot(d,k)}} {{=v['unit'] }}</td>{{pass}}</tr>{{ pass }}{{pass}}
+    </tbody>
+</table>
 {{ end }}

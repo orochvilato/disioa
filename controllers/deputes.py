@@ -123,6 +123,10 @@ def _ajax(type_page):
 
 def comparer():
     depids = request.args
-    compare_items = ['stats.positions.exprimes','stats.nbmots','stats.nbitv','stats.election.exprimes','stats.election.inscrits']
+    #compare_items = ['stats.positions.exprimes','stats.nbmots','stats.nbitvs','stats.election.exprimes','stats.election.inscrits']
     deputes = list(mdb.deputes.find({'depute_shortid':{'$in':depids}}))
-    return dict(deputes=deputes)
+    items_pos = {}
+    for k,it in tri_choices.iteritems():
+        items_pos[k] = sorted([ (i,getdot(d,k)) for i,d in enumerate(deputes) ],key=lambda x:x[1], reverse=True)
+    
+    return dict(deputes=deputes,items_pos=items_pos,items=tri_choices)
