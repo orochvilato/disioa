@@ -128,5 +128,5 @@ def comparer():
     items_pos = {}
     for k,it in tri_choices.iteritems():
         items_pos[k] = sorted([ (i,getdot(d,k)) for i,d in enumerate(deputes) ],key=lambda x:x[1], reverse=True)
-    
+    obsass_log('comparer',request.args)
     return dict(deputes=deputes,items_pos=items_pos,items=tri_choices)
