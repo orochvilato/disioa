@@ -4,11 +4,11 @@ import json
 import datetime
 import re
 
-scrutins_by_id = cache.disk('scrutins_by_id',lambda: dict((s['scrutin_id'],s) for s in mdb.scrutins.find()), time_expire=3600)
+scrutins_by_id = cache.disk('scrutins_by_id',lambda: dict((s['scrutin_id'],s) for s in mdb.scrutins.find()), time_expire=0)
 deputesFI = cache.disk('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}).distinct('depute_shortid'),time_expire=3600)
 def index():
     redirect(URL('fiche'))
-    
+
 def fiche():
     shortid = request.args(0)
 
@@ -18,7 +18,7 @@ def fiche():
         depute = mdb.deputes.find_one({'depute_shortid':deputesFI[int(random.random()*len(deputesFI))]})
     else:
         obsass_log('fiche',shortid)
-    
+
     votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
     dates = {}
     weeks = {}
@@ -28,7 +28,7 @@ def fiche():
         sdat = pdat.strftime('%Y-%m-%d')
         if not wdat in weeks.keys():
             weeks[wdat] = {'e':0,'n':0}
-        
+
         if not sdat in dates.keys():
             dates[sdat] = {'e':0,'n':0}
         weeks[wdat]['n']+= 1

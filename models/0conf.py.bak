@@ -130,7 +130,7 @@ filtresitm_order = ['participation','ficompat','emcompat']
 
 nuages_excl =('ministre','monsieur',u'collègue','madame','premier','cher','effet','commission','parlementaire',u'député','deux','amendement','sujet','texte','an','fois','lieu','trois','mois','rapporteur','cinq','quant','quel','dix','nom','quelle',u'deuxième','hui','vingt','point','question','y','ne','pas','dire','plus','fait','bien','dit',u'président')
 
-scrutins_cles = {1:"la déclaration de politique générale du Gouvernement",
-2:"la prorogation de l'état d'urgence",
-106:"la loi d'habilitation à réformer par ordonnances le code du travail",
-119:"la loi pour la confiance dans la vie politique"}
+scrutins_cles = {"15_1":"la déclaration de politique générale du Gouvernement",
+"15_2":"la prorogation de l'état d'urgence",
+"15_106":"la loi d'habilitation à réformer par ordonnances le code du travail",
+"15_119":"la loi pour la confiance dans la vie politique"}
