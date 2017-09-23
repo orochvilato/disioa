@@ -14,20 +14,10 @@ mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
 def test():
-    obsass_log('domaine','test')
+    mdb.deputes.update({'depute_id':'m.napolepolutele'},{'$set':{'depute_election.exprimes':6839}})
     return BEAUTIFY(request)
 
-def updateLogs():
-    from geoip import geolite2
-    import pycountry
-    for l in mdb.logs.find({'geoip':None}):
-        match = geolite2.lookup('83.203.177.254')
-        pays = ""
-        if match:
-            country = match.country
-            if country:
-                pays = pycountry.countries.get(alpha_2=country).name
-        mdb.logs.update({'_id':l['_id']},{'$set':{'geoip':pays}})
+
 
 def updateDeputesStatsElection():
     from openpyxl import load_workbook

@@ -14,7 +14,7 @@ mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
 def test():
-    obsass_log('domaine','test')
+    
     return BEAUTIFY(request)
 
 

@@ -4,14 +4,16 @@
 def updateLogs():
     from geoip import geolite2
     import pycountry
-    for l in mdb.logs.find({'geoip':None}):
+    from user_agents import parse
+    for l in mdb.logs.find({'agent_pretty':None}):
         match = geolite2.lookup(l['client'])
         pays = ""
         if match:
             country = match.country
             if country:
                 pays = pycountry.countries.get(alpha_2=country).name
-        mdb.logs.update({'_id':l['_id']},{'$set':{'geoip':pays}})
+        agent_pretty = str(parse(l['agent']))
+        mdb.logs.update({'_id':l['_id']},{'$set':{'geoip':pays,'agent_pretty':agent_pretty}})
 
 def logs():
     updateLogs()
