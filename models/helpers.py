@@ -72,5 +72,5 @@ def svgcirco(circo):
     circos = list(mdb.circonscriptions.find(filtre))
     return XML(response.render('svg/circofrance.svg',dep=dep,circo=circosel,circos=circos))
 
-def hemicycle(place,base_url=""):
-    return XML(response.render('svg/hemicyclelight.svg',place='p'+place,base_url='/'+base_url))
+def hemicycle(place="nope",base_url=""):
+    return XML(response.render('svg/hemicyclelight.svg',place='p'+(place or 'nope'),base_url='/'+base_url))

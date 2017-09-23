@@ -60,7 +60,7 @@
                 <div class="depute-fonctions">
                     <h2>Fonctions / Mandats</h2>
                     <ul class="fa-ul">
-                        <li><i class="fa fa-li fa-arrow-circle-o-right"></i> Membre de l'Assemblée {{ if 'depute_actif': }}depuis le {{ =depute_mandat_debut }}{{ else: }}{{ ='du %s au %s' % (depute_mandat_debut,depute_mandat_fin) }}{{ pass }}</li>
+                        <li><i class="fa fa-li fa-arrow-circle-o-right"></i> Membre de l'Assemblée {{ if 'depute_actif': }}depuis le {{ =depute_mandat_debut }}{{ else: }}{{ ="jusqu'au %s (%s)" % (depute_mandat_fin,depute_mandat_fin_cause) }}{{ pass }}</li>
                         {{ if depute_bureau: }}<li><i class="fa fa-li fa-arrow-circle-o-right"></i> {{ =depute_bureau }}</li>{{ pass }}
                         {{ for typ,mandats in depute_mandats.iteritems(): }}{{ for m in mandats: }}
                         <li>
@@ -151,6 +151,7 @@
 
 			<section id="votes" class="tab-content"> <!-- Votes -->
 				<div class="depute-votes-recap">
+                    {{ if 'positions' in stats.keys(): }}
                     <div class="gauge">
                         <h2>Participation</h2>
                         {{ =svggauge('vote',stats['positions']['exprimes']) }}
@@ -167,6 +168,7 @@
                         <h2>Vote En marche</h2>
                         {{ =svggauge('compem',stats['compat']['REM']) }}
                     </div>
+                    {{ pass }}
                 </div>
                 <div class="depute-votes-calendar">
                     <h2>Calendrier des votes</h2>
@@ -183,11 +185,11 @@
                         <input class="search" placeholder="Rechercher un vote">
                         <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
-                    <div class="test"
+                   
                     <ul id="vote-items">
 
                     </ul>
-                    </div>
+                    
                 </div>
             </section>
         </div>
@@ -204,13 +206,13 @@
       
       
     // Interventions
-    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item',container="#itvlist");
+    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}"},append='.itv-item');
     
     function searchitv() {
         itv_IS.element.innerHTML = '';
          itv_IS.destroy();
          search = $('.depute-interventions-search input.search').val();
-         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item',container="#itvlist");
+         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("depute","ajax_itvs")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.itv-item');
         itv_IS.on('append', function(response) {
             if (itv_IS.element.childElementCount === 0) {
                 itv_IS.element.innerHTML = '<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>';
@@ -230,13 +232,13 @@
     });
 
     // Votes
-    var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item',container=".test");
+    var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}"},append='.vote-item');
     
     function searchvote() {
         vote_IS.element.innerHTML = '';
          vote_IS.destroy();
          search = $('.depute-votes-search input.search').val();
-         vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.vote-item',container=".test");
+         vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("depute","ajax_votes")}}',args={depute_uid:"{{=depute_uid}}",search:search},append='.vote-item');
         vote_IS.on('append', function(response) {
             if (vote_IS.element.childElementCount === 0) {
                 vote_IS.element.innerHTML = '<li>Aucun vote n\'a été trouvé pour cette recherche.</li>';

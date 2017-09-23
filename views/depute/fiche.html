@@ -60,7 +60,7 @@
                 <div class="depute-fonctions">
                     <h2>Fonctions / Mandats</h2>
                     <ul class="fa-ul">
-                        <li><i class="fa fa-li fa-arrow-circle-o-right"></i> Membre de l'Assemblée {{ if 'depute_actif': }}depuis le {{ =depute_mandat_debut }}{{ else: }}{{ ='du %s au %s' % (depute_mandat_debut,depute_mandat_fin) }}{{ pass }}</li>
+                        <li><i class="fa fa-li fa-arrow-circle-o-right"></i> Membre de l'Assemblée {{ if depute_actif: }}depuis le {{ =depute_mandat_debut }}{{ else: }}{{ ="jusqu'au %s (%s)" % (depute_mandat_fin,depute_mandat_fin_cause) }}{{ pass }}</li>
                         {{ if depute_bureau: }}<li><i class="fa fa-li fa-arrow-circle-o-right"></i> {{ =depute_bureau }}</li>{{ pass }}
                         {{ for typ,mandats in depute_mandats.iteritems(): }}{{ for m in mandats: }}
                         <li>
@@ -151,6 +151,7 @@
 
 			<section id="votes" class="tab-content"> <!-- Votes -->
 				<div class="depute-votes-recap">
+                    {{ if 'positions' in stats.keys(): }}
                     <div class="gauge">
                         <h2>Participation</h2>
                         {{ =svggauge('vote',stats['positions']['exprimes']) }}
@@ -167,6 +168,7 @@
                         <h2>Vote En marche</h2>
                         {{ =svggauge('compem',stats['compat']['REM']) }}
                     </div>
+                    {{ pass }}
                 </div>
                 <div class="depute-votes-calendar">
                     <h2>Calendrier des votes</h2>
