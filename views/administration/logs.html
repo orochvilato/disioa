@@ -2,7 +2,7 @@
 <body>
 <h1>Logs</h1>
 <table border="1"><thead><tr><th>Date</th><th>Agent</th><th>GeoIP</th><th>Domaine</th><th>Page</th></tr></thead>
-<tbody>{{ for l in logs:}}<tr><td>{{ =l['date'] }}</td><td>{{ =l['agent_pretty']}}</td><td>{{ =l['geoip']}}</td><td>{{ =l['domaine']}}</td><td>{{ =l['page'] if isinstance(l['page'],basestring) else ', '.join(l['page']) }}</td></tr>{{ pass }}
+<tbody>{{ for l in logs:}}<tr><td>{{ =l['date'] }}</td><td>{{ =l.get('agent_pretty','')}}</td><td>{{ =l.get('geoip','')}}</td><td>{{ =l['domaine']}}</td><td>{{ =l['page'] if isinstance(l['page'],basestring) else ', '.join(l['page']) }}</td></tr>{{ pass }}
     
 </tbody>
 </table>
