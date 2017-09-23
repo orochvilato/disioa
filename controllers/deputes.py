@@ -6,15 +6,17 @@ import json
 mdb = client.obsass
 
 from collections import OrderedDict
-tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes','unit':'%'}),
-            ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence','unit':'%'}),
-            ('stats.compat.FI',{'label':'Vote Insoumis','classe':'deputes-fi','rank':'compatFI','unit':'%'}),
-            ('stats.compat.REM',{'label':'Vote En marche','classe':'deputes-em','rank':'compatREM','unit':'%'}),
-            ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','unit':''}),
-            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','unit':''}),
+tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes','precision':0,'unit':'%'}),
+            ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence','precision':0,'unit':'%'}),
+            ('stats.compat.FI',{'label':'Vote Insoumis','classe':'deputes-fi','rank':'compatFI','precision':0,'unit':'%'}),
+            ('stats.compat.REM',{'label':'Vote En marche','classe':'deputes-em','rank':'compatREM','precision':0,'unit':'%'}),
+            ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','precision':0,'unit':''}),
+            ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','precision':0,'unit':''}),
+            ('stats.election.inscrits',{'label':"Voix en % des inscrits",'classe':'deputes-pctinscrits','precision':2,'rank':'pctinscrits','unit':'%'}),
+            ('stats.election.exprimes',{'label':"Voix en % des votes exprimés",'classe':'deputes-pctexprimes','precision':2,'rank':'pctexprimes','unit':'%'}),
             ('depute_nom_tri',{'label':"Nom",'classe':'','rank':'N/A','unit':''})
             ])
-tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots'),
+tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots','stats.election.exprimes','stats.election.inscrits'),
              'liste': ('depute_nom_tri','stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM')}    
 top_choices = [('top','Top'),
             ('flop','Flop'),
@@ -83,7 +85,9 @@ def _ajax(type_page):
                   'stats.nbitvs':-1,
                   'stats.nbmots':-1,
                   'stats.compat.FI':-1,
-                  'stats.compat.REM':-1 }
+                  'stats.compat.REM':-1,
+                  'stats.election.exprimes':-1,
+                  'stats.election.inscrits':-1}
 
     filter = {'$and':[ {'depute_actif':True}]}
 
@@ -116,3 +120,9 @@ def _ajax(type_page):
     deputes = list(mreq.skip(skip).limit(nb))
 
     return dict(deputes=deputes, count=count,tri = tri, top=tri_choices[tri], top_dir=('down' if (tops_dir.get(tri,0)==-1 and top=='top') else 'up'),tf=top, skip = skip, next=(nb == len(deputes) ))
+
+def comparer():
+    depids = request.args
+    compare_items = ['stats.positions.exprimes','stats.nbmots','stats.nbitv','stats.election.exprimes','stats.election.inscrits']
+    deputes = list(mdb.deputes.find({'depute_shortid':{'$in':depids}}))
+    return dict(deputes=deputes)

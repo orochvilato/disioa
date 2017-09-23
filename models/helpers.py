@@ -11,7 +11,11 @@ def obsass_log(domaine,page):
 
 def getdot(e,k):
     for _k in k.split('.'):
-        e = e[_k]
+        if _k in e.keys():
+            e = e[_k]
+        else:
+            e = ""
+            break
     return e
 
 def svggauge(typeg,pct,unit='%'):

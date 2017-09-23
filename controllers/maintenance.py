@@ -448,6 +448,9 @@ def updateDeputesRanks():
         compte = 'positions' in dep['stats'].keys()
         for stat in ['nbitvs','nbmots']:
             ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],dep['stats'][stat] if compte else None) ]
+        # stats elections
+        for stat in ['inscrits','exprimes']:
+            ranks['pct'+stat] = ranks.get('pct'+stat,[]) + [ (dep['depute_uid'],dep['stats']['election'][stat]) ]
         if compte:
             for stat,val in dep['stats']['positions'].iteritems():
                 ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],val)]
@@ -555,17 +558,24 @@ def updateDeputesStats():
             if dep['depute_positions']['exprimes']>0:
                 dep['stats.positions'][pos] = round(100*float(dep['depute_positions'].get(pos,0)) / dep['depute_positions']['total'],3)
         # stats compat
-        
-        
-        
         dep['stats.compat'] = dict((g,0) for g in dep['depute_compat'].keys())
         for g,v in dep['depute_compat'].iteritems():
             if dep['depute_positions']['exprimes']>0:
                 dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
         dep['stats.compat_sort'] = [ dict(g=g,p=p) for g,p in sorted(dep['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
         
+    for d in mdb.deputes.find():
+        uid = d['depute_uid']
+        if uid in deputes.keys():
+            dep = deputes[uid]
+        else:
+            dep = {}
+        # stats election
+        dep['stats.election'] = {'exprimes':round(100*float(d['depute_election']['voix'])/d['depute_election']['exprimes'],2),
+                                 'inscrits':round(100*float(d['depute_election']['voix'])/d['depute_election']['inscrits'],2)}
         ops.append(UpdateOne({'depute_uid':uid},{'$set':dep}))
-
+        
+        
     if ops:
         mdb.deputes.bulk_write(ops)
 

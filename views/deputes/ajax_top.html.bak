@@ -5,7 +5,6 @@
 {{ for i,d in enumerate(deputes): }}
 
   <article class="depute-item">
-      {{ =rank }}
     <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
       <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/{{ =d['depute_uid'][2:] }}.jpg" />
     </a>

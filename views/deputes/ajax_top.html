@@ -22,7 +22,7 @@
           <h2>{{ = d['stats']['ranks'][top_dir][top['rank']] }}</h2>
           <div class="{{ =top['classe'] }}">
             <h3>{{ =top['label'] }}</h3>
-            <div>{{=int(round(getdot(d,tri),0)) }} {{=top['unit']}}</div>
+            <div>{{ v=round(getdot(d,tri),top['precision']) }}{{ if (top['precision']==0): }}{{=int(v) }}{{else:}}{{ =v }}{{pass}} {{=top['unit']}}</div>
             
           </div>
           

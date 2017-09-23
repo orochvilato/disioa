@@ -18,4 +18,4 @@ def updateLogs():
 
 def logs():
     updateLogs()
-    return dict(logs=mdb.logs.find().sort('date',-1).limit(1000))
+    return dict(logs=mdb.logs.find().sort('date',-1).limit(200))
