@@ -15,4 +15,4 @@ def updateLogs():
 
 def logs():
     updateLogs()
-    return dict(logs=list(dict(date=c['date'].strftime('%Y/%m/%d %H:%M:%S'),client=c['client'],geoip=c['geoip'],domaine=c['domaine'],page=c['page']) for c in mdb.logs.find().sort('date',-1).limit(1000)))
+    return dict(logs=mdb.logs.find().sort('date',-1).limit(1000))

@@ -64,7 +64,7 @@ def _ajax(type_page):
     region = request.vars.get('rg',None)
     top = request.vars.get('top',None)
     tri = request.vars.get('tri','stats.positions.exprimes' if top else 'depute_nom_tri')
-    if (page==0):
+    if (count):
         filters = []
         if groupe:
             filters.append(groupe)

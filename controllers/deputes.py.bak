@@ -74,6 +74,8 @@ def _ajax(type_page):
             filters.append(region)
         if age:
             filters.append(age)
+        if top:
+            filters.append(tri_choices[tri]['rank'])
         obsass_log((top if top else 'liste')+'_depute',filters)
         
     tops_dir = {'stats.positions.exprimes':-1,
