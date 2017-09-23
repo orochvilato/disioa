@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # essayez quelque chose comme
-
+def error():
+    1/0
 def updateLogs():
     from geoip import geolite2
     import pycountry
