@@ -447,21 +447,21 @@ def updateDeputesRanks():
     for dep in mdb.deputes.find({'depute_actif':True}):
         compte = 'positions' in dep['stats'].keys()
         for stat in ['nbitvs','nbmots']:
-            ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],dep['stats'][stat] if compte else None) ]
+            ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],(dep['stats'][stat],dep['stats'][stat]) if compte else (None,None)) ]
         # stats elections
         for stat in ['inscrits','exprimes']:
-            ranks['pct'+stat] = ranks.get('pct'+stat,[]) + [ (dep['depute_uid'],dep['stats']['election'][stat]) ]
+            ranks['pct'+stat] = ranks.get('pct'+stat,[]) + [ (dep['depute_uid'],((2-dep['depute_election']['tour'])*100+dep['stats']['election'][stat],dep['stats']['election'][stat])) ]
         if compte:
             for stat,val in dep['stats']['positions'].iteritems():
-                ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],val)]
+                ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],(val,val))]
         if 'compat' in dep['stats'].keys():
             for stat,val in dep['stats']['compat'].iteritems():
-                ranks['compat'+stat] = ranks.get('compat'+stat,[]) + [ (dep['depute_uid'],val)]
+                ranks['compat'+stat] = ranks.get('compat'+stat,[]) + [ (dep['depute_uid'],(val,val))]
     topflop = {}
     for rank in ranks.keys():
         topflop[rank] = {'down':{},'up':{}}
-        topflop[rank]['down'] = sorted(ranks[rank],key=lambda x:x[1], reverse=True)
-        topflop[rank]['up'] = sorted(ranks[rank],key=lambda x:x[1] if x[1]!=None else 'ZZZZ')
+        topflop[rank]['down'] = sorted(ranks[rank],key=lambda x:x[1][0], reverse=True)
+        topflop[rank]['up'] = sorted(ranks[rank],key=lambda x:x[1][0] if x[1][0]!=None else 'ZZZZ')
         topflop[rank]['down'] = dict([ (r[0],i+1) for i,r in enumerate(topflop[rank]['down']) ])
         topflop[rank]['up'] = dict([ (r[0],i+1) for i,r in enumerate(topflop[rank]['up']) ])
         

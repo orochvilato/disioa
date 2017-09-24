@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 # essayez quelque chose comme
+import json
+def updateElectionTour():
+    mdb.deputes.update_one({'depute_shortid':'anneblanc'},{'$set':{'depute_election.adversaires':[{'nom':"M. André AT (retiré)",'voix':0}]}})
+    mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": False } }, {'$set':{'depute_election.tour':1}})
+    mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": True } }, {'$set':{'depute_election.tour':2}})
+    
 def error():
     1/0
 def updateLogs():
