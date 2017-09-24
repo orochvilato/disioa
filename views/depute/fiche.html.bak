@@ -60,7 +60,7 @@
                 <div class="depute-fonctions">
                     <h2>Fonctions / Mandats</h2>
                     <ul class="fa-ul">
-                        <li><i class="fa fa-li fa-arrow-circle-o-right"></i> Membre de l'Assemblée {{ if 'depute_actif': }}depuis le {{ =depute_mandat_debut }}{{ else: }}{{ ="jusqu'au %s (%s)" % (depute_mandat_fin,depute_mandat_fin_cause) }}{{ pass }}</li>
+                        <li><i class="fa fa-li fa-arrow-circle-o-right"></i> Membre de l'Assemblée {{ if depute_actif: }}depuis le {{ =depute_mandat_debut }}{{ else: }}{{ ="jusqu'au %s (%s)" % (depute_mandat_fin,depute_mandat_fin_cause) }}{{ pass }}</li>
                         {{ if depute_bureau: }}<li><i class="fa fa-li fa-arrow-circle-o-right"></i> {{ =depute_bureau }}</li>{{ pass }}
                         {{ for typ,mandats in depute_mandats.iteritems(): }}{{ for m in mandats: }}
                         <li>

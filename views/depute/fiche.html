@@ -34,7 +34,7 @@
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance[0].lower()+depute_naissance[1:]) }}</span></div>
                 <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
                 
-                 <div class="depute-infos"><span>Elu(e) avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{else:}} au 1er tour{{pass}}</span></div>                    
+                 <div class="depute-infos"><span>Elu(e) au {{="1er" if depute_election['tour']==1 else "2e" }} tour avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{pass}}</span></div>                    
                 <div class="depute-infos"><span>Elu(e) par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],2)}}% des inscrits de sa circonscription ({{=depute_election['voix']}} voix)</span></div>
             </div>
         </div>
