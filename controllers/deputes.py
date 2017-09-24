@@ -123,7 +123,7 @@ def _ajax(type_page):
 
 def comparer():
     depids = request.args
-    #compare_items = ['stats.positions.exprimes','stats.nbmots','stats.nbitvs','stats.election.exprimes','stats.election.inscrits']
+    items_selection = ['stats.positions.exprimes','stats.nbmots','stats.nbitvs','stats.election.exprimes','stats.election.inscrits']
     deputes = list(mdb.deputes.find({'depute_shortid':{'$in':depids}}))
     items_pos = {}
     for k,it in tri_choices.iteritems():
@@ -132,4 +132,4 @@ def comparer():
     for v in mdb.votes.find({'$and':[{'depute_uid':{'$in':[d['depute_uid'] for d in deputes]}},{'scrutin_num':{'$in':scrutins_cles.keys()}}]}):
         votes[v['scrutin_num']][v['depute_uid']] = v['vote_position']
     obsass_log('comparer',request.args)
-    return dict(deputes=deputes,items_pos=items_pos,votes=votes,items=tri_choices)
+    return dict(deputes=deputes,items_pos=items_pos,votes=votes,items=tri_choices,items_selection=items_selection)

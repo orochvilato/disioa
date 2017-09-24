@@ -130,6 +130,6 @@ def comparer():
         items_pos[k] = sorted([ (i,getdot(d,k)) for i,d in enumerate(deputes) ],key=lambda x:x[1], reverse=True)
     votes = dict((k,{}) for k in scrutins_cles.keys())
     for v in mdb.votes.find({'$and':[{'depute_uid':{'$in':[d['depute_uid'] for d in deputes]}},{'scrutin_num':{'$in':scrutins_cles.keys()}}]}):
-        votes[v['scrutin_num']][v['depute_uid']] = v['position']
+        votes[v['scrutin_num']][v['depute_uid']] = v['vote_position']
     obsass_log('comparer',request.args)
     return dict(deputes=deputes,items_pos=items_pos,votes=votes,items=tri_choices)
