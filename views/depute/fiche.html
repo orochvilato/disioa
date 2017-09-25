@@ -30,7 +30,7 @@
                     {{ pass }}
                 </div>
 
-                <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="#">{{ =groupe_libelle }}</a></div>
+                <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="{{ =URL('groupe','fiche',args=[groupe_abrev]) }}">{{ =groupe_libelle }}</a></div>
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance[0].lower()+depute_naissance[1:]) }}</span></div>
                 <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
                 
@@ -334,7 +334,7 @@
              "legend": {
                 "show": false
               },
-              "bindto": "#presenceChart"
+              "bindto": "#cspChart"
             });
         }
       //addGraphPresences()

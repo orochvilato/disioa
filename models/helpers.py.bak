@@ -11,7 +11,11 @@ def obsass_log(domaine,page):
 
 def getdot(e,k):
     for _k in k.split('.'):
-        e = e[_k]
+        if _k in e.keys():
+            e = e[_k]
+        else:
+            e = ""
+            break
     return e
 
 def svggauge(typeg,pct,unit='%'):
@@ -72,5 +76,5 @@ def svgcirco(circo):
     circos = list(mdb.circonscriptions.find(filtre))
     return XML(response.render('svg/circofrance.svg',dep=dep,circo=circosel,circos=circos))
 
-def hemicycle(place="nope",base_url=""):
-    return XML(response.render('svg/hemicyclelight.svg',place='p'+(place or 'nope'),base_url='/'+base_url))
+def hemicycle(place="nope",places=[],base_url=""):
+    return XML(response.render('svg/hemicyclelight.svg',place='p'+(place or 'nope'),places=[],base_url='/'+base_url))

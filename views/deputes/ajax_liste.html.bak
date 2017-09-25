@@ -19,19 +19,19 @@
          {{ if 'positions' in d['stats'].keys(): }}
           <div class="deputes-participation">
             <h3>Participation</h3>
-            <div>{{=int(round(d['stats']['positions']['exprimes']),0) }} %</div>
+            <div>{{=int(round(d['stats']['positions']['exprimes'],0)) }} %</div>
           </div>
           <div class="deputes-dissidence">
             <h3>Contre son groupe</h3>
-            <div>{{=int(round(d['stats']['positions']['dissidence']),0) }} %</div>
+            <div>{{=int(round(d['stats']['positions']['dissidence'],0)) }} %</div>
           </div>
           <div class="deputes-fi">
             <h3>Vote Insoumis</h3>
-            <div>{{=int(round(d['stats']['compat']['FI']),0) }} %</div>
+            <div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>
           </div>
           <div class="deputes-em">
             <h3>Vote En marche</h3>
-            <div>{{=int(round(d['stats']['compat']['REM']),0) }} %</div>
+            <div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>
           </div>
         {{ pass }}
       </div>

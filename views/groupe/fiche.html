@@ -1,0 +1,317 @@
+{{ extend "base.html" }}
+{{ block title }}{{ =groupe_libelle }} | Observatoire Insoumis{{ end }}
+{{ block style }}
+<style>
+    high {
+        background-color: #82cde2;
+        color: white;
+    }
+    #declaration {
+        font-size:14px;
+    }
+    .groupe-charts {
+        display:flex;
+        flex:wrap;
+    }
+    .groupe-charts .chart {
+        width:50%;
+        font-size:10px;
+    }
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.0.1/billboard.min.css" rel="stylesheet">
+</style>
+{{ end }}
+{{ block content }}
+    <div id="depute-template" class="container">
+        <div class="depute-header"><!--
+            <div class="depute-photo">
+                
+            </div>-->
+            <div class="depute-identite">
+                <header>
+                    <h1>{{ =groupe_libelle }}</h1>
+                </header>
+                <div class="groupe-infos"><span>{{ =groupe_nbmembres }} membres</span></div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <header>
+                <input id="tab1" type="radio" name="tabs" value="presentation" {{if tab=='presentation':}}checked{{pass}}>
+                <label for="tab1"><i class="fa fa-id-card-o"></i><span>Présentation</span></label>
+
+                <input id="tab2" type="radio" name="tabs" value="interventions" {{if tab=='interventions':}}checked{{pass}}>
+                <label for="tab2"><i class="fa fa-comment-o"></i><span>Interventions</span></label>
+
+                <input id="tab3" type="radio" name="tabs" value="votes" {{if tab=='votes':}}checked{{pass}}>
+                <label for="tab3"><i class="fa fa-hand-paper-o"></i><span>Votes</span></label>
+            </header>
+
+            <section id="presentation" class="tab-content"> <!-- Présentation -->
+                <div class="depute-hemicycle">
+                    {{ =hemicycle(groupe=groupe_abrev,base_url=URL(c='depute',f='fiche')) }}
+                    <!--<object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>-->
+                </div>
+                <div class="groupe-charts">
+                    <div id="ageChart" class="chart"></div>
+                    <div id="cspChart" class="chart"></div>
+                </div>
+                {{ if groupe_declaration: }}
+                <h2>Déclaration</h2>
+                {{ import re }}
+                <blockquote id="declaration">{{ =XML(re.search(r'<div class="topmargin-lg">(.*)</div></div>',groupe_declaration.replace('\t','').replace('\n','')).groups()[0]) }}</blockquote>
+                {{ pass }}
+            </section>
+
+			<section id="interventions" class="tab-content"> <!-- Interventions -->
+                <div class="depute-interventions-recap">
+                    Nombre d'interventions : <span>{{ =stats['nbitvs'] }}</span>, nombre de mots : <span>{{ =stats['nbmots'] }}</span>
+                </div>
+                <div class="depute-interventions-cloud">
+                    <div>
+                        <h2>Mots du groupe</h2>
+                        <div id="sourrounding_div_noms" class="cloud">
+                            <canvas id="wordcanvas_noms"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Verbes du groupe</h2>
+                        <div id="sourrounding_div_verbes" class="cloud">
+                            <canvas id="wordcanvas_verbes"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div id="itvlist">
+                    <h2>Interventions du groupe</h2>
+                    <div class="depute-interventions-search">
+                        <input class="search" placeholder="Rechercher une intervention">
+                        <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                    <ul id="itv-items" class="fa-ul">
+
+                    </ul>
+                </div>
+			</section>
+
+			<section id="votes" class="tab-content"> <!-- Votes -->
+				<div class="depute-votes-recap">
+                    {{ if 'positions' in stats.keys(): }}
+                    <div class="gauge">
+                        <h2>Participation</h2>
+                        {{ =svggauge('vote',stats['positions']['exprimes']) }}
+                    </div>
+                    <div class="gauge">
+                        <h2>Dissidence</h2>
+                        {{ =svggauge('diss',stats['positions']['dissidence']) }}
+                    </div>
+                    <div class="gauge">
+                        <h2>Vote Insoumis</h2>
+                        {{ =svggauge('compfi',stats['compat']['FI']) }}
+                    </div>
+                    <div class="gauge">
+                        <h2>Vote En marche</h2>
+                        {{ =svggauge('compem',stats['compat']['REM']) }}
+                    </div>
+                    {{ pass }}
+                </div>
+                
+                <div class="depute-votes-list">
+                    <h2>Votes du groupe</h2>
+                    <div class="depute-votes-search">
+                        <input class="search" placeholder="Rechercher un vote">
+                        <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                   
+                    <ul id="vote-items">
+
+                    </ul>
+                    
+                </div>
+            </section>
+        </div>
+    </div>
+{{ end }}
+{{ block script }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{{ =URL('static','js/wordcloud2.js') }}"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.0.1/billboard.min.js"></script>
+  <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+  <script src="{{=URL('static','js/groupe.js')}}"></script>
+  <script>
+      
+      
+    // Interventions
+    var itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("groupe","ajax_itvs")}}',args={groupe_abrev:"{{=groupe_abrev}}"},append='.itv-item');
+    
+    function searchitv() {
+        itv_IS.element.innerHTML = '';
+         itv_IS.destroy();
+         search = $('.depute-interventions-search input.search').val();
+         itv_IS = setInfiniteScroll(id='itv-items',path='{{=URL("groupe","ajax_itvs")}}',args={groupe_abrev:"{{=groupe_abrev}}",search:search},append='.itv-item');
+        itv_IS.on('append', function(response) {
+            if (itv_IS.element.childElementCount === 0) {
+                itv_IS.element.innerHTML = '<li>Aucune intervention n\'a été trouvée pour cette recherche.</li>';
+            }
+        });
+    }
+      
+    $('.depute-interventions-search button').click(function() {
+        searchitv();
+    });
+    
+    $('.depute-interventions-search').keypress(function(e) {
+    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+        e.preventDefault();
+        searchitv();
+    }
+    });
+
+    // Votes
+    var vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("groupe","ajax_votes")}}',args={groupe_abrev:"{{=groupe_abrev}}"},append='.vote-item');
+    
+    function searchvote() {
+        vote_IS.element.innerHTML = '';
+         vote_IS.destroy();
+         search = $('.depute-votes-search input.search').val();
+         vote_IS = setInfiniteScroll(id='vote-items',path='{{=URL("groupe","ajax_votes")}}',args={groupe_abrev:"{{=groupe_abrev}}",search:search},append='.vote-item');
+        vote_IS.on('append', function(response) {
+            if (vote_IS.element.childElementCount === 0) {
+                vote_IS.element.innerHTML = '<li>Aucun vote n\'a été trouvé pour cette recherche.</li>';
+            }
+        });
+    }
+    
+    $('.depute-votes-search button').click(function() {
+        searchvote();
+    });
+      
+    $('.depute-votes-search').keypress(function(e) {
+    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+        e.preventDefault();
+        searchvote();
+    }
+    });
+     
+    // Init Nuages
+    {{ import json }}
+    var wordlist = {};
+    {{ if groupe_nuages: }}
+    {{ for lex in groupe_nuages.keys(): }}
+       wordlist['{{=lex}}'] = JSON.parse('{{ =XML(json.dumps(groupe_nuages[lex])) }}');
+    {{ pass }}
+    {{ pass }}
+    function cspChart() {
+        var csp_ranges = JSON.parse('{{ =XML(json.dumps([ s[0] for s in stats["csp"] ]).replace("'","\\'")) }}');
+        var data = JSON.parse('{{ =XML(json.dumps([""]+[ s[1] for s in stats["csp"] ])) }}');
+        
+        
+        var chart = bb.generate({
+        padding: {
+            left: 200,
+        },
+        data: {
+            columns: [
+                data,
+            ],
+            type: 'bar',
+        },
+        color: {
+          pattern: ['#213558']
+        },
+      axis: {
+        rotated: true,
+        x: {
+          type: 'category', categories: csp_ranges,
+          tick: {
+            width: 200,
+            multiline: false,
+          },
+        },
+      },
+      bar: {
+          "width": {
+              "ratio": 0.90,
+          },
+          "zerobased": true,
+      },
+      bindto: "#cspChart"
+        });
+    }
+
+    function pyramidChart() {
+        var age_ranges = JSON.parse('{{ =XML(json.dumps([ s[0] for s in stats["classeage"] ])) }}');
+        var data1 = JSON.parse('{{ =XML(json.dumps(["H"]+[ -s[1]["H"] for s in stats["classeage"] ])) }}');
+        var data2 = JSON.parse('{{ =XML(json.dumps(["F"]+[ s[1]["F"] for s in stats["classeage"] ])) }}');
+        
+        var qtymax = {{ = max([ s[1]["H"] for s in stats["classeage"] ]+[ s[1]["F"] for s in stats["classeage"] ]) }};
+
+        var chart = bb.generate({
+        data: {
+            columns: [
+                data1,
+                data2
+            ],
+            type: 'bar',
+            groups: [['H', 'F']]
+        },
+        color: {
+          pattern: ['#213558', '#FF0052']
+        },
+      axis: {
+        rotated: true,
+        x: {
+          type: 'category', categories: age_ranges
+        },
+        y: {
+          tick: {
+            format: function (d) {
+              return (parseInt(d) === d) ? Math.abs(d) : null;
+            }
+          },
+          max: qtymax, min: -qtymax
+        }
+      },
+      bar: {
+          "width": {
+              "ratio": 0.90,
+          },
+          "zerobased": true,
+      },
+      grid: {
+        y: {
+          lines: [{value:0}]
+        }
+      },
+       bindto: "#ageChart"
+        });
+    }
+    pyramidChart();
+    cspChart();
+    //var svg = document.getElementById('hemicycle');
+    $(document).ready(function() {
+        
+        var visible = $('.tab-container input:checked').val();
+        $('#' + visible).addClass('visible');
+
+        $('.tab-container header input[name=tabs]').change(function(e) {
+            $('.tab-content').removeClass('visible');
+            $('#' + e.target.value).addClass('visible');
+        });
+
+        drawNuages();  
+
+        var resizeDebounce;
+        $(window).resize(function() {
+            clearTimeout(resizeDebounce);
+            resizeDebounce = setTimeout(function() {
+                window.requestAnimationFrame(function() {
+                    drawNuages();
+                    $('#calendar svg').remove();
+                    genCalendar();
+                });
+            }, 100);
+        });
+    });
+</script>
+{{ end }}

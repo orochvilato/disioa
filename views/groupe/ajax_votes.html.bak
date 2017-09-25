@@ -1,0 +1,23 @@
+{{ genres = {'loi':'e','motion':'e'} }}
+{{ icons = {'pour':'fa-thumbs-up','contre':'fa-thumbs-down','abstention':'fa-microphone-slash','absent':'fa-question'} }}
+{{ icons_s = {'amendement':'fa-pencil-square','loi':'fa-book','article':'fa-file','motion':'fa-undo','declaration':'fa-microphone','autre':''} }}
+{{ for v in votes: }}
+<li class="vote-item">
+    <div class="ico {{ =v['vote_position']}}">
+        <i class="fa {{ =icons_s[v['scrutin_typedetail']] }}"></i>
+    </div>
+    <div>
+        <header>
+            <div>
+                <h3><span>{{ =v['scrutin_dossierLibelle'] }} - {{ =v['scrutin_typedetail'][0].upper()+v['scrutin_typedetail'][1:] }}{{ if v['scrutin_groupe']: }} proposé{{ =genres.get(v['scrutin_typedetail'],'')}} par le groupe {{ =v['scrutin_groupe'] }}{{ pass }}</span></h3>
+                <a href="{{ =URL('scrutin','index',args=[v['scrutin_id']])}}">Scrutin n°{{ ="%d du %s (%s)" % (v['scrutin_num'],v['scrutin_date'],v['scrutin_sort']) }}</a>
+            </div>
+            <div class="vote {{ =v['vote_position'] }}"><i class="fa {{ =icons[v['vote_position']] }}"></i> {{ =v['vote_position'][0].upper()+v['vote_position'][1:] }}</div>
+        </header>
+        <p><i class="fa fa-arrow-circle-o-right"></i> {{ =XML(v['scrutin_desc']) }}</p>
+    </div>
+</li>
+{{ pass }}
+{{ if next: }}
+    <div class="pagination__next"></div>
+{{ pass }}

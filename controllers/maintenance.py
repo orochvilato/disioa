@@ -255,10 +255,17 @@ def updateSessions():
             new_itv['mots'] = countWords(new_itv['itv_contenu_texte'])
             new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
             mdb.interventions.update_one({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True)
-
+    updateNuages()
     updateInterventions()
 
 def updateInterventions():
+    interventions = mdb.interventions.find({'depute_nom':None})
+    groupe_depute = dict((d['depute_id'],(d['groupe_abrev'],d['depute_nom'])) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1,'depute_nom':1}))
+    for itv in interventions:
+        if itv['depute_id'] in groupe_depute.keys():
+            mdb.interventions.update({'itv_id':itv['itv_id']},{'$set':{'groupe_abrev':groupe_depute[itv['depute_id']][0],'depute_nom':groupe_depute[itv['depute_id']][1]}})
+                                                                   
+def updateNuages():
     lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
 
     with open(lexiques_path,'r') as f:
@@ -319,6 +326,8 @@ def updateInterventions():
         mdb.deputes.update_one({'depute_id':uid},
                                    {'$set':d})
     return "ok"
+
+
 def updateScrutins():
     _scrutins = {}
     if 'rebuild' in request.args:
@@ -483,7 +492,7 @@ def updateStats():
     updateDeputesRanks()
 
 def updateScrutinsSignataires():
-    groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find())
+    groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
     for s in mdb.scrutins.find():
         desc = s['scrutin_desc'].replace('. [','')
         siggp = None
@@ -519,7 +528,7 @@ def updateScrutinsSignataires():
         mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
         
 def updateDeputesStats():
-    groupe_depute = dict((d['depute_uid'],d['groupe_abrev']) for d in mdb.deputes.find())
+    groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
     pgroup = dict((g,{'$sum':'$vote_compat.'+g}) for g in mdb.groupes.distinct('groupe_abrev'))
     pgroup['_id'] = {'depute':'$depute_uid'}
     pipeline = [
@@ -674,6 +683,7 @@ def updateGroupesStats():
         gid = p['_id']['groupe']
         groupes[gid]['groupe_positions'][p['_id']['position']] = p['n']
     ops = []
+    
     for gid,g in groupes.iteritems():
         g['groupe_positions']['total'] = sum(g['groupe_positions'].values())
         g['groupe_positions']['exprimes'] = g['groupe_positions']['total'] - g['groupe_positions'].get('absent',0)
@@ -690,6 +700,18 @@ def updateGroupesStats():
             if g['groupe_positions']['exprimes']>0:
                 g['stats.compat'][_g] = round(100*float(_v) / g['groupe_positions']['exprimes'],3)
         g['stats.compat_sort'] = [ dict(g=_g,p=_p) for _g,_p in sorted(g['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
+        
+        
+        stats = {'csp':{},'classeage':{}}
+        for d in mdb.deputes.find({'groupe_abrev':gid},{'depute_id':1,'depute_csp':1,'depute_classeage':1}):
+            sexe = 'F' if d['depute_id'][0:3]=='mme' else 'H'
+            stats['csp'][d['depute_csp']] = stats['csp'].get(d['depute_csp'],0) + 1
+            if not d['depute_classeage'] in stats['classeage'].keys():
+                stats['classeage'][d['depute_classeage']]={'H':0,'F':0}
+            stats['classeage'][d['depute_classeage']][sexe] += 1
+        g.update({'stats.csp':sorted(stats['csp'].items(),key=lambda x:x[1],reverse=True),
+                  'stats.classeage':sorted(stats['classeage'].items(),key=lambda x:x[0],reverse=True)
+                 })
         ops.append(UpdateOne({'groupe_abrev':gid},{'$set':g}))
 
     if ops:
