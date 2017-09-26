@@ -41,7 +41,7 @@ def ajax_votes():
         for s in scrutins:
             s['scrutin_desc']=regx.sub('<high>'+search+'</high>',itv['scrutin_desc'])
 
-    return dict(scrutins=scrutins, next=(nb == len(scrutins)))
+    return dict(scrutins=scrutins, groupe=groupe_abrev, next=(nb == len(scrutins)))
 
 def ajax_itvs():
     nb = 25

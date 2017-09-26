@@ -47,7 +47,7 @@ def updateDeputesStatsElection():
     
     return json.dumps(advs)
 
-def updataAll():
+def updateAll():
     updateAssemblee()
     updateSessions()
     
@@ -243,29 +243,22 @@ def updateSessions():
                 s['scrutin_ref']['urlCompteRenduRef'] = cptrd + '#' + bal
                 mdb.scrutins.update_one({'scrutin_id': s['scrutin_id']}, {'$set': {'scrutin_ref': s['scrutin_ref']}})
 
-
+    deputes = dict((d['depute_id'],d['depute_uid']) for d in mdb.deputes.find({},{"depute_id":1,"depute_uid":1}))
     interventions = getJson('interventions')
     for itv in interventions:
         for n,depid in enumerate(itv['depute_id'].split(u'|')):
             new_itv=dict(itv)
             new_itv['depute_id'] = depid
             nid = deputes.get(depid,None)
-            if nid and nid['uid'] != new_itv['depute_uid']:
-                new_itv['depute_uid'] = nid['uid']
-            new_itv['mots'] = countWords(new_itv['itv_contenu_texte'])
+            if nid and nid != new_itv['depute_uid']:
+                new_itv['depute_uid'] = nid
             new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
             mdb.interventions.update_one({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True)
-    updateNuages()
-    updateInterventions()
+    
+    updateInterventionsNuages()
 
-def updateInterventions():
-    interventions = mdb.interventions.find({'depute_nom':None})
-    groupe_depute = dict((d['depute_id'],(d['groupe_abrev'],d['depute_nom'])) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1,'depute_nom':1}))
-    for itv in interventions:
-        if itv['depute_id'] in groupe_depute.keys():
-            mdb.interventions.update({'itv_id':itv['itv_id']},{'$set':{'groupe_abrev':groupe_depute[itv['depute_id']][0],'depute_nom':groupe_depute[itv['depute_id']][1]}})
-                                                                   
-def updateNuages():
+
+def updateInterventionsNuages():
     lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
 
     with open(lexiques_path,'r') as f:
@@ -301,21 +294,26 @@ def updateNuages():
             else:
                 for mot,n in w2[k].iteritems():
                     w1[k][mot] = w1[k].get(mot,0) + n
-
+    
+    groupe_depute = dict((d['depute_id'],(d['groupe_abrev'],d['depute_nom'])) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1,'depute_nom':1}))
     deputes = dict((a['depute_id'],{ 'groupe_abrev':a['groupe_abrev'],'stats.nbmots':0, 'stats.nbitvs':0, 'depute_mots':{}, 'depute_nuages':{}}) for a in mdb.deputes.find())
     groupes = dict((g['groupe_abrev'], {'groupe_mots':{},'groupe_nuages':{},'stats.nbmots':0,'stats.nbitvs':0}) for g in mdb.groupes.find())
     interventions = mdb.interventions.find()
     for itv in interventions:
+        updt ={'mots':countWords(itv['itv_contenu_texte'])}
         if itv['depute_id'] in deputes.keys():
             _dep = deputes[itv['depute_id']]
             _dep['stats.nbmots'] += itv['itv_nbmots']
             _dep['stats.nbitvs'] += 1
-            addWords(_dep['depute_mots'],itv['mots'])
+            addWords(_dep['depute_mots'],updt['mots'])
+            updt.update({'groupe_abrev':groupe_depute[itv['depute_id']][0],'depute_nom':groupe_depute[itv['depute_id']][1]})
         _grp = groupes[_dep['groupe_abrev']]
         _grp['stats.nbmots'] += itv['itv_nbmots']
         _grp['stats.nbitvs'] += 1
-        addWords(_grp['groupe_mots'],itv['mots'])
-    
+        addWords(_grp['groupe_mots'],updt['mots'])
+
+        mdb.interventions.update({'itv_id':itv['itv_id']},{'$set':updt})
+
     for gid,g in groupes.iteritems():
         g['groupe_nuages'] = genNuages(groupes[gid]['groupe_mots'])
         mdb.groupes.update_one({'groupe_abrev':gid},
@@ -446,9 +444,10 @@ def updateScrutins():
         mdb.scrutins.create_index([('scrutin_id', pymongo.ASCENDING)], unique = True)
         mdb.scrutins.insert_many(scrutins)
 
-    
-    updateStats()
-    
+
+    updateScrutinsStats()
+    updateScrutinsSignataires()
+
 def updateDeputesRanks():
     ops = []
     ranks = {}
@@ -484,9 +483,7 @@ def updateDeputesRanks():
     return json.dumps(ranks)
 
 
-def updateStats():
-    updateScrutinsStats()
-    updateScrutinsSignataires()
+def updateAllStats():
     updateDeputesStats()
     updateGroupesStats()
     updateDeputesRanks()
@@ -528,7 +525,7 @@ def updateScrutinsSignataires():
         mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
         
 def updateDeputesStats():
-    groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
+    groupe_depute = dict((d['depute_uid'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_uid':1,'groupe_abrev':1}))
     pgroup = dict((g,{'$sum':'$vote_compat.'+g}) for g in mdb.groupes.distinct('groupe_abrev'))
     pgroup['_id'] = {'depute':'$depute_uid'}
     pipeline = [
