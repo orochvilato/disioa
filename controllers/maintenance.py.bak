@@ -47,7 +47,7 @@ def updateDeputesStatsElection():
     
     return json.dumps(advs)
 
-def updateAll():
+def weekly_job():
     updateAssemblee()
     
 
@@ -704,15 +704,15 @@ def updateGroupesStats():
         g['stats.compat_sort'] = [ dict(g=_g,p=_p) for _g,_p in sorted(g['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
         
         
-        stats = {'csp':{},'classeage':{}}
+        stats = {'classeage':{},'csp':{}}
         for d in mdb.deputes.find({'groupe_abrev':gid},{'depute_id':1,'depute_csp':1,'depute_classeage':1}):
             sexe = 'F' if d['depute_id'][0:3]=='mme' else 'H'
             stats['csp'][d['depute_csp']] = stats['csp'].get(d['depute_csp'],0) + 1
             if not d['depute_classeage'] in stats['classeage'].keys():
                 stats['classeage'][d['depute_classeage']]={'H':0,'F':0}
             stats['classeage'][d['depute_classeage']][sexe] += 1
-        g.update({'stats.csp':sorted(stats['csp'].items(),key=lambda x:x[1],reverse=True),
-                  'stats.classeage':sorted(stats['classeage'].items(),key=lambda x:x[0],reverse=True)
+        g.update({'stats.csp':stats['csp'],
+                  'stats.classeage':stats['classeage']
                  })
         ops.append(UpdateOne({'groupe_abrev':gid},{'$set':g}))
 

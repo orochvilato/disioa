@@ -704,7 +704,7 @@ def updateGroupesStats():
         g['stats.compat_sort'] = [ dict(g=_g,p=_p) for _g,_p in sorted(g['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
         
         
-        stats = {'csp':{},'classeage':{}}
+        stats = {'classeage':{},'csp':{}}
         for d in mdb.deputes.find({'groupe_abrev':gid},{'depute_id':1,'depute_csp':1,'depute_classeage':1}):
             sexe = 'F' if d['depute_id'][0:3]=='mme' else 'H'
             stats['csp'][d['depute_csp']] = stats['csp'].get(d['depute_csp'],0) + 1
