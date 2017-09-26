@@ -47,9 +47,14 @@ def updateDeputesStatsElection():
     
     return json.dumps(advs)
 
-def updateAll():
+def weekly_job():
     updateAssemblee()
+    
+
+def daily_job():
+    updateScrutins()
     updateSessions()
+    updateAllStats()
     
 # ---------------------
 # Helpers

@@ -5670,3 +5670,9 @@
 [2017-09-26 12:02:08] EDIT oadev/controllers/maintenance.py: 0
 [2017-09-26 12:12:56] EDIT oadev/controllers/groupe.py: 0
 [2017-09-26 12:13:06] EDIT oadev/controllers/depute.py: 0
+[2017-09-26 12:18:03] EDIT oadev/controllers/maintenance.py: 3
+[2017-09-26 12:18:29] EDIT oadev/controllers/maintenance.py: 0
+[2017-09-26 13:55:38] EDIT oadev/views/groupe/fiche.html: 1
+[2017-09-26 18:37:33] EDIT oadev/models/helpers.py: 0
+[2017-09-26 18:39:16] EDIT oadev/views/svg/hemicyclelight.svg: 0
+[2017-09-26 18:41:03] EDIT oadev/views/depute/fiche.html: 0

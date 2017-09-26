@@ -203,7 +203,7 @@
     {{ pass }}
     function cspChart() {
         var csp_ranges = JSON.parse('{{ =XML(json.dumps([ s[0] for s in stats["csp"] ]).replace("'","\\'")) }}');
-        var data = JSON.parse('{{ =XML(json.dumps(["Test"]+[ s[1] for s in stats["csp"] ])) }}');
+        var data = JSON.parse('{{ =XML(json.dumps([""]+[ s[1] for s in stats["csp"] ])) }}');
         
         
         var chart = bb.generate({

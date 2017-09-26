@@ -4,7 +4,6 @@
 	<script type="text/ecmascript">var svghemiDoc;
        var hemi
        var tlhemi;
-       var coef = {{ =50 if groupe else 6 }};
        function svghemi_init(evt) {
           svghemiDoc = evt.target;
           
@@ -17,7 +16,8 @@
        }
        function hemiZoomIn() {
            var s = hemi.getBBox();
-           var viewplace = "" + (s.x-845/coef) + " " + (s.y-583/coef) + " " + (845/(coef/2)) + " " + (583/(coef/2));
+           {{ if groupe: }}var viewplace = "" + s.x + " " + s.y + " " + s.width + " " + s.height;{{else:}}
+           var viewplace = "" + (s.x-845/6) + " " + (s.y-583/6) + " " + (845/3) + " " + (583/3);{{pass}}
            tlhemi = new TimelineMax();
            tlhemi.add("zIn");
 

@@ -54,7 +54,7 @@
             <section id="presentation" class="tab-content"> <!-- Présentation -->
                 <div class="depute-hemicycle">
                     {{ =svgcirco(depute_circo_id) }}
-                    {{ =hemicycle(depute_place,URL(c='depute',f='fiche')) }}
+                    {{ =hemicycle(place=depute_place,base_url=URL(c='depute',f='fiche')) }}
                     <!--<object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>-->
                 </div>
                 <div class="depute-fonctions">

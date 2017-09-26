@@ -49,7 +49,12 @@ def updateDeputesStatsElection():
 
 def updateAll():
     updateAssemblee()
+    
+
+def daily_job():
+    updateScrutins()
     updateSessions()
+    updateAllStats()
     
 # ---------------------
 # Helpers
@@ -258,7 +263,7 @@ def updateSessions():
     updateInterventionsNuages()
 
 
-def updateNuages():
+def updateInterventionsNuages():
     lexiques_path = os.path.join(request.folder, 'private','lexiques.json')
 
     with open(lexiques_path,'r') as f:

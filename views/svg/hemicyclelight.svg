@@ -7,7 +7,7 @@
        function svghemi_init(evt) {
           svghemiDoc = evt.target;
           
-          hemi=svghemiDoc.getElementById("{{=groupe if groupe else place}}");
+          hemi=svghemiDoc.getElementById("{{=groupe if len(groupe)>0 else place}}");
           svghemiDoc.addEventListener("mouseenter", hemiZoomIn);
           svghemiDoc.addEventListener("mouseleave", hemiZoomOut);
           hemi.style.fill = "#ff0052";
