@@ -77,7 +77,7 @@ def ajax_itvs():
     if search:
         regx = re.compile(search, re.IGNORECASE)
         itv_filter['itv_contenu_texte']=regx
-    itvs = list(mdb.interventions.find(itv_filter).sort([('itv_date',-1),('itv_n',-1)]).skip(skip).limit(nb))
+    itvs = list(mdb.interventions.find(itv_filter).sort([('itv_date',-1),('itv_n',1)]).skip(skip).limit(nb))
     if search:
         for itv in itvs:
             itv['itv_contenu']=regx.sub('<high>'+search+'</high>',itv['itv_contenu'])

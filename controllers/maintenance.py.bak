@@ -312,10 +312,10 @@ def updateInterventionsNuages():
             _dep['stats.nbitvs'] += 1
             addWords(_dep['depute_mots'],updt['mots'])
             updt.update({'groupe_abrev':groupe_depute[itv['depute_id']][0],'depute_nom':groupe_depute[itv['depute_id']][1]})
-        _grp = groupes[_dep['groupe_abrev']]
-        _grp['stats.nbmots'] += itv['itv_nbmots']
-        _grp['stats.nbitvs'] += 1
-        addWords(_grp['groupe_mots'],updt['mots'])
+            _grp = groupes[_dep['groupe_abrev']]
+            _grp['stats.nbmots'] += itv['itv_nbmots']
+            _grp['stats.nbitvs'] += 1
+            addWords(_grp['groupe_mots'],updt['mots'])
 
         mdb.interventions.update({'itv_id':itv['itv_id']},{'$set':updt})
 
@@ -711,8 +711,8 @@ def updateGroupesStats():
             if not d['depute_classeage'] in stats['classeage'].keys():
                 stats['classeage'][d['depute_classeage']]={'H':0,'F':0}
             stats['classeage'][d['depute_classeage']][sexe] += 1
-        g.update({'stats.csp':stats['csp'],
-                  'stats.classeage':stats['classeage']
+        g.update({'stats.csp':sorted(stats['csp'].items(),key=lambda x:x[1],reverse=True),
+                  'stats.classeage':sorted(stats['classeage'].items(),key=lambda x:x[0],reverse=True)
                  })
         ops.append(UpdateOne({'groupe_abrev':gid},{'$set':g}))
 

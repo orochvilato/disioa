@@ -89,6 +89,7 @@ def updateHemicycle():
         if depute:
             p['@href'] = "{{ =base_url[1:]+'/"+depute['depute_shortid']+"' if 'base_url' in locals() else '#' }}"
             p['@title'] = "place %s : %s (%s)" % (depute['depute_place'],depute['depute_nom'],depute['groupe_abrev'])
+            p['path']['@class'] = "place %s" % depute['groupe_abrev']
             p['title']={'#text':p['@title']}
             if '@target' in p.keys():
                 del p['@target']
@@ -312,10 +313,10 @@ def updateInterventionsNuages():
             _dep['stats.nbitvs'] += 1
             addWords(_dep['depute_mots'],updt['mots'])
             updt.update({'groupe_abrev':groupe_depute[itv['depute_id']][0],'depute_nom':groupe_depute[itv['depute_id']][1]})
-        _grp = groupes[_dep['groupe_abrev']]
-        _grp['stats.nbmots'] += itv['itv_nbmots']
-        _grp['stats.nbitvs'] += 1
-        addWords(_grp['groupe_mots'],updt['mots'])
+            _grp = groupes[_dep['groupe_abrev']]
+            _grp['stats.nbmots'] += itv['itv_nbmots']
+            _grp['stats.nbitvs'] += 1
+            addWords(_grp['groupe_mots'],updt['mots'])
 
         mdb.interventions.update({'itv_id':itv['itv_id']},{'$set':updt})
 

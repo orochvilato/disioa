@@ -62,10 +62,12 @@ class SessionsSpider(scrapy.Spider):
             #break
 
     def parse_periode(self, response):
-        for session in response.xpath('//h1[@class="seance"]/a/@href'):
-            session_id = session.extract()
-            if session_id in exclude:
-               
+        for session in response.xpath('//td[@class="seance"]'):
+            
+
+            session_id = session.xpath('h1[@class="seance"]/a/@href').extract()
+            prov = session.xpath('div/h2/span[@class="provisoire"]')
+            if session_id in exclude or prov:
                 continue
                 
             url = response.meta['url'] + session_id
