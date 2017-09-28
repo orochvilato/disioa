@@ -44,7 +44,7 @@ def svggauge(typeg,pct,unit='%'):
         symbolcolor = "#213558"
         symbol = typeg
         transp ='0.33'
-    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=int(pct),transp=transp,unit=unit))
+    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=round(pct,0),transp=transp,unit=unit))
 
 def svgtop(typet):
     if typet=='top10':
@@ -76,5 +76,5 @@ def svgcirco(circo):
     circos = list(mdb.circonscriptions.find(filtre))
     return XML(response.render('svg/circofrance.svg',dep=dep,circo=circosel,circos=circos))
 
-def hemicycle(place="nope",groupe="NOPE",base_url=""):
+def hemicycle(place="nope",groupe="",base_url=""):
     return XML(response.render('svg/hemicyclelight.svg',place='p'+(place or 'nope'),groupe=groupe,base_url='/'+base_url))
