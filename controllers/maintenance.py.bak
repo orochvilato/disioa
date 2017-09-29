@@ -89,6 +89,7 @@ def updateHemicycle():
         if depute:
             p['@href'] = "{{ =base_url[1:]+'/"+depute['depute_shortid']+"' if 'base_url' in locals() else '#' }}"
             p['@title'] = "place %s : %s (%s)" % (depute['depute_place'],depute['depute_nom'],depute['groupe_abrev'])
+            p['path']['@class'] = "place %s" % depute['groupe_abrev']
             p['title']={'#text':p['@title']}
             if '@target' in p.keys():
                 del p['@target']
@@ -571,8 +572,10 @@ def updateDeputesStats():
         # stats compat
         dep['stats.compat'] = dict((g,0) for g in dep['depute_compat'].keys())
         for g,v in dep['depute_compat'].iteritems():
-            if dep['depute_positions']['exprimes']>0:
-                dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
+            #if dep['depute_positions']['exprimes']>0:
+                #dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
+            if dep['depute_positions']['exprimes']>0 and dep['stats.positions']['exprimes']>20:
+                dep['stats.compat'][g] = round(100*float(v) / dep['depute_positions']['exprimes'],3)
         dep['stats.compat_sort'] = [ dict(g=g,p=p) for g,p in sorted(dep['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
         
     for d in mdb.deputes.find():

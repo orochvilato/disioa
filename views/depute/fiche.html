@@ -160,14 +160,14 @@
                         <h2>Contre son groupe</h2>
                         {{ =svggauge('diss',stats['positions']['dissidence']) }}
                     </div>
-                    <div class="gauge">
+                    {{ if stats['compat']['FI'] != None: }}<div class="gauge">
                         <h2>Vote Insoumis</h2>
                         {{ =svggauge('compfi',stats['compat']['FI']) }}
-                    </div>
-                    <div class="gauge">
+                    </div>{{ pass }}
+                    {{ if stats['compat']['REM'] != None: }}<div class="gauge">
                         <h2>Vote En marche</h2>
                         {{ =svggauge('compem',stats['compat']['REM']) }}
-                    </div>
+                    </div>{{ pass }}
                     {{ pass }}
                 </div>
                 <div class="depute-votes-calendar">
