@@ -576,6 +576,8 @@ def updateDeputesStats():
                 #dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
             if dep['depute_positions']['exprimes']>0 and dep['stats.positions']['exprimes']>20:
                 dep['stats.compat'][g] = round(100*float(v) / dep['depute_positions']['exprimes'],3)
+            else:
+                dep['stats.compat'][g] = None
         dep['stats.compat_sort'] = [ dict(g=g,p=p) for g,p in sorted(dep['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
         
     for d in mdb.deputes.find():

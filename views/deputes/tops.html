@@ -11,6 +11,7 @@
         <select id="deputes-sort" name="tri">{{ for k in tri_items: }}{{ v=tris[k] }}<option value="{{=k}}" {{ if params.get('tri','stats.positions.exprimes')==k:}}selected{{pass}}>{{=v['label']}}</option>{{ pass }}</select>
         <select id="deputes-groupe-filter" name="gp">{{ for id,lib in [('','Tous les groupes')]+groupes: }}<option value="{{ =id }}" {{ if params.get('gp','')==id:}}selected{{pass}}>{{ =lib }}</option>{{ pass }}</select>
         <select id="deputes-region-filter" name="rg">{{ for k,r in [('','Toutes les régions')]+regions: }}<option value="{{ =k }}" {{ if params.get('rg','')==k:}}selected{{pass}}>{{ =r }}</option>{{ pass }}</select>
+    <div class="deputes-count"><span id="deputes-count"></span> député(s) <span id="deputes-count-compl"></span></div>
     <div id="deputes-liste">
 
     </div>
@@ -32,7 +33,7 @@
               top_IS.destroy();
               console.log('destroy');
           }
-          return setInfiniteScroll(id='deputes-liste',path='{{=URL("deputes","ajax_top")}}',args=params,append='.depute-item',urlappend=true);
+          return setInfiniteScroll(id='deputes-liste',path='{{=URL("deputes","ajax_top")}}',args=params,append='.depute-item',urlappend=true,countid='deputes-count');
         }
         top_IS = go_IS();
     </script>

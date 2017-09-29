@@ -1,5 +1,5 @@
 <svg onload="init(evt)" pct="{{ =pct }}" unit="{{ =unit }}" viewBox="0 0 220 220" preserveAspectRatio= "xMinYMin meet" >
-   
+    
     <script type="text/ecmascript"><![CDATA[
       function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
           var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
@@ -25,14 +25,15 @@
        
        function init(evt) {
           var svgDocument = evt.target;
-          
           pct = svgDocument.getAttribute("pct");
+         
           svgDocument.getElementById("pct").textContent=pct+svgDocument.getAttribute("unit");
           svgDocument.getElementById("arc1").setAttribute("d", describeArc(110, 110, 100, 220, 500));
           // svgDocument.getElementById("arc2").setAttribute("d", describeArc(110, 110, 100, 220, 220+280*(pct/100)));
           var limit = 280*(pct/100);
           var nextval = 0;
           anime();
+        
           function anime() {
              
              if (nextval<limit) {
@@ -42,11 +43,13 @@
              } else {
                  svgDocument.getElementById("arc2").setAttribute("d", describeArc(110, 110, 100, 220, 220+limit));
              }
-       }
+           }
+          
        }
 ]]></script>
+
     <text id="pct" text-anchor="middle" x="115" y="205" font-size="38" font-weight="bold" fill="{{ =color }}" style="font-family: 'Montserrat', sans serif;"></text>
-    <path id="arc1" fill="none" stroke="{{ =color }}" stroke-opacity="{{ =transp }}" stroke-width="20" />
+    <path id="arc1" fill="none" stroke="{{ =color }}" stroke-opacity="{{ =transp }}" stroke-width="20"/>
     <path id="arc2" fill="none" stroke="{{ =color }}" stroke-width="20" />
     {{ =symbol }}
     

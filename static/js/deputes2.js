@@ -14,6 +14,9 @@ function setInfiniteScroll(id,path,args,append,urlupdate,countid) {
   // récupère le nombre de résultats
   if (countid) {
       $.getJSON( path+'?'+urlargs+"&count=1", function( data ) {
+          if (data['compl']!=undefined) {
+              $("#"+countid+"-compl").html(data['compl']);
+          }
           $("#"+countid).html(data['count']);
       });
   }

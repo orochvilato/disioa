@@ -109,13 +109,19 @@ def _ajax(type_page):
         rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='top') else 'up')+'.'+tri_choices[tri]['rank']
         #sort += [ ('stats.nonclasse',1),(tri,direction),(rank,tops_dir[tri]*(-1 if top=='top' else 1))]
         sort += [ ('stats.nonclasse',1),(rank,1)]
+        filter['$and'].append({tri:{'$ne':None}})
     else:
         sort += [ (tri,direction)]
 
     skip = nb*page
     mreq = mdb.deputes.find(filter).sort(sort)
     if count:
-        return json.dumps(dict(count=mreq.count()))
+        rcount = mreq.count()
+        if rcount<577 and tri in ('stats.compat.FI','stats.compat.REM'):
+            compl="(%d députés non pris en compte car leur participation est inférieure a %d %%)" % (577-rcount,seuil_compat)
+        else:
+            compl=""
+        return json.dumps(dict(count=rcount,compl=compl))
     
     deputes = list(mreq.skip(skip).limit(nb))
 

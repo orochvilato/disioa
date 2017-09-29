@@ -44,7 +44,7 @@ def svggauge(typeg,pct,unit='%'):
         symbolcolor = "#213558"
         symbol = typeg
         transp ='0.33'
-    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=round(pct,0),transp=transp,unit=unit))
+    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=int(round(pct,0)) if pct else None,transp=transp,unit=unit))
 
 def svgtop(typet):
     if typet=='top10':

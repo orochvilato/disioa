@@ -574,7 +574,7 @@ def updateDeputesStats():
         for g,v in dep['depute_compat'].iteritems():
             #if dep['depute_positions']['exprimes']>0:
                 #dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
-            if dep['depute_positions']['exprimes']>0 and dep['stats.positions']['exprimes']>20:
+            if dep['depute_positions']['exprimes']>0 and dep['stats.positions']['exprimes']>seuil_compat:
                 dep['stats.compat'][g] = round(100*float(v) / dep['depute_positions']['exprimes'],3)
             else:
                 dep['stats.compat'][g] = None
