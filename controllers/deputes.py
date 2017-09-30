@@ -117,10 +117,13 @@ def _ajax(type_page):
     mreq = mdb.deputes.find(filter).sort(sort)
     if count:
         rcount = mreq.count()
-        if rcount<577 and tri in ('stats.compat.FI','stats.compat.REM'):
-            compl="(%d députés non pris en compte car leur participation est inférieure a %d %%)" % (577-rcount,seuil_compat)
-        else:
-            compl=""
+        compl = ""
+        if top:
+            filter['$and'][-1] = {tri:{'$eq':None}}
+            excount = mdb.deputes.find(filter).sort(sort).count()
+            if excount>0 and tri in ('stats.compat.FI','stats.compat.REM'):
+                compl="(%d députés non pris en compte car leur participation est inférieure a %d %%)" % (excount,seuil_compat)
+        
         return json.dumps(dict(count=rcount,compl=compl))
     
     deputes = list(mreq.skip(skip).limit(nb))
