@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 1925.7142 1097.1428" preserveAspectRatio= "xMinYMin meet"   
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="Nouveau document 1">
+  <defs
+     id="defs4" />
+  
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-297.14279,76.209244)">
+    <rect
+       style="fill:#1ee1aa;fill-opacity:1;stroke:none"
+       id="rect3050"
+       width="1925.7142"
+       height="1097.1428"
+       x="297.14279"
+       y="-76.209244" />
+    <text
+       xml:space="preserve"
+       style="font-size:133.79191589px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:left;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"
+       x="1031.9902"
+       y="316.38498"
+       id="nomdepute"
+       sodipodi:linespacing="97.000003%"
+       inkscape:label="#text3054"><tspan
+         sodipodi:role="line"
+         id="tspan3056"
+         x="1031.9902"
+         y="316.38498"
+         dy="0 0 0 0">{{ =prenom }}</tspan><tspan
+         sodipodi:role="line"
+         x="1031.9902"
+         y="446.16315"
+         id="tspan3058">{{ =nom }}</tspan></text>
+    <rect
+       y="-76.209244"
+       x="297.14279"
+       height="139.99997"
+       width="1925.7142"
+       id="rect3060"
+       style="fill:#000000;fill-opacity:1;stroke:none" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3062"
+       y="23.708683"
+       x="1050"
+       style="font-size:88.28583527px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:left;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
+       xml:space="preserve"><tspan
+         id="tspan3066"
+         y="23.708683"
+         x="1050"
+         sodipodi:role="line">« Nous nous engageons à être assidus »</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:133.84925842px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:left;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
+       x="1208.8268"
+       y="653.11047"
+       id="pct"
+       sodipodi:linespacing="125%"
+       inkscape:label="#text3135"><tspan
+         sodipodi:role="line"
+         x="1050"
+         y="653.11047"
+         id="tspan3137">{{ =pct }}</tspan></text>
+    <text
+       inkscape:label="#text3135"
+       sodipodi:linespacing="125%"
+       id="text3139"
+       y="745.46106"
+       x="1477.0317"
+       style="font-size:64.52581024px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
+       xml:space="preserve"><tspan
+         id="tspan3141"
+         y="745.46106"
+         x="1477.0317"
+         sodipodi:role="line">de participation aux votes</tspan></text>
+    <image
+       y="139.2193"
+       x="364.99997"
+       id="image3977"
+       xlink:href="data:image/jpeg;base64,{{=photo}}"
+       height="763.42859"
+       width="596.42859" />
+  </g>
+</svg>

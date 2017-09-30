@@ -1,0 +1,5 @@
+<h1>Test générateur de visuels</h1>
+<div style="width:400px;">
+{{ =svgvisuel('test') }}    
+</div>
+<a href="{{ =URL('download',args=[id]) }}">Télécharger</a>
