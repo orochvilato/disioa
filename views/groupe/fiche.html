@@ -23,6 +23,7 @@
 </style>
 {{ end }}
 {{ block content }}
+
     <div id="depute-template" class="container">
         <div class="depute-header"><!--
             <div class="depute-photo">
@@ -33,6 +34,8 @@
                     <h1>{{ =groupe_libelle }}</h1>
                 </header>
                 <div class="groupe-infos"><span>{{ =groupe_nbmembres }} membres</span></div>
+                {{ if president: }}<div class="groupe-infos"><span>Président : {{ =president }}</span></div>{{ pass }}
+                
             </div>
         </div>
 

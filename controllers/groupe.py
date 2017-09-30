@@ -19,8 +19,10 @@ def fiche():
 
     #votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
     votes = []   
-        
-    return dict(tab=tab,
+    president = [ m['uid'] for m in groupe['groupe_membres'] if m['actif']==True and m['qualite']==u'Président']
+    president = mdb.deputes.find_one({'depute_uid':president[0]},{'depute_nom':1})['depute_nom'] if president else ""
+       
+    return dict(tab=tab, president = president,
                 **groupe)
 
 def ajax_votes():

@@ -19,8 +19,10 @@ def fiche():
 
     #votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
     votes = []   
-        
-    return dict(tab=tab,
+    president = [ m['uid'] for m in groupe['groupe_membres'] if m['actif']==True and m['qualite']==u'Président']
+    president = mdb.deputes.find_one({'depute_uid':president[0]},{'depute_nom':1}) if president else ""
+       
+    return dict(tab=tab, president = president,
                 **groupe)
 
 def ajax_votes():
@@ -55,7 +57,7 @@ def ajax_itvs():
     if search:
         regx = re.compile(search, re.IGNORECASE)
         itv_filter['itv_contenu_texte']=regx
-    itvs = list(mdb.interventions.find(itv_filter).sort([('itv_date',-1),('itv_n',1)]).skip(skip).limit(nb))
+    itvs = list(mdb.interventions.find(itv_filter).sort([('itv_date',-1),('session_id',1),('itv_n',1)]).skip(skip).limit(nb))
     if search:
         for itv in itvs:
             itv['itv_contenu']=regx.sub('<high>'+search+'</high>',itv['itv_contenu'])
