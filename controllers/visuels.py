@@ -31,7 +31,9 @@ def download():
     pct="%.2f %%" % depute['stats']['positions']['exprimes']
     inputsvg = str(svgvisuel('test',photo=photo,prenom=prenom,nom=nom,pct=pct))
     #result = cairosvg.svg2png(inputsvg,write_to=os.path.join(request.folder,'static/test.png'))
+    return XML(inputsvg)
     from cStringIO import StringIO
     response.headers['ContentType'] ="application/octet-stream";
     response.headers['Content-Disposition']="attachment; filename="+depute['depute_shortid']+".svg"
+    
     return response.stream(StringIO(inputsvg),chunk_size=4096)

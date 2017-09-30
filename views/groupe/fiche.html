@@ -6,19 +6,6 @@
         background-color: #82cde2;
         color: white;
     }
-    #declaration {
-        font-size:14px;
-    }
-    .groupe-charts {
-        display:flex;
-        flex-wrap:wrap;
-    }
-    .groupe-charts .chart {
-        width:450px;
-        height:200px;
-        font-size:10px;
-    }
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.0.1/billboard.min.css" rel="stylesheet">
 </style>
 {{ end }}
@@ -30,13 +17,13 @@
                 <h1>{{ =groupe_libelle }}</h1>
                 {{ if president: }}
                 <h2>
-                    <a href="#">Président : {{ =president }}</a>
+                    <a href="{{ =URL('depute','fiche',args=[president['depute_shortid']]) }}">Président : {{ =president['depute_nom'] }}</a>
                 </h2>
                 {{ pass }}
             </header>
             <div class="groupe-membres">
                 <i class="fa fa-users" aria-hidden="true"></i> {{ =groupe_nbmembres }} membres<br />
-                (<a href="#">voir la liste des membres</a>)
+                (<a href="{{ =URL('deputes','liste',vars={'gp':groupe_abrev}) }}">voir la liste des membres</a>)
             </div>
         </div>
 
@@ -53,10 +40,13 @@
             </header>
 
             <section id="presentation" class="tab-content"> <!-- Présentation -->
-                <div class="depute-hemicycle">
+                <div class="groupe-hemicycle">
                     {{ =hemicycle(groupe=groupe_abrev,base_url=URL(c='depute',f='fiche')) }}
                     <!--<object id="hemicycle" data="{{ =URL('static','images/hemicyclelight.svg') }}" type="image/svg+xml"></object>-->
                 </div>
+                <h2>
+                    Représentatitivité
+                </h2>
                 <div class="groupe-charts">
                     <div id="ageChart" class="chart"></div>
                     <div id="cspChart" class="chart"></div>
@@ -64,7 +54,7 @@
                 {{ if groupe_declaration: }}
                 <h2>Déclaration</h2>
                 {{ import re }}
-                <blockquote id="declaration">{{ =XML(re.search(r'<div class="topmargin-lg">(.*)</div></div>',groupe_declaration.replace('\t','').replace('\n','')).groups()[0]) }}</blockquote>
+                <div class="groupe-declaration">{{ =XML(re.search(r'<div class="topmargin-lg">(.*)</div></div>',groupe_declaration.replace('\t','').replace('\n','')).groups()[0]) }}</div>
                 {{ pass }}
             </section>
 
@@ -209,8 +199,7 @@
     function cspChart() {
         var csp_ranges = JSON.parse('{{ =XML(json.dumps([s[1] for s in csp_liste ]).replace("'","\\'")) }}');
         var data = JSON.parse('{{ =XML(json.dumps([""]+[ dict(stats['csp']).get(s[0],0) for s in csp_liste ])) }}');
-        
-        
+
         var chart = bb.generate({
         padding: {
             left: 150,
@@ -238,7 +227,6 @@
         },
         y: {
             tick: {
-                rotate: 75,
                 multiline: false
             },
         }
@@ -261,7 +249,6 @@
         var age_ranges = JSON.parse('{{ =XML(json.dumps(classeage_liste)) }}');
         var data1 = JSON.parse('{{ =XML(json.dumps(["H"]+[ -dict(stats['classeage']).get(s,{'H':0})["H"] for s in classeage_liste])) }}');
         var data2 = JSON.parse('{{ =XML(json.dumps(["F"]+[ dict(stats['classeage']).get(s,{'F':0})["F"] for s in classeage_liste])) }}');
-        
         var qtymax = {{ = max([ s[1]["H"] for s in stats["classeage"] ]+[ s[1]["F"] for s in stats["classeage"] ]) }};
 
         var chart = bb.generate({
@@ -311,7 +298,6 @@
     cspChart();
     //var svg = document.getElementById('hemicycle');
     $(document).ready(function() {
-        
         var visible = $('.tab-container input:checked').val();
         $('#' + visible).addClass('visible');
 
@@ -328,6 +314,8 @@
             resizeDebounce = setTimeout(function() {
                 window.requestAnimationFrame(function() {
                     drawNuages();
+                    pyramidChart();
+                    cspChart();
                 });
             }, 100);
         });
