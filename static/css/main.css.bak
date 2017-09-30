@@ -448,7 +448,7 @@ template {
     #deputes-template #deputes-liste article > div {
       width: 100%; }
   #deputes-template #deputes-liste img {
-    margin-top: 32px; }
+    margin-top: 30px; }
     @media (max-width: 767px) {
       #deputes-template #deputes-liste img {
         display: block;
@@ -464,22 +464,22 @@ template {
     background: #ff0052;
     display: inline-block;
     font-size: 16px;
-    padding: 4px 6px;
+    padding: 3px 6px;
     transition: .2s; }
   #deputes-template #deputes-liste h1 {
     background: #213558;
     display: inline-block;
-    font-size: 24px;
-    padding: 3px 5px;
+    font-size: 18px;
+    padding: 1px 5px;
     transition: .2s; }
   #deputes-template .deputes-infos {
-    font-size: 15px;
-    margin: 12px 15px 0; }
+    font-size: 13px;
+    margin: 2px 15px 0; }
+    #deputes-template .deputes-infos .fa {
+      color: #82cde2; }
   #deputes-template .deputes-groupe {
     color: #213558;
-    display: inline-block;
-    font-size: 16px;
-    margin-bottom: 6px; }
+    display: inline-block; }
   #deputes-template .deputes-interventions span {
     color: #ff0052; }
   #deputes-template .deputes-votes {
@@ -489,7 +489,7 @@ template {
     flex-wrap: wrap;
     justify-content: space-around;
     margin-top: 5px;
-    padding: 5px;
+    padding: 4px;
     text-align: center; }
     @media (max-width: 767px) {
       #deputes-template .deputes-votes > div {
@@ -498,19 +498,21 @@ template {
     #deputes-template .deputes-votes h3 {
       border-bottom: 1px dashed #82cde2;
       display: inline-block;
-      font-size: 13px;
-      font-weight: 600; }
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.5em; }
       @media (max-width: 767px) {
         #deputes-template .deputes-votes h3 {
           font-size: 12px; } }
     #deputes-template .deputes-votes div div {
-      background: url("../assets/ico-participation.svg") no-repeat center 10px;
-      background-size: 40px;
+      background: url("../assets/ico-participation.svg") no-repeat center 6px;
+      background-size: 25px;
       color: #ff0052;
-      padding-top: 55px; }
+      font-size: 13px;
+      padding-top: 30px; }
     #deputes-template .deputes-votes .deputes-dissidence div {
       background-image: url("../assets/ico-dissidence.svg");
-      background-size: 24px; }
+      background-size: 14px; }
     #deputes-template .deputes-votes .deputes-fi div {
       background-image: url("../assets/ico-ficompat.svg"); }
     #deputes-template .deputes-votes .deputes-em div {
@@ -816,6 +818,36 @@ template {
       margin-top: 10px; }
       #depute-template .depute-votes-list p i {
         margin-right: 4px; }
+
+#groupe-template {
+  padding-top: 60px; }
+  #groupe-template .groupe-header {
+    display: flex;
+    justify-content: space-between; }
+  #groupe-template h1 {
+    background: #213558;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    padding: 4px 6px; }
+  #groupe-template h2 a {
+    background: #ff0052;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    padding: 3px 5px;
+    transition: .2s; }
+    #groupe-template h2 a:hover {
+      background: #82cde2;
+      text-decoration: none; }
+  #groupe-template .groupe-membres {
+    text-align: right; }
+    #groupe-template .groupe-membres a {
+      color: #213558;
+      font-size: .85em;
+      transition: .2s; }
+      #groupe-template .groupe-membres a:hover {
+        color: #82cde2; }
 
 /* GENERIC */
 *,

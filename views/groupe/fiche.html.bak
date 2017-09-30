@@ -24,18 +24,19 @@
 {{ end }}
 {{ block content }}
 
-    <div id="depute-template" class="container">
-        <div class="depute-header"><!--
-            <div class="depute-photo">
-                
-            </div>-->
-            <div class="depute-identite">
-                <header>
-                    <h1>{{ =groupe_libelle }}</h1>
-                </header>
-                <div class="groupe-infos"><span>{{ =groupe_nbmembres }} membres</span></div>
-                <div class="groupe-infos"><span>Président : {{ =president }}</span></div>
-                
+    <div id="groupe-template" class="container">
+        <div class="groupe-header">
+            <header>
+                <h1>{{ =groupe_libelle }}</h1>
+                {{ if president: }}
+                <h2>
+                    Président : {{ =president }}
+                </h2>
+                {{ pass }}
+            </header>
+            <div class="groupe-membres">
+                <i class="fa fa-users" aria-hidden="true"></i> {{ =groupe_nbmembres }} membres<br />
+                (<a href="#">voir la liste des membres</a>)
             </div>
         </div>
 

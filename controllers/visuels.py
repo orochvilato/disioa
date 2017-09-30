@@ -4,7 +4,7 @@ def index():
     from base64 import b64encode
     import os
     #depid = request.args(0)
-    deputes = list(mdb.deputes.find({'stats.positions.exprimes':{'$lt':20}}))
+    deputes = list(mdb.deputes.find({'$and':[{'groupe_abrev':'REM'},{'stats.positions.exprimes':{'$lt':20}}]}))
     import random
     depute = deputes[random.randint(0,len(deputes))]
     

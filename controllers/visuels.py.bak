@@ -3,11 +3,11 @@
 def index():
     from base64 import b64encode
     import os
-    depid = request.args(0)
-    depute = mdb.deputes.find_one({'depute_shortid':depid})
-    if not depute:
-        depute = mdb.deputes.find_one({'depute_shortid':'jeanlucmelenchon'})
-
+    #depid = request.args(0)
+    deputes = list(mdb.deputes.find({'stats.positions.exprimes':{'$lt':20}}))
+    import random
+    depute = deputes[random.randint(0,len(deputes))]
+    
     path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % depute['depute_id'])
     photo = b64encode(open(path).read())
     s = depute['depute_nom'].split(' ')

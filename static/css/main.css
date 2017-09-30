@@ -819,6 +819,37 @@ template {
       #depute-template .depute-votes-list p i {
         margin-right: 4px; }
 
+#groupe-template {
+  padding-top: 60px; }
+  #groupe-template .groupe-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 60px; }
+  #groupe-template h1 {
+    background: #213558;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    padding: 4px 6px; }
+  #groupe-template h2 a {
+    background: #ff0052;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    padding: 3px 5px;
+    transition: .2s; }
+    #groupe-template h2 a:hover {
+      background: #82cde2;
+      text-decoration: none; }
+  #groupe-template .groupe-membres {
+    text-align: right; }
+    #groupe-template .groupe-membres a {
+      color: #213558;
+      font-size: .85em;
+      transition: .2s; }
+      #groupe-template .groupe-membres a:hover {
+        color: #82cde2; }
+
 /* GENERIC */
 *,
 *:before,
