@@ -13,7 +13,7 @@
       <div class="deputes-infos">
         <div><i class="fa fa-briefcase" aria-hidden="true"></i> {{=d['depute_csp'] }} / {{ =d['depute_profession'] }}</div>
         <div><i class="fa fa-birthday-cake" aria-hidden="true"></i> {{=d['depute_age'] }} ans</div>
-        <a href="#" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>     
+        <a href="{{=URL('groupe','fiche',args=[d['groupe_abrev']])}}" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>     
         <div class="deputes-votes">
        
          {{ if 'positions' in d['stats'].keys(): }}

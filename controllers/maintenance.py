@@ -15,9 +15,11 @@ output_path = os.path.join(request.folder, 'private', 'scrapy')
 
 def test():
     
-    return BEAUTIFY(request)
+    return BEAUTIFY(mdb.scrutins.find_one())
 
-
+def correctData():
+    mdb.scrutins.update({'scrutin_id':'15_135'},{'$set':{'scrutin_groupe':'LR'}})
+    mdb.scrutins.update({'scrutin_id':'15_134'},{'$set':{'scrutin_groupe':'FI'}})
 
 def updateDeputesStatsElection():
     from openpyxl import load_workbook

@@ -5796,3 +5796,6 @@
 [2017-09-30 02:27:52] EDIT oadev/controllers/groupe.py: 0
 [2017-09-30 02:28:27] EDIT oadev/views/groupe/fiche.html: 0
 [2017-09-30 02:28:44] EDIT oadev/views/groupe/fiche.html: 0
+[2017-09-30 12:29:16] EDIT oadev/controllers/maintenance.py: 2
+[2017-09-30 12:33:11] EDIT oadev/controllers/maintenance.py: 1
+[2017-09-30 16:23:59] EDIT oadev/views/deputes/ajax_liste.html: 0

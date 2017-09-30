@@ -27,11 +27,11 @@
           </div>
           <div class="deputes-fi">
             <h3>Vote Insoumis</h3>
-            <div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>
+            {{ if d['stats']['compat']['FI']: }}<div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
           </div>
           <div class="deputes-em">
             <h3>Vote En marche</h3>
-            <div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>
+            {{ if d['stats']['compat']['REM']: }}<div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
           </div>
         {{ pass }}
       </div>
