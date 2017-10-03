@@ -34,7 +34,7 @@
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance[0].lower()+depute_naissance[1:]) }}</span></div>
                 <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
                 
-                 <div class="depute-infos"><span>Elu(e) au {{="1er" if depute_election['tour']==1 else "2e" }} tour avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{pass}}</span></div>                    
+                 <div class="depute-infos"><span>Elu(e) au {{="1er" if depute_election['tour']==1 else "2e" }} tour ({{ =depute_election['nuance'] }}) avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{pass}}</span></div>                    
                 <div class="depute-infos"><span>Elu(e) par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],2)}}% des inscrits de sa circonscription ({{=depute_election['voix']}} voix)</span></div>
             </div>
         </div>
@@ -179,7 +179,18 @@
                     <h2>Présences aux votes</h2>
                     <div id="presenceChart"></div>
                 </div>-->
-
+                <div class="depute-votes-list">
+                    <h2>Ses votes clés</h2>
+                    <ul >
+                    {{ icons = {'pour':'fa-thumbs-up','contre':'fa-thumbs-down','abstention':'fa-microphone-slash','absent':'fa-question'} }}
+                        {{ for v in votes_cles:}}<li class="vote-item" style="margin-bottom:20px;"><i class="fa fa-arrow-circle-o-right"></i>
+                        <div class="vote {{ =v['vote_position'] }}"><i class="fa {{ =icons[v['vote_position']] }}"></i> {{ =v['vote_position'][0].upper()+v['vote_position'][1:] }}</div>
+                        <div style="padding-left:5px;">{{ = "sur " if v['vote_position'] in ('absent','abstention') else '' }}{{ = scrutins_cles[v['scrutin_num']] }} ({{ =v['scrutin_num'] }})</div>
+ 
+                    </li>
+                    {{ pass }}
+                    </ul>
+                </div>
                 <div class="depute-votes-list">
                     <h2>Ses votes</h2>
                     <div class="depute-votes-search">

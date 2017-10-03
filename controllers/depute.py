@@ -20,6 +20,7 @@ def fiche():
         obsass_log('fiche',shortid)
 
     votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
+    votes_cles = list(mdb.votes.find({'depute_uid':depute['depute_uid'],'scrutin_num':{'$in':scrutins_cles.keys()}},{'scrutin_num':1,'vote_position':1}).sort('scrutin_num',-1))
     dates = {}
     weeks = {}
     for v in votes:
@@ -39,7 +40,7 @@ def fiche():
         
     return dict(dates=sorted([{"date": dat,"pct":round(float(v['e'])/v['n'],3)} for dat,v in dates.iteritems()],key=lambda x:x['date']),
                 weeks=sorted([{"week": w,"pct":100*round(float(v['e'])/v['n'],2)} for w,v in weeks.iteritems()],key=lambda x:x['week']),
-                tab=tab,
+                tab=tab,votes_cles=votes_cles,
                 **depute)
 
 def ajax_votes():

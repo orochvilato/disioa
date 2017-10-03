@@ -19,5 +19,5 @@
 </li>
 {{ pass }}
 {{ if next: }}
-    <div class="pagination__next__votes"></div>
+    <div class="pagination__next"></div>
 {{ pass }}

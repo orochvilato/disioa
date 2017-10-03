@@ -138,3 +138,5 @@ scrutins_cles = {1:"la déclaration de politique générale du Gouvernement",
 csp_liste = [(u"Cadres et professions intellectuelles sup\u00e9rieures",u"Cadres, Prof. Sup."), (u"Artisans, commer\u00e7ants et chefs d'entreprise",u"Artisants, Chefs d'entrep."), (u"Agriculteurs exploitants",u"Agriculteurs exploitants"),(u"Professions Interm\u00e9diaires",u"Professions Interm\u00e9diaires"),(u"Employ\u00e9s",u"Employ\u00e9s"),(u"Ouvriers",u"Ouvriers"),(u"Retrait\u00e9s",u"Retrait\u00e9s"),(u"Autres (y compris inconnu et sans profession d\u00e9clar\u00e9e)",u"Autres")]
 
 classeage_liste = ["70-80 ans", "60-70 ans", "50-60 ans", "40-50 ans", "30-40 ans", "20-30 ans"]
+
+seuil_compat = 30

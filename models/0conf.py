@@ -133,7 +133,9 @@ nuages_excl =('ministre','monsieur',u'collègue','madame','premier','cher','effe
 scrutins_cles = {1:"la déclaration de politique générale du Gouvernement",
 2:"la prorogation de l'état d'urgence",
 106:"la loi d'habilitation à réformer par ordonnances le code du travail",
-119:"la loi pour la confiance dans la vie politique"}
+119:"la loi pour la confiance dans la vie politique",
+138:"l'inscription de l'état d'urgence dans le droit commun",
+                }
 
 csp_liste = [(u"Cadres et professions intellectuelles sup\u00e9rieures",u"Cadres, Prof. Sup."), (u"Artisans, commer\u00e7ants et chefs d'entreprise",u"Artisants, Chefs d'entrep."), (u"Agriculteurs exploitants",u"Agriculteurs exploitants"),(u"Professions Interm\u00e9diaires",u"Professions Interm\u00e9diaires"),(u"Employ\u00e9s",u"Employ\u00e9s"),(u"Ouvriers",u"Ouvriers"),(u"Retrait\u00e9s",u"Retrait\u00e9s"),(u"Autres (y compris inconnu et sans profession d\u00e9clar\u00e9e)",u"Autres")]
 
