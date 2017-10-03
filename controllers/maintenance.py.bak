@@ -23,7 +23,7 @@ def correctData():
 
 def updateDeputesStatsElection():
     from openpyxl import load_workbook
-    path = os.path.join(request.folder, 'private','legislatives.xlsx')
+    path = os.path.join(request.folder, 'private','data','legislatives.xlsx')
     wb = cache.ram('circo.xls',lambda:load_workbook(path),time_expire=0)
     circos = dict((d['depute_departement_id'],d['depute_departement']) for d in mdb.deputes.find())
     deputes = {}
@@ -45,8 +45,8 @@ def updateDeputesStatsElection():
             i += 9
 
         for d in deputes[t]:
-            mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election':{'inscrits':r[4].value, 'adversaires':advs, 'abstentions':r[5].value,'votants':r[7].value,'blancs':r[9].value,'nuls':r[12].value,'exprimes':r[15].value,'voix':r[23].value}}})
-    
+            #mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election':{'inscrits':r[4].value, 'adversaires':advs, 'abstentions':r[5].value,'votants':r[7].value,'blancs':r[9].value,'nuls':r[12].value,'exprimes':r[15].value,'voix':r[23].value}}})
+            mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election.nuance':r[22].value}})
     return json.dumps(advs)
 
 def weekly_job():
@@ -62,11 +62,13 @@ def daily_job():
 # Helpers
 # ---------------------
 def updatePhotos():
+    upd = []
     for d in mdb.deputes.find():
         r =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+d['depute_uid'][2:]+'.jpg')
         with open(os.path.join(request.folder, 'static', 'images','deputes',d['depute_id']+'.jpg'),'w') as f:
             f.write(r.content)
-    return 'ok'
+        upd.append(d['depute_id'])
+    return BEAUTIFY(upd)
 
 def formatpct(n,d,prec=1):
     return round(float(n)/d,prec)
@@ -533,18 +535,43 @@ def updateScrutinsSignataires():
         mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
         
 def updateDeputesStats():
+    groupes_abrev = mdb.groupes.distinct('groupe_abrev')
     groupe_depute = dict((d['depute_uid'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_uid':1,'groupe_abrev':1}))
     pgroup = dict((g,{'$sum':'$vote_compat.'+g}) for g in mdb.groupes.distinct('groupe_abrev'))
     pgroup['_id'] = {'depute':'$depute_uid'}
+
     pipeline = [
         {"$group": pgroup },
     ]
-    deputes = {}
+    deputes = dict((uid,{'depute_compat':{},'depute_compat_globale':{},'depute_positions':{}}) for uid in mdb.deputes.distinct('depute_uid'))
+
     for compat in list(mdb.votes.aggregate(pipeline)):
         depuid = compat['_id']['depute']
         del compat['_id']
-        deputes[depuid] = {'depute_compat':compat, 'depute_positions':{} }
+        deputes[depuid].update({'depute_compat_globale':compat})
 
+    # comptabilisation compats
+    gp_pos = dict((g,{'pour':[],'contre':[],'abstention':[],'absent':[]}) for g in groupes_abrev+['assemblee'])
+    for s in mdb.scrutins.find():
+        for g,pos in s['scrutin_compats'].iteritems():
+            pos = pos if pos else 'absent'
+            gp_pos[g][pos].append(s['scrutin_id'])
+    
+    for gid in ['FI','REM']:
+        pgroup['n'] = {'$sum':1}
+        pgroup['_id']['position'] ='$vote_position'
+        # V1 : pipeline = [{'$match':{'$and':[{'scrutin_typedetail':'amendement'},{'vote_position':{'$ne':'absent'}}]}}] + pipeline
+        pipeline2 = [{'$match':{'$and':[{'scrutin_id':{'$in':gp_pos[gid]['pour']}},{'vote_position':{'$ne':'absent'}}]}}] + pipeline
+        
+        for compat in list(mdb.votes.aggregate(pipeline2)):
+            depuid = compat['_id']['depute']
+            pos = compat['_id']['position']
+            if not gid in deputes[depuid]['depute_compat'].keys():
+                deputes[depuid]['depute_compat'][gid] = {}
+            deputes[depuid]['depute_compat'][gid][pos] = compat[gid]
+            deputes[depuid]['depute_compat'][gid]['total'] = deputes[depuid]['depute_compat'][gid].get('total',0)+compat['n']
+        
+    
     pipeline = [
         {"$group":{'_id': {'depute':'$depute_uid','position':'$vote_position'}, 'n':{'$sum':1}}},
         {"$sort": SON([("_id.depute",1)])}
@@ -555,33 +582,34 @@ def updateDeputesStats():
         deputes[uid]['depute_positions'][p['_id']['position']] = p['n']
     ops = []
     
-    groupes_abrev = mdb.groupes.distinct('groupe_abrev')
+    
     gp_nbvotes = {}
     for g in groupes_abrev:
         pipeline = [ {'$redact': {'$cond': [{'$lt': ['$scrutin_positions.'+g+'.absent', '$scrutin_positions.'+g+'.total']}, '$$KEEP', '$$PRUNE']}}]
         gp_nbvotes[g] = len(list(mdb.scrutins.aggregate(pipeline)))
     
     for uid,dep in deputes.iteritems():
-        dep['depute_positions']['total'] = sum(dep['depute_positions'].values())
+        dep['depute_positions']['total'] = dep['depute_positions'].get('pour',0)+dep['depute_positions'].get('contre',0)+dep['depute_positions'].get('abstention',0)+dep['depute_positions'].get('absent',0)
         dep['depute_positions']['exprimes'] = dep['depute_positions']['total'] - dep['depute_positions'].get('absent',0)
-        dep['depute_positions']['dissidence'] = dep['depute_positions']['exprimes'] - dep['depute_compat'][groupe_depute[uid]]
+        dep['depute_positions']['dissidence'] = dep['depute_positions']['exprimes'] - dep['depute_compat_globale'].get(groupe_depute[uid],0)
 
         # stats positions
         dep['stats.positions'] = dict((p,0) for p in ('pour','contre','exprimes','absent','abstention','dissidence'))
         for pos in dep['stats.positions'].keys():
             if dep['depute_positions']['exprimes']>0:
-                dep['stats.positions'][pos] = round(100*float(dep['depute_positions'].get(pos,0)) / dep['depute_positions']['total'],3)
+                num = dep['depute_positions']['exprimes'] if not pos in ('exprimes','absent') else dep['depute_positions']['total']
+                dep['stats.positions'][pos] = round(100*float(dep['depute_positions'].get(pos,0)) / num,3)
         # stats compat
-        dep['stats.compat'] = dict((g,0) for g in dep['depute_compat'].keys())
+        dep['stats.compat'] = dict((g,0) for g in groupes_abrev)
         for g,v in dep['depute_compat'].iteritems():
             #if dep['depute_positions']['exprimes']>0:
                 #dep['stats.compat'][g] = round(100*float(v) / gp_nbvotes[g],3)
-            if dep['depute_positions']['exprimes']>0 and dep['stats.positions']['exprimes']>seuil_compat:
-                dep['stats.compat'][g] = round(100*float(v) / dep['depute_positions']['exprimes'],3)
+            if dep['stats.positions']['exprimes']>seuil_compat:
+                dep['stats.compat'][g] = round(100*float(v.get('pour',0)) / v['total'],3)
             else:
                 dep['stats.compat'][g] = None
         dep['stats.compat_sort'] = [ dict(g=g,p=p) for g,p in sorted(dep['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
-        
+    
     for d in mdb.deputes.find():
         uid = d['depute_uid']
         if uid in deputes.keys():
@@ -593,7 +621,7 @@ def updateDeputesStats():
                                  'inscrits':round(100*float(d['depute_election']['voix'])/d['depute_election']['inscrits'],2)}
         ops.append(UpdateOne({'depute_uid':uid},{'$set':dep}))
         
-        
+    
     if ops:
         mdb.deputes.bulk_write(ops)
 
@@ -672,17 +700,20 @@ def updateGroupesStats():
     #    {"$sort": SON([("n",-1)])}
     #]
     #return json.dumps(list(mdb.deputes.aggregate(pipeline)))
-    pgroup = dict((g,{'$sum':'$vote_compat.'+g}) for g in mdb.groupes.distinct('groupe_abrev'))
+    pgroup = dict((g+'_pour',{'$sum':'$depute_compat.'+g+'.pour'}) for g in ['FI','REM'])
+    pgroup.update(dict((g+'_total',{'$sum':'$depute_compat.'+g+'.total'}) for g in ['FI','REM']))
     pgroup['_id'] = {'groupe':'$groupe_abrev'}
     pipeline = [
         {"$group": pgroup },
     ]
     groupes = {}
-    for compat in list(mdb.votes.aggregate(pipeline)):
-        groupe = compat['_id']['groupe']
-        del compat['_id']
-        groupes[groupe] = {'groupe_compat':compat, 'groupe_positions':{} }
-    
+    for cpt in mdb.deputes.aggregate(pipeline):
+        gp = cpt['_id']['groupe']
+        _comp = {}
+        for g in ['FI','REM']:
+            _comp[g] = {'pour':cpt[g+'_pour'],'total':cpt[g+'_total']}
+        groupes[gp] = {'groupe_compat':_comp, 'groupe_positions':{} }
+
     pipeline = [
         {"$group":{'_id': {'groupe':'$groupe_abrev','position':'$vote_position'}, 'n':{'$sum':1}}},
         {"$sort": SON([("_id.groupe",1)])}
@@ -707,7 +738,7 @@ def updateGroupesStats():
         g['stats.compat'] = dict((_g,0) for _g in g['groupe_compat'].keys())
         for _g,_v in g['groupe_compat'].iteritems():
             if g['groupe_positions']['exprimes']>0:
-                g['stats.compat'][_g] = round(100*float(_v) / g['groupe_positions']['exprimes'],3)
+                g['stats.compat'][_g] = round(100*float(_v['pour']) / _v['total'],3)
         g['stats.compat_sort'] = [ dict(g=_g,p=_p) for _g,_p in sorted(g['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
         
         

@@ -162,11 +162,12 @@
                     </div>
                     <div class="gauge">
                         <h2>Vote Insoumis</h2>
-                        {{ =svggauge('compfi',stats['compat']['FI']) }}
+                        {{ if stats['compat']['FI'] != None: }}{{ =svggauge('compfi',stats['compat']['FI']) }}{{else:}}
+                        <p>Nombre de votes insuffisants</p>{{pass}}
                     </div>
                     <div class="gauge">
-                        <h2>Vote En marche</h2>
-                        {{ =svggauge('compem',stats['compat']['REM']) }}
+                        <h2>Vote En marche</h2>{{ if stats['compat']['REM'] != None: }}
+                        {{ =svggauge('compem',stats['compat']['REM']) }}{{ else: }}<p>Nombre de votes insuffisants</p>{{pass}}
                     </div>
                     {{ pass }}
                 </div>

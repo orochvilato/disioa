@@ -23,7 +23,7 @@
             </header>
             <div class="groupe-membres">
                 <i class="fa fa-users" aria-hidden="true"></i> {{ =groupe_nbmembres }} membres<br />
-                (<a href="#">voir la liste des membres</a>)
+                (<a href="{{ =URL('deputes','liste',vars={'gp':groupe_abrev}) }}">voir la liste des membres</a>)
             </div>
         </div>
 

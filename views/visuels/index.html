@@ -2,8 +2,11 @@
 <h1>Test générateur de visuels</h1>
 <h3>1 député en marche à moins de 20 % (au hasard) </h3>
 <div style="width:400px;">
-{{ =svgvisuel('test') }}    
+{{ =svgvisuel('test') }}
 </div>
-<a href="{{ =URL('download',args=[id]) }}">Télécharger</a>
-    </body>
+<a href="{{ =URL('download',args=[id]) }}">Télécharger SVG</a>
+<a href="{{ =URL('download',args=[id,1600,int(1600*coef)]) }}">Télécharger PNG (1600)</a>
+<a href="{{ =URL('download',args=[id,800,int(800*coef)]) }}">Télécharger PNG (800)</a>
+<a href="{{ =URL('tweeter',args=[id,800,int(800*coef)]) }}" target="_blank">Tweeter</a>
+</body>
 </html>

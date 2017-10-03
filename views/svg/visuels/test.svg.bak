@@ -16,7 +16,11 @@
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="Nouveau document 1">
   <defs
-     id="defs4" />
+     id="defs4">
+    <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic');
+ </style>
+    </defs>
   
   <g
      inkscape:label="Calque 1"
@@ -32,7 +36,7 @@
        y="-76.209244" />
     <text
        xml:space="preserve"
-       style="font-size:133.79191589px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:left;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"
+       style="font-size:133.79191589px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"
        x="1031.9902"
        y="316.38498"
        id="nomdepute"
@@ -58,23 +62,23 @@
        sodipodi:linespacing="125%"
        id="text3062"
        y="23.708683"
-       x="1050"
-       style="font-size:88.28583527px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:left;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
+       x="1251.7546"
+       style="font-size:88.28583527px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
        xml:space="preserve"><tspan
          id="tspan3066"
          y="23.708683"
-         x="1050"
+         x="1251.7546"
          sodipodi:role="line">« Nous nous engageons à être assidus »</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:133.84925842px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:left;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
+       style="font-size:133.84925842px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
        x="1208.8268"
        y="653.11047"
        id="pct"
        sodipodi:linespacing="125%"
        inkscape:label="#text3135"><tspan
          sodipodi:role="line"
-         x="1050"
+         x="1031"
          y="653.11047"
          id="tspan3137">{{ =pct }}</tspan></text>
     <text
@@ -83,11 +87,11 @@
        id="text3139"
        y="745.46106"
        x="1477.0317"
-       style="font-size:64.52581024px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
+       style="font-size:64.52581024px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Bold"
        xml:space="preserve"><tspan
          id="tspan3141"
          y="745.46106"
-         x="1477.0317"
+         x="1031"
          sodipodi:role="line">de participation aux votes</tspan></text>
     <image
        y="139.2193"

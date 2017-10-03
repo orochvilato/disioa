@@ -1,0 +1,7 @@
+<html>
+    <body>
+<div style="width:100%;">
+{{ =svgvisuel('test') }}
+</div>
+</body>
+</html>

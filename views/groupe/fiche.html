@@ -95,10 +95,10 @@
                         <h2>Participation</h2>
                         {{ =svggauge('vote',stats['positions']['exprimes']) }}
                     </div>
-                    <div class="gauge">
+                    {{ if groupe_abrev!='NI': }}<div class="gauge">
                         <h2>Dissidence</h2>
                         {{ =svggauge('diss',stats['positions']['dissidence']) }}
-                    </div>
+                    </div>{{ pass }}
                     <div class="gauge">
                         <h2>Vote Insoumis</h2>
                         {{ =svggauge('compfi',stats['compat']['FI']) }}
