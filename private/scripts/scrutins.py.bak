@@ -28,7 +28,7 @@ def strip_accents(s):
                   if unicodedata.category(c) != 'Mn')
 def normalize(s):
     return strip_accents(s).replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
-    
+
 
 
 
@@ -276,8 +276,9 @@ for s in scrutins.values():
     if estamd:
         namd = estamd.groups()[0]
         sig = estamd.groups()[1]
-        dos = amds[s['dossierlien']]
-
+        dos = amds.get(s['dossierlien'],None)
+        if not dos:
+            continue
         candidats = []
         for _amds in dos:
             if namd in _amds.keys():

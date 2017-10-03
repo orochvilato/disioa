@@ -16,24 +16,22 @@ def updateElectionTour():
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": False } }, {'$set':{'depute_election.tour':1}})
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": True } }, {'$set':{'depute_election.tour':2}})
 def test():
-    #return BEAUTIFY(mdb.deputes.find_one({'depute_uid':'PA719684'}))
-    gp_abrevs = mdb.groupes.distinct('groupe_abrev')
-    pgroup = dict((g+'_pour',{'$sum':'$depute_compat.'+g+'.pour'}) for g in ['FI','REM'])
-    pgroup.update(dict((g+'_total',{'$sum':'$depute_compat.'+g+'.total'}) for g in ['FI','REM'])
-    pgroup['_id'] = {'groupe':'$groupe_abrev'}
-    pipeline = [
-        {"$group": pgroup },
-    ]
-    compats = {}
+    from openpyxl import load_workbook
+    from cStringIO import StringIO
+    import requests
     
-    for cpt in mdb.deputes.aggregate(pipeline):
-        gp = cpt['_id']['groupe']
-        _comp = {}
-        for g in ['FI','REM']:
-            _comp[g] = {'pour':cpt[g+'_pour'],'total':cpt[g+'_total']}
-        compats[gp] = _comp
-    return BEAUTIFY(compats)
-    return BEAUTIFY(mdb.scrutins.find_one({'scrutin_id':'15_87'}))
+    r =requests.get("https://docs.google.com/spreadsheets/d/1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw/export?format=xlsx&id=1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw")
+    f = StringIO(r.content)
+    wb = load_workbook(f)
+    ws = wb['scrutins']
+    elts = []
+    for j,row in enumerate(ws.iter_rows(min_row=2)):
+        elts.append([a.value for a in row])
+    scrutins_cles = {}
+    for e in elts:
+        if e[1] != None:
+            scrutins_cles[e[0]] = dict(num=e[0],nom=e[1],desc=e[2],theme=e[3],lien=e[4])
+    return BEAUTIFY(scrutins_cles)
     
 def error():
     1/0
