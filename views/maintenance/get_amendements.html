@@ -1,0 +1,25 @@
+<table border="1">
+    <thead>
+        <tr>
+            <th>Groupe</th><th>Total</th><th>Adopté</th><th>Rejeté</th><th>Retiré</th><th>Tombé</th><th>Non renseigné</th><th>Non soutenu</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ for g,v in stats.items()+[('Total',totaux)]: }}
+        <tr><td>{{ =g }}</td>{{ for f in ['total',u'Adopt\xe9',u'Rejet\xe9',u'Retir\xe9',u'Tomb\xe9',u'Non renseign\xe9',u'Non soutenu']: }}<td>{{ =v.get(f,0) }} {{ if f!='total':}}({{ =round(100*float(v.get(f,0))/v['total'],1) }} %){{ pass }}</td>{{ pass }}</tr>
+        {{ pass }}
+    </tbody>
+</table>
+<br/>
+<table border="1">
+    <thead>
+        <tr>
+            <th>#</th><th>Nom</th><th>Groupe</th><th>Rédigés</th><th>Signés</th><th>Adoptés (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ for i,dep in enumerate(stats_deps):}}
+        <tr><td>{{ =i+1 }}</td><td>{{ =dep[0] }}</td><td>{{ =dep[1]['groupe'] }}</td><td>{{ =dep[1]['rediges'] }}</td><td>{{ =dep[1]['signes'] }}</td><td>{{ if 'pct' in dep[1]: }}{{ =dep[1]['adoptes'] }} ({{ =dep[1]['pct'] }} %){{ pass }}</td></tr>
+        {{ pass }}
+    </tbody>
+</table>

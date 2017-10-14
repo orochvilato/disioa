@@ -34,7 +34,7 @@ def getScrutinsCles():
             scles[int(e[0])] = dict(num=int(e[0]),nom=e[1],desc=e[2],theme=e[3],lien=e[4])
     return scles
 
-scrutins_cles = cache.disk('scrutins_cles',lambda:getScrutinsCles(),time_expire=3600*24)
+scrutins_cles = cache.disk('scrutins_cles',lambda:getScrutinsCles(),time_expire=3600)
 
 csp_liste = [(u"Cadres et professions intellectuelles sup\u00e9rieures",u"Cadres, Prof. Sup."), (u"Artisans, commer\u00e7ants et chefs d'entreprise",u"Artisants, Chefs d'entrep."), (u"Agriculteurs exploitants",u"Agriculteurs exploitants"),(u"Professions Interm\u00e9diaires",u"Professions Interm\u00e9diaires"),(u"Employ\u00e9s",u"Employ\u00e9s"),(u"Ouvriers",u"Ouvriers"),(u"Retrait\u00e9s",u"Retrait\u00e9s"),(u"Autres (y compris inconnu et sans profession d\u00e9clar\u00e9e)",u"Autres")]
 

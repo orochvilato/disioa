@@ -1,0 +1,37 @@
+{{ def emphasize(itemtype,value): }}
+{{   return SPAN(value,_class='emphasize' if itemtype==tri else None) }}
+{{ pass }}
+
+{{ for i,d in enumerate(deputes): }}
+
+  <article class="depute-item">
+    <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
+      <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/{{ =d['depute_uid'][2:] }}.jpg" />
+    </a>
+    <div>
+      <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
+        <header>
+          <h2><span>{{ =d['depute_region'] }} / {{ =d['depute_departement'] }} / {{ =d['depute_circo'] }}</span></h2>
+          <h1>{{ =d['depute_nom'] }}</h1>
+        </header>
+      </a>
+      <div class="deputes-infos">
+        <a href="{{=URL('groupe','fiche',args=[d['groupe_abrev']]}}" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>
+        {{ if 'positions' in d['stats'].keys(): }}
+        <div class="deputes-votes">
+          <h2>{{ = d['stats']['ranks'][top_dir][top['rank']] }}</h2>
+          <div class="{{ =top['classe'] }}">
+            <h3>{{ =top['label'] }}{{ if top['rank'] in ('pctinscrits','pctexprimes'):}} ({{ ={1:'1er tour',2:'2e tour'}[d['depute_election']['tour']] }}){{pass}}</h3>
+            <div>{{ v=round(getdot(d,tri),top['precision']) }}{{ if (top['precision']==0): }}{{=int(v) }}{{else:}}{{ =v }}{{pass}} {{=top['unit']}}</div>
+            
+          </div>
+          
+        {{ pass }}
+      </div>
+    </div>
+  </article>
+
+{{ pass }}
+{{ if next: }}
+    <div class="pagination__next"></div>
+{{ pass }}

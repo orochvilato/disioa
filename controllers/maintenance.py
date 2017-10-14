@@ -9,10 +9,87 @@ import requests
 from tools import normalize
 from pymongo import UpdateOne
 from bson.son import SON
+from tools import normalize
 import xmltodict
 mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
+def groupeFromNom(nom):
+    def gfromn():
+        gfn  = {}
+        for d in mdb.deputes.find({},{'depute_id':1,'depute_nom':1,'groupe_abrev':1}):
+            g = d['groupe_abrev']
+            nom =d['depute_nom'].split(' ')
+            gfn[normalize(nom[0])+normalize(''.join(nom[2:]))] = {'g':g,'id':d['depute_id']}
+        return gfn
+    gfn = cache.ram('gfn',lambda:gfromn(),time_expire=3600)
+    return gfn[nom]
+
+
+def get_amendements():
+    result = cache.disk('amendements',lambda:fetch_amendements(),time_expire=3600)
+    return result
+
+def fetch_amendements():
+    
+    leg = request.args(0) or '15'
+    from HTMLParser import HTMLParser
+    html = HTMLParser()
+    gfn  = {}
+    for d in mdb.deputes.find({},{'depute_id':1,'depute_nom':1,'groupe_abrev':1}):
+        g = d['groupe_abrev']
+        nom =d['depute_nom'].split(' ')
+        gfn[normalize(nom[0])+normalize(''.join(nom[2:]))] = {'g':g,'id':d['depute_id'],'nom':d['depute_nom']}
+    
+    amendements = []
+    nb = 1000
+    count = 1000
+    start = 1
+    stats = {}
+    stats_deps = {}
+    
+    while (count==nb):
+        r = requests.get('http://www2.assemblee-nationale.fr/recherche/query_amendements?typeDocument=amendement&leg=%s&idExamen=&idDossierLegislatif=&missionVisee=&numAmend=&idAuteur=&premierSignataire=false&idArticle=&idAlinea=&sort=&dateDebut=&dateFin=&periodeParlementaire=&texteRecherche=&rows=%d&format=json&tri=ordreTexteasc&start=%d&typeRes=liste' % (leg,nb,start))
+        amds = r.json()
+        fields = amds['infoGenerales']['description_schema'].split('|')
+        count = len(amds[u'data_table'])
+        start += nb
+        for a in amds[u'data_table']:
+            amd = dict((fields[i],_a) for i,_a in enumerate(a.split('|')))
+            amd['signataires_ids'] = []
+            amd['signataires_groupes'] = []
+            for i,s in enumerate(amd['signataires'].replace(' et ', ',').split(',')):
+                s = normalize(html.unescape(s))
+                if s in gfn.keys():
+                    if not gfn[s]['nom'] in stats_deps:
+                        stats_deps[gfn[s]['nom']] = {'signes':0,'rediges':0,'adoptes':0,'groupe':gfn[s]['g']}
+                    if i==0:
+                        stats_deps[gfn[s]['nom']]['rediges'] += 1
+                        if amd['sort']==u'Adopté':
+                            stats_deps[gfn[s]['nom']]['adoptes'] += 1
+                    stats_deps[gfn[s]['nom']]['signes'] += 1
+                    amd['signataires_ids'].append(gfn[s]['id'])
+                    amd['signataires_groupes'].append(gfn[s]['g'])
+
+            if amd['signataires_groupes']:
+                g = amd['signataires_groupes'][0]
+            else:
+                g = 'Gouvernement'
+            if not g in stats:
+                stats[g] = dict()
+            stats[g][amd['sort']] = stats[g].get(amd['sort'],0)+1
+            amendements.append(amd)
+    totaux = {}
+    for d in stats_deps.keys():
+        if stats_deps[d]['rediges'] > 0:
+            stats_deps[d]['pct'] = round(100*float(stats_deps[d]['adoptes'])/stats_deps[d]['rediges'],2)
+    for g in stats.keys():
+        stats[g]['total'] = sum(stats[g].values())
+    for f in ['total',u'Adopt\xe9',u'Rejet\xe9',u'Retir\xe9',u'Tomb\xe9',u'Non renseign\xe9',u'Non soutenu']:
+        totaux[f] = sum([stats[g].get(f,0) for g in stats.keys()])
+    
+    return dict(stats=stats,totaux=totaux,stats_deps=sorted(stats_deps.iteritems(),key=lambda x:(x[1]['rediges'],x[1]['signes']),reverse=True))
+    
 def test():
     
     return BEAUTIFY(mdb.scrutins.find_one())
@@ -56,6 +133,7 @@ def weekly_job():
 def daily_job():
     updateScrutins()
     updateSessions()
+    #updateCommissions()
     updateAllStats()
     
 # ---------------------
@@ -152,7 +230,22 @@ def buildIndexes():
     mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
     mdb.deputes.reindex()
 
-
+def updateCommissions():
+    launchScript('commissions')
+    presences  =getJson('presences')
+    #amendements  =getJson('amendements')
+    commissions = getJson('commissions')
+    groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
+    for com in commissions:
+        mdb.commissions.update_one({'commission_id':com['commission_id']},{'$set':com},upsert=True)
+    for pres in presences:
+        pres['groupe_abrev'] = groupe_depute[pres['depute_id']]
+        mdb.presences.update_one({'presence_id':pres['presence_id']},{'$set':pres},upsert=True)
+    #for amd in amendements:
+    #    amd['groupe_abrev'] = groupe_depute.get(amd['auteur_id'],amd['auteur_id'])
+    #    mdb.amendements.update_one({'amendement_id':amd['amendement_id']},{'$set':amd},upsert=True)
+    
+    return "ok"
 def updateAssemblee():
     updateHATVP()
     updateDeputyWatch()
@@ -543,6 +636,7 @@ def updateDeputesStats():
     pipeline = [
         {"$group": pgroup },
     ]
+   
     deputes = dict((uid,{'depute_compat':{},'depute_compat_globale':{},'depute_positions':{}}) for uid in mdb.deputes.distinct('depute_uid'))
 
     for compat in list(mdb.votes.aggregate(pipeline)):

@@ -16,22 +16,36 @@ def updateElectionTour():
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": False } }, {'$set':{'depute_election.tour':1}})
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": True } }, {'$set':{'depute_election.tour':2}})
 def test():
-    from openpyxl import load_workbook
-    from cStringIO import StringIO
-    import requests
+    return BEAUTIFY(mdb.groupes.find_one()['stats'])
+    #return BEAUTIFY(list(mdb.presences.find({'depute_id':'m.jeanlucmelenchon'})))
+    # presences / depute
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = { 'depute_id':'$depute_id', 'etat':'$presence_etat'}
+    pipeline = [{'$group':pgroup}]
+    presences_deputes = {}
+    for p in mdb.presences.aggregate(pipeline):
+        depid = p['_id']['depute_id']
+        etat = p['_id']['etat']
+        if not depid in presences_deputes.keys():
+            presences_deputes[depid]={'present':0,'absent':0,'excuse':0}
+        presences_deputes[depid][etat] += p['n']
     
-    r =requests.get("https://docs.google.com/spreadsheets/d/1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw/export?format=xlsx&id=1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw")
-    f = StringIO(r.content)
-    wb = load_workbook(f)
-    ws = wb['scrutins']
-    elts = []
-    for j,row in enumerate(ws.iter_rows(min_row=2)):
-        elts.append([a.value for a in row])
-    scrutins_cles = {}
-    for e in elts:
-        if e[0] != None:
-            scrutins_cles[int(e[0])] = dict(num=e[0],nom=e[1],desc=e[2],theme=e[3],lien=e[4])
-    return BEAUTIFY(scrutins_cles)
+    # presences / par groupe
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = { 'groupe':'$groupe_abrev', 'etat':'$presence_etat'}
+    pipeline = [{'$group':pgroup}]
+    presences_groupes = {}
+    for p in mdb.presences.aggregate(pipeline):
+        groupeabrev = p['_id']['groupe']
+        etat = p['_id']['etat']
+        if not groupeabrev in presences_groupes.keys():
+            presences_groupes[groupeabrev]={'present':0,'absent':0,'excuse':0}
+        presences_groupes[groupeabrev][etat] += p['n']
+    
+    
+    return json.dumps(presences_groupes)
     
 def error():
     1/0
