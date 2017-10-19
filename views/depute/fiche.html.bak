@@ -106,11 +106,11 @@
                 <div>
                     <h2>Déclaration à la HATVP</h2>
                     <ul class="fa-ul">
-                        {{ for dec in depute_hatvp: }}
+                        {{ for dec in depute_hatvp[0]: }}
                         <li>
                             <a href="{{ =dec['docurl'] }}" target="_blank">
                                 <i class="fa fa-li fa-file-text-o"></i>
-                                {{ ="%s - %s" % (dec['typedoc'], dec['qualite']) }}
+                                Fiche HATVP
                             </a>
                         </li>
                         {{ pass }}
@@ -188,7 +188,6 @@
                         {{ for v in votes_cles[theme]:}}<li class="vote-item" style="margin-bottom:20px;"><i class="fa fa-arrow-circle-o-right"></i>
                         <div class="vote {{ =v['vote_position'] }}"><i class="fa {{ =icons[v['vote_position']] }}"></i> {{ =v['vote_position'][0].upper()+v['vote_position'][1:] }}</div>
                         <div style="padding-left:5px;">{{ = "sur " if v['vote_position'] in ('absent','abstention') else '' }}{{ = v['nom'] }} (n°{{ =v['scrutin_num'] }})</div>
-                        {{ if v['desc']: }}<div>{{ =v['desc'] }}</div>{{ pass }}
  
                     </li>
                     {{ pass }}{{ pass }}

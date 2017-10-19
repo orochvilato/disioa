@@ -12,8 +12,12 @@ tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation',
             ('stats.compat.REM',{'label':'Vote En marche','classe':'deputes-em','rank':'compatREM','precision':0,'unit':'%'}),
             ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','precision':0,'unit':''}),
             ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','precision':0,'unit':''}),
+            ('stats.amendements.rediges',{'label':"Nombre d'amendements rédigés",'classe':'deputes-mots','rank':'nbamendements','precision':0,'unit':''}),
+            ('stats.commissions.present',{'label':"Présence en commission",'classe':'deputes-mots','rank':'pctcommissions','precision':0,'unit':'%'}),
+                           
             ('stats.election.inscrits',{'label':"Voix en % des inscrits",'classe':'deputes-pctinscrits','precision':2,'rank':'pctinscrits','unit':'%'}),
             ('stats.election.exprimes',{'label':"Voix en % des votes exprimés",'classe':'deputes-pctexprimes','precision':2,'rank':'pctexprimes','unit':'%'}),
+                         
             ('depute_nom_tri',{'label':"Nom",'classe':'','rank':'N/A','unit':''})
             ])
 tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots','stats.election.exprimes','stats.election.inscrits'),
@@ -132,7 +136,7 @@ def _ajax(type_page):
 
 def comparer():
     depids = request.args
-    items_selection = ['stats.positions.exprimes','stats.nbmots','stats.nbitvs','stats.election.exprimes','stats.election.inscrits']
+    items_selection = ['stats.positions.exprimes','stats.nbmots','stats.nbitvs','stats.commissions.present','stats.amendements.rediges','stats.election.exprimes','stats.election.inscrits']
     deputes = list(mdb.deputes.find({'depute_shortid':{'$in':depids}}))
     items_pos = {}
     for k,it in tri_choices.iteritems():

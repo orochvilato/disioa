@@ -10,26 +10,44 @@ def getPrivate():
     
     return response.stream(f,chunk_size=4096)
 
+def test2():
+    return BEAUTIFY(mdb.deputes.find_one({'depute_id':'m.manuelvalls'}))
+    liste = []
+    for d in mdb.deputes.find():
+        n = d['depute_nom'].split(' ')
+        nom = ' '.join(n[2:]).upper()
+        prenom = n[1]
+        
+        if d['depute_collaborateurs']:
+            for c in d['depute_collaborateurs']:
+                col = c.split(' ')
+                nom = ' '.join(col[2:]).upper()
+                prenom = col[1]
+                
+                liste.append([nom+' '+prenom,d['depute_nom']])
+    return "<p>"+"</p><p>".join([";".join(l) for l in liste])+"</p>"
     
 def updateElectionTour():
     mdb.deputes.update_one({'depute_shortid':'anneblanc'},{'$set':{'depute_election.adversaires':[{'nom':"M. André AT (retiré)",'voix':0}]}})
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": False } }, {'$set':{'depute_election.tour':1}})
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": True } }, {'$set':{'depute_election.tour':2}})
 def test():
-    return BEAUTIFY(mdb.groupes.find_one()['stats'])
     #return BEAUTIFY(list(mdb.presences.find({'depute_id':'m.jeanlucmelenchon'})))
     # presences / depute
     pgroup = {}
     pgroup['n'] = {'$sum':1}
-    pgroup['_id'] = { 'depute_id':'$depute_id', 'etat':'$presence_etat'}
+    pgroup['_id'] = { 'depute_id':'$depute_id', 'commission_id':'$commission_id','etat':'$presence_etat'}
     pipeline = [{'$group':pgroup}]
     presences_deputes = {}
     for p in mdb.presences.aggregate(pipeline):
         depid = p['_id']['depute_id']
+        commissionid = p['_id']['commission_id'].split('_')[1]
         etat = p['_id']['etat']
         if not depid in presences_deputes.keys():
-            presences_deputes[depid]={'present':0,'absent':0,'excuse':0}
-        presences_deputes[depid][etat] += p['n']
+            presences_deputes[depid]={}
+        if not commissionid in presences_deputes[depid].keys():
+            presences_deputes[depid][commissionid] = {'present':0,'absent':0,'excuse':0}
+        presences_deputes[depid][commissionid][etat] += p['n']
     
     # presences / par groupe
     pgroup = {}
@@ -45,7 +63,7 @@ def test():
         presences_groupes[groupeabrev][etat] += p['n']
     
     
-    return json.dumps(presences_groupes)
+    return json.dumps(presences_deputes)
     
 def error():
     1/0

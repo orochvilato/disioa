@@ -27,7 +27,7 @@ def groupeFromNom(nom):
 
 
 def get_amendements():
-    result = cache.disk('amendements',lambda:fetch_amendements(),time_expire=3600)
+    result = cache.disk('amendements',lambda:fetch_amendements(),time_expire=0)
     return result
 
 def fetch_amendements():
@@ -81,14 +81,15 @@ def fetch_amendements():
             amendements.append(amd)
     totaux = {}
     for d in stats_deps.keys():
+        mdb.deputes.update({'depute_nom':d},{'$set':{'depute_amendements':stats_deps[d]}})
         if stats_deps[d]['rediges'] > 0:
             stats_deps[d]['pct'] = round(100*float(stats_deps[d]['adoptes'])/stats_deps[d]['rediges'],2)
     for g in stats.keys():
         stats[g]['total'] = sum(stats[g].values())
     for f in ['total',u'Adopt\xe9',u'Rejet\xe9',u'Retir\xe9',u'Tomb\xe9',u'Non renseign\xe9',u'Non soutenu']:
         totaux[f] = sum([stats[g].get(f,0) for g in stats.keys()])
-    
-    return dict(stats=stats,totaux=totaux,stats_deps=sorted(stats_deps.iteritems(),key=lambda x:(x[1]['rediges'],x[1]['signes']),reverse=True))
+
+    return dict(stats=stats,totaux=totaux,stats_deps=sorted(stats_deps.iteritems(),key=lambda x:(x[1]['signes'],x[1]['signes']),reverse=True))
     
 def test():
     
@@ -133,7 +134,8 @@ def weekly_job():
 def daily_job():
     updateScrutins()
     updateSessions()
-    #updateCommissions()
+    updateCommissions()
+    get_amendements()
     updateAllStats()
     
 # ---------------------
@@ -231,9 +233,9 @@ def buildIndexes():
     mdb.deputes.reindex()
 
 def updateCommissions():
-    #launchScript('commissions')
+    launchScript('commissions')
     presences  =getJson('presences')
-    amendements  =getJson('amendements')
+    #amendements  =getJson('amendements')
     commissions = getJson('commissions')
     groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
     for com in commissions:
@@ -241,14 +243,51 @@ def updateCommissions():
     for pres in presences:
         pres['groupe_abrev'] = groupe_depute[pres['depute_id']]
         mdb.presences.update_one({'presence_id':pres['presence_id']},{'$set':pres},upsert=True)
-    for amd in amendements:
-        amd['groupe_abrev'] = groupe_depute.get(amd['auteur_id'],amd['auteur_id'])
-        mdb.amendements.update_one({'amendement_id':amd['amendement_id']},{'$set':amd},upsert=True)
+        
+    # presences / depute
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = { 'depute_id':'$depute_id', 'commission_id':'$commission_id','etat':'$presence_etat'}
+    pipeline = [{'$group':pgroup}]
+    presences_deputes = {}
+    for p in mdb.presences.aggregate(pipeline):
+        depid = p['_id']['depute_id']
+        commissionid = p['_id']['commission_id'].split('_')[1]
+        etat = p['_id']['etat']
+        if not depid in presences_deputes.keys():
+            presences_deputes[depid]={}
+        if not commissionid in presences_deputes[depid].keys():
+            presences_deputes[depid][commissionid] = {'present':0,'absent':0,'excuse':0}
+        presences_deputes[depid][commissionid][etat] += p['n']
+    for d in mdb.deputes.find({},{'depute_commissions':1,'depute_id':1}):
+        if d['depute_id'] in presences_deputes.keys():
+            for c in d['depute_commissions']:
+                if c['id'] in presences_deputes[d['depute_id']]:
+                    c.update(presences_deputes[d['depute_id']][c['id']])
+                    mdb.deputes.update_one({'depute_id':d['depute_id']},{'$set':d})
+    
+    # presences / par groupe
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = { 'groupe':'$groupe_abrev', 'etat':'$presence_etat'}
+    pipeline = [{'$group':pgroup}]
+    presences_groupes = {}
+    for p in mdb.presences.aggregate(pipeline):
+        groupeabrev = p['_id']['groupe']
+        etat = p['_id']['etat']
+        if not groupeabrev in presences_groupes.keys():
+            presences_groupes[groupeabrev]={'present':0,'absent':0,'excuse':0}
+        presences_groupes[groupeabrev][etat] += p['n']
+    #for amd in amendements:
+    #    amd['groupe_abrev'] = groupe_depute.get(amd['auteur_id'],amd['auteur_id'])
+    #    mdb.amendements.update_one({'amendement_id':amd['amendement_id']},{'$set':amd},upsert=True)
+    #for depid,pres in presences_deputes.iteritems():
+    #    mdb.deputes.presence
     
     return "ok"
 def updateAssemblee():
     updateHATVP()
-    updateDeputyWatch()
+    #updateDeputyWatch()
     launchScript('assemblee')
     deputes = getJson('deputes')
     deputywatch = getJson('deputywatch')
@@ -324,8 +363,8 @@ def updateHATVP():
     for row in csv:
         drow = dict((k,v.decode('utf8') if isinstance(v,basestring) else v) for k,v in row.iteritems())
         id = normalize(drow['civilite']+' '+drow['prenom']+' '+drow['nom'])
-        drow['docurl'] = 'http://www.hatvp.fr/livraison/dossiers/'+drow['nom_fichier']
-        drow['typedoc'] = types_doc[drow['type_document']]
+        code = drow['url_dossier'].split('/')[-1]
+        drow['docurl'] = 'http://www.hatvp.fr/fiche-nominative/?declarant='+code
         declarations[id] = declarations.get(id,[])+ [drow]
 
     with open(output_path+'/hatvp.json','w') as f:
@@ -562,6 +601,12 @@ def updateDeputesRanks():
         # stats elections
         for stat in ['inscrits','exprimes']:
             ranks['pct'+stat] = ranks.get('pct'+stat,[]) + [ (dep['depute_uid'],((2-dep['depute_election']['tour'])*100+dep['stats']['election'][stat],dep['stats']['election'][stat])) ]
+        
+        # stats commissions
+        ranks['pctcommissions'] = ranks.get('pctcommissions',[]) + [ (dep['depute_uid'],(dep['stats']['commissions']['present'],dep['stats']['commissions']['present']) if 'commissions' in dep['stats'].keys() else (None,None)) ]
+        # stats amendements
+        ranks['nbamendements'] = ranks.get('nbamendements',[]) + [ (dep['depute_uid'],(dep['stats']['amendements']['rediges'],dep['stats']['amendements']['rediges']) if 'amendements' in dep['stats'].keys() else (None,None)) ]
+        ranks['pctamendements'] = ranks.get('pctamendements',[]) + [ (dep['depute_uid'],(dep['stats']['amendements']['adoptes'],dep['stats']['amendements']['adoptes']) if 'amendements' in dep['stats'].keys() and 'adoptes' in dep['stats']['amendements'].keys() else (None,None)) ]
         if compte:
             for stat,val in dep['stats']['positions'].iteritems():
                 ranks[stat] = ranks.get(stat,[]) + [ (dep['depute_uid'],(val,val))]
@@ -713,6 +758,24 @@ def updateDeputesStats():
         # stats election
         dep['stats.election'] = {'exprimes':round(100*float(d['depute_election']['voix'])/d['depute_election']['exprimes'],2),
                                  'inscrits':round(100*float(d['depute_election']['voix'])/d['depute_election']['inscrits'],2)}
+        # stats commissions
+        statsc = {'present':0,'absent':0,'excuse':0,'total':0}
+        if d['depute_commissions']:
+            for c in d['depute_commissions']:
+                if 'present' in c.keys() or 'absent' in c.keys() or 'excuse' in c.keys():
+                    for pos in ('present','absent','excuse'):
+                        statsc[pos] += c[pos]
+                        statsc['total'] += c[pos]
+
+            if statsc['total']>0:
+                dep['stats.commissions'] = {}
+                for pos in ('present','absent','excuse'):
+                    dep['stats.commissions'][pos] = round(100*float(statsc[pos])/statsc['total'],2)
+        # stats amendements
+        if 'depute_amendements' in d.keys():
+            dep['stats.amendements'] = {'rediges':d['depute_amendements']['rediges']}
+            if d['depute_amendements']['rediges']>0:
+                dep['stats.amendements']['adoptes']=round(100*float(d['depute_amendements']['adoptes'])/d['depute_amendements']['rediges'],2)
         ops.append(UpdateOne({'depute_uid':uid},{'$set':dep}))
         
     
