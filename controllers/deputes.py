@@ -8,8 +8,8 @@ mdb = client.obsass
 from collections import OrderedDict
 tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation','classe':'deputes-participation','rank':'exprimes','precision':0,'unit':'%'}),
             ('stats.positions.dissidence',{'label':'Contre son groupe','classe':'deputes-dissidence','rank':'dissidence','precision':0,'unit':'%'}),
-            ('stats.compat.FI',{'label':'Vote Insoumis','classe':'deputes-fi','rank':'compatFI','precision':0,'unit':'%'}),
-            ('stats.compat.REM',{'label':'Vote En marche','classe':'deputes-em','rank':'compatREM','precision':0,'unit':'%'}),
+            ('stats.compat.FI',{'label':'Compatibilité FI','classe':'deputes-fi','rank':'compatFI','precision':0,'unit':'%'}),
+            ('stats.compat.REM',{'label':'Compatibilité EM','classe':'deputes-em','rank':'compatREM','precision':0,'unit':'%'}),
             ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','precision':0,'unit':''}),
             ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','precision':0,'unit':''}),
             ('stats.amendements.rediges',{'label':"Amendements rédigés",'classe':'deputes-mots','rank':'nbamendements','precision':0,'unit':''}),

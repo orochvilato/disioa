@@ -64,7 +64,7 @@
                         {{ if depute_bureau: }}<li><i class="fa fa-li fa-arrow-circle-o-right"></i> {{ =depute_bureau }}</li>{{ pass }}
                         {{ for typ,mandats in depute_mandats.iteritems(): }}{{ for m in mandats: }}
                         <li>
-                            <i class="fa fa-li fa-arrow-circle-o-right"></i> <a href="{{ =m['lien'] }}">{{ =m['nom'] }}</a> ({{ =m['qualite'] }})
+                            <i class="fa fa-li fa-arrow-circle-o-right"></i> <a href="{{ =m['lien'] }}">{{ =m['nom'] }}</a> ({{ =m['qualite'] }}{{ if m['id'] in depute_presences_commissions.keys() and depute_presences_commissions[m['id']]['total']>0:}}, <b>{{ =round(100*float(depute_presences_commissions[m['id']]['present'])/depute_presences_commissions[m['id']]['total'],2) }}%</b> de présence{{pass}})
                         </li>
                         {{ pass }}{{ pass }}
                     </ul>
@@ -106,7 +106,7 @@
                 <div>
                     <h2>Déclaration à la HATVP</h2>
                     <ul class="fa-ul">
-                        {{ for dec in depute_hatvp[0]: }}
+                        {{ for dec in depute_hatvp[:1]: }}
                         <li>
                             <a href="{{ =dec['docurl'] }}" target="_blank">
                                 <i class="fa fa-li fa-file-text-o"></i>
@@ -161,12 +161,12 @@
                         {{ =svggauge('diss',stats['positions']['dissidence']) }}
                     </div>
                     <div class="gauge">
-                        <h2>Vote Insoumis</h2>
+                        <h2>Compatibilité Insoumis</h2>
                         {{ if stats['compat']['FI'] != None: }}{{ =svggauge('compfi',stats['compat']['FI']) }}{{else:}}
                         <p>Nombre de votes insuffisants</p>{{pass}}
                     </div>
                     <div class="gauge">
-                        <h2>Vote En marche</h2>{{ if stats['compat']['REM'] != None: }}
+                        <h2>Compatibilité En marche</h2>{{ if stats['compat']['REM'] != None: }}
                         {{ =svggauge('compem',stats['compat']['REM']) }}{{ else: }}<p>Nombre de votes insuffisants</p>{{pass}}
                     </div>
                     {{ pass }}

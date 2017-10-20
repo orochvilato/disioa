@@ -257,14 +257,13 @@ def updateCommissions():
         if not depid in presences_deputes.keys():
             presences_deputes[depid]={}
         if not commissionid in presences_deputes[depid].keys():
-            presences_deputes[depid][commissionid] = {'present':0,'absent':0,'excuse':0}
+            presences_deputes[depid][commissionid] = {'present':0,'absent':0,'excuse':0,'total':0}
         presences_deputes[depid][commissionid][etat] += p['n']
+        presences_deputes[depid][commissionid]['total'] += p['n']
     for d in mdb.deputes.find({},{'depute_commissions':1,'depute_id':1}):
         if d['depute_id'] in presences_deputes.keys():
-            for c in d['depute_commissions']:
-                if c['id'] in presences_deputes[d['depute_id']]:
-                    c.update(presences_deputes[d['depute_id']][c['id']])
-                    mdb.deputes.update_one({'depute_id':d['depute_id']},{'$set':d})
+            d['depute_presences_commissions'] = presences_deputes[d['depute_id']]
+            mdb.deputes.update_one({'depute_id':d['depute_id']},{'$set':d})
     
     # presences / par groupe
     pgroup = {}
