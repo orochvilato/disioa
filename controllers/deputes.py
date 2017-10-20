@@ -12,7 +12,8 @@ tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation',
             ('stats.compat.REM',{'label':'Vote En marche','classe':'deputes-em','rank':'compatREM','precision':0,'unit':'%'}),
             ('stats.nbitvs',{'label':"Nombre d'interventions",'classe':'deputes-interventions','rank':'nbitvs','precision':0,'unit':''}),
             ('stats.nbmots',{'label':"Nombre de mots",'classe':'deputes-mots','rank':'nbmots','precision':0,'unit':''}),
-            ('stats.amendements.rediges',{'label':"Nombre d'amendements rédigés",'classe':'deputes-mots','rank':'nbamendements','precision':0,'unit':''}),
+            ('stats.amendements.rediges',{'label':"Amendements rédigés",'classe':'deputes-mots','rank':'nbamendements','precision':0,'unit':''}),
+            ('stats.amendements.adoptes',{'label':"Amendements adoptés (%)",'classe':'deputes-mots','rank':'pctamendements','precision':0,'unit':'%'}),
             ('stats.commissions.present',{'label':"Présence en commission",'classe':'deputes-mots','rank':'pctcommissions','precision':0,'unit':'%'}),
                            
             ('stats.election.inscrits',{'label':"Voix en % des inscrits",'classe':'deputes-pctinscrits','precision':2,'rank':'pctinscrits','unit':'%'}),
@@ -20,7 +21,7 @@ tri_choices = OrderedDict([('stats.positions.exprimes',{'label':'Participation',
                          
             ('depute_nom_tri',{'label':"Nom",'classe':'','rank':'N/A','unit':''})
             ])
-tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots','stats.election.exprimes','stats.election.inscrits'),
+tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM','stats.nbitvs','stats.nbmots','stats.amendements.rediges','stats.amendements.adoptes','stats.commissions.present','stats.election.exprimes','stats.election.inscrits'),
              'liste': ('depute_nom_tri','stats.positions.exprimes','stats.positions.dissidence','stats.compat.FI','stats.compat.REM')}    
 top_choices = [('top','Top'),
             ('flop','Flop'),
@@ -90,6 +91,9 @@ def _ajax(type_page):
                   'stats.nbmots':-1,
                   'stats.compat.FI':-1,
                   'stats.compat.REM':-1,
+                  'stats.amendements.rediges':-1,
+                  'stats.amendements.adoptes':-1,
+                  'stats.commissions.present':-1,
                   'stats.election.exprimes':-1,
                   'stats.election.inscrits':-1}
 
