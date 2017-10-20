@@ -6350,3 +6350,4 @@
 [2017-10-20 16:12:42] EDIT oadev/controllers/deputes.py: 0
 [2017-10-20 16:15:28] EDIT oadev/views/depute/fiche.html: 0
 [2017-10-20 16:15:39] EDIT oadev/controllers/deputes.py: 0
+[2017-10-20 16:26:59] EDIT oadev/views/groupe/ajax_votes.html: 1
