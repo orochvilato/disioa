@@ -64,7 +64,7 @@
                         {{ if depute_bureau: }}<li><i class="fa fa-li fa-arrow-circle-o-right"></i> {{ =depute_bureau }}</li>{{ pass }}
                         {{ for typ,mandats in depute_mandats.iteritems(): }}{{ for m in mandats: }}
                         <li>
-                            <i class="fa fa-li fa-arrow-circle-o-right"></i> <a href="{{ =m['lien'] }}">{{ =m['nom'] }}</a> ({{ =m['qualite'] }}{{ if m['id'] in depute_presences_commissions.keys() and depute_presences_commissions[m['id']]['total']>0:}}, <b style="font-size:1.2em">{{ =round(100*float(depute_presences_commissions[m['id']]['present'])/depute_presences_commissions[m['id']]['total'],2) }}%</b> de présence{{pass}}{{ if 'depute_amendements' in locals() and depute_amendements.get('rediges',0)>0:}}, <b style="font-size:1.2em">{{ =depute_amendements['rediges'] }}</b> amendements rédigés{{pass}})
+                            <i class="fa fa-li fa-arrow-circle-o-right"></i> <a href="{{ =m['lien'] }}">{{ =m['nom'] }}</a> ({{ =m['qualite'] }}{{ if m['id'] in depute_presences_commissions.keys() and depute_presences_commissions[m['id']]['total']>0:}}, <b style="font-size:1.2em">{{ =round(100*float(depute_presences_commissions[m['id']]['present'])/depute_presences_commissions[m['id']]['total'],2) }}%</b> de présence{{pass}})
                         </li>
                         {{ pass }}{{ pass }}
                     </ul>
