@@ -11,20 +11,20 @@ def getPrivate():
     return response.stream(f,chunk_size=4096)
 
 def test2():
-    return BEAUTIFY(mdb.deputes.find_one({'depute_id':'mmedanieleobono'}))
-    liste = []
+    #return BEAUTIFY(mdb.deputes.find_one({'depute_id':'m.manuelvalls'}))
+    pres = {}
     for d in mdb.deputes.find():
-        n = d['depute_nom'].split(' ')
-        nom = ' '.join(n[2:]).upper()
-        prenom = n[1]
-        
-        if d['depute_collaborateurs']:
-            for c in d['depute_collaborateurs']:
-                col = c.split(' ')
-                nom = ' '.join(col[2:]).upper()
-                prenom = col[1]
-                
-                liste.append([nom+' '+prenom,d['depute_nom']])
+        if not d['groupe_abrev'] in pres.keys():
+            pres[d['groupe_abrev']] = dict(present=0,absent=0,excuse=0,total=0)
+        if 'depute_presences_commissions' in d.keys():
+            for c in d['depute_presences_commissions'].values():
+                for p in ('present','absent','excuse'):
+                    pres[d['groupe_abrev']][p] += c[p]
+                    pres[d['groupe_abrev']]['total'] += c[p]
+    tx = {}
+    for k in pres.kes():
+        tx[k] = round(float(100*pres[k]['present'])/pres[k]['total'],2)
+    return BEAUTIFY(tx)
     return "<p>"+"</p><p>".join([";".join(l) for l in liste])+"</p>"
     
 def updateElectionTour():
