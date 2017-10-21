@@ -151,7 +151,7 @@ class ScrutinsSpider(scrapy.Spider):
                 _typedetail = 'motion'
             elif _desc[:27] =="l'ensemble du projet de loi":
                 _typedetail = 'loi'
-            elif "article" in _desc[:9]:
+            elif "article" in _desc[:14]:
                 _typedetail = 'article'
             elif _desc[:14] ==u'la déclaration':
                 _typedetail = 'declaration'

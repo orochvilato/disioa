@@ -65,7 +65,7 @@ class SessionsSpider(scrapy.Spider):
         for session in response.xpath('//td[@class="seance"]'):
             
 
-            session_id = session.xpath('h1[@class="seance"]/a/@href').extract()
+            session_id = session.xpath('h1[@class="seance"]/a/@href').extract()[0]
             prov = session.xpath('div/h2/span[@class="provisoire"]')
             if session_id in exclude or prov:
                 continue

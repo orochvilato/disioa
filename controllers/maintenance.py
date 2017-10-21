@@ -131,12 +131,18 @@ def weekly_job():
     updateAssemblee()
     
 
-def daily_job():
+def daily_job1():
     updateScrutins()
     updateSessions()
+def daily_job2():
     updateCommissions()
     get_amendements()
+def daily_job3():
     updateAllStats()
+def daily_job():
+    daily_job1()
+    daily_job2()
+    daily_job3()
     
 # ---------------------
 # Helpers
@@ -759,12 +765,11 @@ def updateDeputesStats():
                                  'inscrits':round(100*float(d['depute_election']['voix'])/d['depute_election']['inscrits'],2)}
         # stats commissions
         statsc = {'present':0,'absent':0,'excuse':0,'total':0}
-        if d['depute_commissions']:
-            for c in d['depute_commissions']:
-                if 'present' in c.keys() or 'absent' in c.keys() or 'excuse' in c.keys():
-                    for pos in ('present','absent','excuse'):
-                        statsc[pos] += c[pos]
-                        statsc['total'] += c[pos]
+        if 'depute_presences_commissions' in d.keys():
+            for c in d['depute_presences_commissions'].values():
+                for pos in ('present','absent','excuse'):
+                    statsc[pos] += c[pos]
+                    statsc['total'] += c[pos]
 
             if statsc['total']>0:
                 dep['stats.commissions'] = {}

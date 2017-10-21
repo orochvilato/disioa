@@ -6351,3 +6351,17 @@
 [2017-10-20 16:15:28] EDIT oadev/views/depute/fiche.html: 0
 [2017-10-20 16:15:39] EDIT oadev/controllers/deputes.py: 0
 [2017-10-20 16:26:59] EDIT oadev/views/groupe/ajax_votes.html: 1
+[2017-10-20 18:58:36] EDIT oadev/models/0conf.py: 0
+[2017-10-20 19:25:43] EDIT oadev/controllers/maintenance.py: 0
+[2017-10-20 19:33:55] EDIT oadev/controllers/maintenance.py: 2
+[2017-10-20 19:54:05] EDIT oadev/private/scripts/scrutins.py: 0
+[2017-10-20 22:39:36] EDIT oadev/private/scripts/sessions.py: 0
+[2017-10-20 22:50:13] EDIT oadev/controllers/maintenance.py: 4
+[2017-10-21 14:57:11] EDIT oadev/controllers/maintenance.py: -1
+[2017-10-21 14:57:20] EDIT oadev/controllers/maintenance.py: 0
+[2017-10-21 15:04:32] EDIT oadev/views/depute/fiche.html: 0
+[2017-10-21 15:08:09] EDIT oadev/views/depute/fiche.html: 0
+[2017-10-21 15:09:28] EDIT oadev/views/depute/fiche.html: 0
+[2017-10-21 15:10:21] EDIT oadev/views/depute/fiche.html: 0
+[2017-10-21 15:10:57] EDIT oadev/views/depute/fiche.html: 0
+[2017-10-21 15:11:14] EDIT oadev/views/depute/fiche.html: 0

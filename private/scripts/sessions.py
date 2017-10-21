@@ -103,13 +103,13 @@ class SessionsSpider(scrapy.Spider):
 
             if 'somtitre' in elt.extract():
                 path[1:] = ['','','','']
-                path[1] = elt.xpath('.//a/text()').extract()[0]
+                path[1] = elt.xpath('.//a//text()').extract()[0]
             if 'somtpetcap' in elt.extract():
                 path[2:] = ['','','']
-                path[2] = elt.xpath('.//a/text()').extract()[0]
+                path[2] = elt.xpath('.//a//text()').extract()[0]
             if 'sompetcap' in elt.extract():
                 path[3:] = ['','']
-                path[3] = elt.xpath('.//a/text()').extract()[0]
+                path[3] = elt.xpath('.//a//text()').extract()[0]
             if 'sommaigre' in elt.extract():
                 txt = elt.xpath('text()').extract()
                 txt = txt[0].strip() if txt and len(txt[0].strip())>0 else None
