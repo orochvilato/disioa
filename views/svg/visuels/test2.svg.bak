@@ -14,7 +14,7 @@
   <defs
      id="defs4">
        <style type="text/css">
-    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800');
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800,900');
       </style></defs>
   <metadata
      id="metadata7">
@@ -22,6 +22,14 @@
   </metadata>
   <g
      id="layer1">
+      <rect
+       style="fill:#fffcf0;fill-opacity:1;stroke:none"
+       id="blanc"
+       width="1024"
+       height="512"
+       x="0"
+       y="0"
+        />
     <rect
        width="1024"
        height="38.386047"
@@ -49,7 +57,7 @@
        width="1024"
        id="nomdepute"
        xml:space="preserve"
-       style="font-size:47.75409698px;font-style:normal;font-variant:normal;text-anchor:middle;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+       style="font-size:47.75409698px;font-style:normal;font-variant:normal;text-anchor:middle;font-weight:bold-heavy;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
          x="512"
          y="54.009064"
          id="tspan3034">{{ =prenom+' '+nom }}</tspan></text>
@@ -141,5 +149,6 @@
          id="tspan3027"
          style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">via</tspan></text>
      {{ = symbol }}
+     
   </g>
 </svg>

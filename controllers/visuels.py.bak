@@ -35,11 +35,13 @@ def index():
     import os
     depute = request.args(0)
     tweet = (request.args(1)=='tweet')
+    hasard = False
     if not depute:
+        hasard = True
         deputes = list(mdb.deputes.find({'$and':[{'depute_actif':True},{'stats.positions.exprimes':{'$lt':20}}]}))
         import random
         depute = deputes[random.randint(0,len(deputes)-1)]['depute_shortid']
-    return dict(tweet=tweet,visuel=getvisuel('test2',depute),id=depute)
+    return dict(tweet=tweet,visuel=getvisuel('test2',depute),id=depute,hasard=hasard)
 
 
 def getimage(deputeid,w,h):
