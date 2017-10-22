@@ -11,7 +11,9 @@ def getPrivate():
     return response.stream(f,chunk_size=4096)
 
 def test2():
-    #return BEAUTIFY(mdb.deputes.find_one({'depute_id':'m.manuelvalls'}))
+    l = [ (len(d['depute_hatvp'][0]['prenom']),d['depute_hatvp'][0]['prenom']) for d in mdb.deputes.find({'depute_actif':True},{'depute_hatvp':1})]
+    return json.dumps(sorted(l,reverse=True)[0][1])
+    return BEAUTIFY(mdb.deputes.find_one({'depute_id':'m.manuelvalls'}))
     pres = {}
     for d in mdb.deputes.find():
         if not d['groupe_abrev'] in pres.keys():

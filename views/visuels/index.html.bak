@@ -1,12 +1,22 @@
-<html><body>
-<h1>Test générateur de visuels</h1>
-<h3>1 député en marche à moins de 20 % (au hasard) </h3>
-<div style="width:400px;">
-{{ =svgvisuel('test') }}
+{{ if tweet: }}
+<html>
+    <body style="margin:0px">
+<div style="width:100%;">
+{{ =visuel['data'] }}
 </div>
-<a href="{{ =URL('download',args=[id]) }}">Télécharger SVG</a>
-<a href="{{ =URL('download',args=[id,1600]) }}">Télécharger PNG (1600)</a>
-<a href="{{ =URL('download',args=[id,800]) }}">Télécharger PNG (800)</a>
-<a href="{{ =URL('tweeter',args=[id]) }}" target="_blank">Tweeter</a>
 </body>
 </html>
+{{ else: }}
+<html><body>
+<h1>Test générateur de visuels</h1>
+<h3>{{ if hasard: }}1 député en marche à moins de 20 % (au hasard){{ pass }} </h3>
+<div style="width:480px;">
+{{ =visuel['data'] }}
+</div>
+<a href="{{ =URL('download',args=[id]) }}">Télécharger SVG</a>
+<a href="{{ =URL('download',args=[id,2048,int(2048*visuel['coef'])]) }}">Télécharger PNG (2048)</a>
+<a href="{{ =URL('download',args=[id,1024,int(1024*visuel['coef'])]) }}">Télécharger PNG (1024)</a>
+<a href="{{ =URL('tweeter',args=[id,1024,int(1024*visuel['coef'])]) }}" target="_blank">Tweeter</a>
+</body>
+</html>
+{{ pass }}

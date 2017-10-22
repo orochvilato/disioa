@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # essayez quelque chose comme
-def index():
-    from base64 import b64encode
-    import requests
-    import os
-    #depid = request.args(0)
-    deputes = list(mdb.deputes.find({'$and':[{'depute_actif':True},{'groupe_abrev':'REM'},{'stats.positions.exprimes':{'$lt':20}}]}))
-    import random
-    depute = deputes[random.randint(0,len(deputes)-1)]
-
+from base64 import b64encode
+import requests
+import os
+def getvisuel(name,deputeid,**args):
+    depute = mdb.deputes.find_one({'depute_shortid':deputeid})
+    
+    groupe = depute['groupe_abrev']
+    if groupe == 'NI':
+        groupe = depute['depute_election']['nuance']
     path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % depute['depute_id'])
     content = open(path).read()
     #content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+depute['depute_uid'][2:]+'.jpg').content
@@ -17,15 +17,31 @@ def index():
     prenom = s[1]
     nom = ' '.join(s[2:])
     id = depute['depute_shortid']
-    pct = "%.2f %%" % depute['stats']['positions']['exprimes']
+    pct = ("%.2f%%" % depute['stats']['positions']['exprimes']).replace('.',',')
+    import datetime
     import re
-    svg = svgvisuel('test',photo=photo,prenom=prenom,nom=nom,pct=pct)
+    symbol = XML(response.render('svg/symbols/vote.svg', color='#82cde2',tx=354,ty=150,scale=0.4))
+    svg = svgvisuel(name,symbol=symbol,photo=photo,prenom=prenom,nom=nom,pct=pct,groupe=groupe,depart=int(depute['depute_departement_id']),date=datetime.datetime.now().strftime('%d/%m/%Y'))
     data = str(svg)
     w,h = re.search(r'viewBox="0 0 ([0-9\.]+) ([0-9\.]+)"',data).groups()
     w = float(w)
     h = float(h)
     coef = float(h/w)
-    return dict(coef=coef,id=id,photo=photo,nom=nom,prenom=prenom,pct=pct)
+    return dict(data=svg,coef=coef)
+
+def index():
+    from base64 import b64encode
+    import requests
+    import os
+    depute = request.args(0)
+    tweet = (request.args(1)=='tweet')
+    hasard = False
+    if not depute:
+        hasard = True
+        deputes = list(mdb.deputes.find({'$and':[{'depute_actif':True},{'stats.positions.exprimes':{'$lt':20}}]}))
+        import random
+        depute = deputes[random.randint(0,len(deputes)-1)]['depute_shortid']
+    return dict(tweet=tweet,visuel=getvisuel('test2',depute),id=depute,hasard=hasard)
 
 
 def getimage(deputeid,w,h):
@@ -34,7 +50,7 @@ def getimage(deputeid,w,h):
     
     driver = webdriver.PhantomJS(service_args=['--ignore-ssl-errors=true']) # or add to your PATH
     driver.set_window_size(w,h)# optional
-    driver.get(URL('tweet',args=[deputeid],scheme=True, host=True))
+    driver.get(URL('index',args=[deputeid,'tweet'],scheme=True, host=True))
     data = driver.get_screenshot_as_png()
     return data
 
@@ -58,22 +74,6 @@ def tweeter():
     return BEAUTIFY(r.json())
     
 
-def tweet():
-    from base64 import b64encode
-    import os
-    depid = request.args(0)
-    tweet = request.args(1)
-    depute = mdb.deputes.find_one({'depute_shortid':depid})
-    if not depute:
-        depute = mdb.deputes.find_one({'depute_shortid':'jeanlucmelenchon'})
-
-    path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % depute['depute_id'])
-    photo = b64encode(open(path).read())
-    s = depute['depute_nom'].split(' ')
-    prenom = s[1]
-    nom = ' '.join(s[2:])
-    pct="%.2f %%" % depute['stats']['positions']['exprimes']
-    return dict(id=depute['depute_shortid'],photo=photo,nom=nom,prenom=prenom,pct="%.2f %%" % depute['stats']['positions']['exprimes'])
 
 def download():
     from base64 import b64encode
@@ -81,30 +81,18 @@ def download():
     depid = request.args(0)
     width = request.args(1)
     height = request.args(2)
-   
-    depute = mdb.deputes.find_one({'depute_shortid':depid})
-    if not depute:
-        depute = mdb.deputes.find_one({'depute_shortid':'jeanlucmelenchon'})
-
-    path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % depute['depute_id'])
-    photo = b64encode(open(path).read())
-    s = depute['depute_nom'].split(' ')
-    prenom = s[1]
-    nom = ' '.join(s[2:])
-    pct="%.2f %%" % depute['stats']['positions']['exprimes']
-    
     if width:
         data = getimage(depid,int(width),int(height))
         compl = "%sx%s" % (width,height)
         ext = 'png'
     else:
-        svg = svgvisuel('test',photo=photo,prenom=prenom,nom=nom,pct=pct)
-        data = str(svg)
+        visuel = getvisuel('test2',depid)
+        data = str(visuel['data'])
         compl = ""
         ext = "svg"
         
     from cStringIO import StringIO
     response.headers['ContentType'] ="application/octet-stream";
-    response.headers['Content-Disposition']="attachment; filename="+depute['depute_shortid']+compl+"."+ext
+    response.headers['Content-Disposition']="attachment; filename="+depid+compl+"."+ext
 
     return response.stream(StringIO(data),chunk_size=4096)

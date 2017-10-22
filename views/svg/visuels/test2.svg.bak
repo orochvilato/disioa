@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.2"
+   viewBox="0 0 1024 512" preserveAspectRatio= "xMinYMin meet"   
+   id="svg2">
+  <defs
+     id="defs4">
+       <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800');
+      </style></defs>
+  <metadata
+     id="metadata7">
+    
+  </metadata>
+  <g
+     id="layer1">
+    <rect
+       width="1024"
+       height="38.386047"
+       x="1.0101471"
+       y="473.61395"
+       id="rect3036"
+       style="fill:#213659;fill-opacity:1;stroke:none" />
+    <rect
+       width="1024"
+       height="76.771843"
+       x="0"
+       y="-1.1577454"
+       id="rect3007"
+       style="fill:#213659;fill-opacity:1;stroke:none" />
+    <image
+       xlink:href="data:image/jpeg;base64,{{=photo}}"
+       x="19.95433"
+       y="75.578339"
+       width="294.42026"
+       height="376.85791"
+       id="photo" />
+    <text
+       x="512"
+       y="54.009064"
+       width="1024"
+       id="nomdepute"
+       xml:space="preserve"
+       style="font-size:47.75409698px;font-style:normal;font-variant:normal;text-anchor:middle;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="512"
+         y="54.009064"
+         id="tspan3034">{{ =prenom+' '+nom }}</tspan></text>
+    <rect
+       width="708.8324"
+       height="49.497227"
+       x="315.1676"
+       y="-125.11133"
+       transform="scale(1,-1)"
+       id="rect3042"
+       style="fill:#ff0052;fill-opacity:1;stroke:none" />
+    <text
+       x="328.1192"
+       y="109.97256"
+       id="groupe"
+       xml:space="preserve"
+       style="font-size:29.94020462px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="328.1192"
+         y="109.97256"
+         id="tspan3040"
+         style="font-size:29.94020462px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">Député {{=groupe}} ({{=depart}})</tspan></text>
+    <text
+       x="582.23328"
+       y="300.84467"
+       id="text3044"
+       xml:space="preserve"
+       style="font-size:105.72580719px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="582.23328"
+         y="300.84467"
+         id="tspan3046">{{ =pct }}</tspan></text>
+    <text
+       x="20.203049"
+       y="501.01843"
+       id="dategeneration"
+       xml:space="preserve"
+       style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="20.203049"
+         y="501.01843"
+         id="tspan3007"
+         style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">Généré le {{ =date }}</tspan></text>
+    <text
+       x="703.06616"
+       y="501.01843"
+       id="text3009"
+       xml:space="preserve"
+       style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold"><tspan
+         x="703.06616"
+         y="501.01843"
+         id="tspan3011"
+         style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">observatoire-démocratie.fr</tspan></text>
+    <text
+       x="351.10095"
+       y="424.16577"
+       id="soustitre1"
+       xml:space="preserve"
+       style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="351.10095"
+         y="424.16577"
+         id="tspan3015"
+         style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">de</tspan></text>
+    <text
+       x="405.10095"
+       y="424.16577"
+       id="soustitres2"
+       xml:space="preserve"
+       style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0052;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="405.10095"
+         y="424.16577"
+         id="tspan3019"
+         style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0052;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">participation</tspan></text>
+    <text
+       x="651.10095"
+       y="424.16577"
+       id="soustitre3"
+       xml:space="preserve"
+       style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="651.10095"
+         y="424.16577"
+         id="tspan3023"
+         style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">aux scrutins publics</tspan></text>
+    <text
+       x="665.06616"
+       y="501.01843"
+       id="text3025"
+       xml:space="preserve"
+       style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium"><tspan
+         x="665.06616"
+         y="501.01843"
+         id="tspan3027"
+         style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">via</tspan></text>
+     {{ = symbol }}
+  </g>
+</svg>
