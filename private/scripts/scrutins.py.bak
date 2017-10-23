@@ -273,7 +273,7 @@ from fuzzywuzzy import fuzz
 import re
 for s in scrutins.values():
     estamd = re.match(r'.*l\'amendement n. *([0-9]+) de (.*)',s['desc'])
-    if estamd:
+    if 0:
         namd = estamd.groups()[0]
         sig = estamd.groups()[1]
         dos = amds.get(s['dossierlien'],None)

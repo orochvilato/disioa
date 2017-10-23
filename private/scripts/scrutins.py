@@ -145,7 +145,7 @@ class ScrutinsSpider(scrapy.Spider):
             _abs = int(scr.xpath('td[contains(@class,"abs")]/text()').extract()[0])
             _desc = scr.xpath('td[contains(@class,"desc")]/text()').extract()[0].replace('  [','')
             _date = scr.xpath('td/text()').extract()[1]
-            if "amendement" in _desc[:12]:
+            if "amendement" in _desc[:12] or 'sous-amendement' in _desc[:20]:
                 _typedetail = 'amendement'
             elif _desc[:9]=="la motion":
                 _typedetail = 'motion'

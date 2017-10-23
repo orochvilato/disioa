@@ -4,7 +4,7 @@
       <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/{{ =d['depute_uid'][2:] }}.jpg" />
     </a>
     <div>
-      <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
+      <a href="{{=URL('depute','fiche',args=[d['depute_shortid'],'votes'])}}">
         <header>
           <h2><span>{{ =d['depute_region'] }} / {{ =d['depute_departement'] }} / {{ =d['depute_circo'] }}</span></h2>
           <h1>{{ =d['depute_nom'] }}</h1>
@@ -27,11 +27,11 @@
           </div>
           <div class="deputes-fi">
             <h3>Vote Insoumis</h3>
-            {{ if d['stats']['compat']['FI']: }}<div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
+            {{ if d['stats']['compat']['FI']!=None: }}<div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
           </div>
           <div class="deputes-em">
             <h3>Vote En marche</h3>
-            {{ if d['stats']['compat']['REM']: }}<div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
+            {{ if d['stats']['compat']['REM']!=None: }}<div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
           </div>
         {{ pass }}
       </div>

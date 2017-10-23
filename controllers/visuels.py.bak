@@ -15,8 +15,9 @@ def getvisuel(name,deputeid,**args):
     photo = b64encode(content)
     s = depute['depute_nom'].split(' ')
     prenom = s[1]
-    nom = ' '.join(s[2:])
+    nom = ' '.join(s[2:]).upper()
     id = depute['depute_shortid']
+    depart = depute['depute_departement_id'] if depute['depute_departement_id'][0]!='0' else depute['depute_departement_id'][1:]
     pct = ("%.2f%%" % depute['stats']['positions']['exprimes']).replace('.',',')
     import datetime
     import re

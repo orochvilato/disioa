@@ -17,7 +17,8 @@
             </div>
             <div class="depute-identite">
                 <header>
-                    <h2><span>{{ ="%s / %s / %se circ" % (depute_region,depute_departement,depute_circo) }}</span></h2>
+                    {{ dep = depute_departement_id[1:] if depute_departement_id[0]=='0' else depute_departement_id }}
+                    <h2><span>{{ ="%s / %s (%s) / %se circ" % (depute_region,depute_departement,dep,depute_circo) }}</span></h2>
                     <h1>{{ =depute_nom }}</h1>
                 </header>
 
@@ -34,8 +35,8 @@
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance[0].lower()+depute_naissance[1:]) }}</span></div>
                 <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
                 
-                 <div class="depute-infos"><span>Elu(e) au {{="1er" if depute_election['tour']==1 else "2e" }} tour ({{ =depute_election['nuance'] }}) avec {{=round(float(100*depute_election['voix'])/depute_election['exprimes'],2)}}% des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{pass}}</span></div>                    
-                <div class="depute-infos"><span>Elu(e) par {{=round(float(100*depute_election['voix'])/depute_election['inscrits'],2)}}% des inscrits de sa circonscription ({{=depute_election['voix']}} voix)</span></div>
+                 <div class="depute-infos"><span>Elu(e) au {{="1er" if depute_election['tour']==1 else "2e" }} tour ({{ =depute_election['nuance'] }}) avec {{="{0:n}".format(round(float(100*depute_election['voix'])/depute_election['exprimes'],2))}} % des voix {{ if depute_election['adversaires']: }}face à {{ =' et '.join([a['nom'] for a in depute_election['adversaires'] ]) }}{{pass}}</span></div>                    
+                <div class="depute-infos"><span>Elu(e) par {{="{0:n}".format(round(float(100*depute_election['voix'])/depute_election['inscrits'],2))}} % des inscrits de sa circonscription ({{="{0:n}".format(depute_election['voix']) }} voix)</span></div>
             </div>
         </div>
 
@@ -64,7 +65,7 @@
                         {{ if depute_bureau: }}<li><i class="fa fa-li fa-arrow-circle-o-right"></i> {{ =depute_bureau }}</li>{{ pass }}
                         {{ for typ,mandats in depute_mandats.iteritems(): }}{{ for m in mandats: }}
                         <li>
-                            <i class="fa fa-li fa-arrow-circle-o-right"></i> <a href="{{ =m['lien'] }}">{{ =m['nom'] }}</a> ({{ =m['qualite'] }}{{ if m['id'] in depute_presences_commissions.keys() and depute_presences_commissions[m['id']]['total']>0:}}, <b style="font-size:1.2em">{{ =round(100*float(depute_presences_commissions[m['id']]['present'])/depute_presences_commissions[m['id']]['total'],2) }}%</b> de présence{{pass}})
+                            <i class="fa fa-li fa-arrow-circle-o-right"></i> <a href="{{ =m['lien'] }}">{{ =m['nom'] }}</a> ({{ =m['qualite'] }}{{ if m['id'] in depute_presences_commissions.keys() and depute_presences_commissions[m['id']]['total']>0:}}, <b style="font-size:1.2em">{{ =int(round(100*float(depute_presences_commissions[m['id']]['present'])/depute_presences_commissions[m['id']]['total'],0)) }}%</b> de présence{{pass}})
                         </li>
                         {{ pass }}{{ pass }}
                     </ul>
@@ -121,7 +122,7 @@
 
 			<section id="interventions" class="tab-content"> <!-- Interventions -->
                 <div class="depute-interventions-recap">
-                    Nombre d'interventions : <span>{{ =stats['nbitvs'] }}</span>, nombre de mots : <span>{{ =stats['nbmots'] }}</span>
+                    Nombre d'interventions : <span>{{ ="{0:n}".format(stats['nbitvs']) }}</span>, nombre de mots : <span>{{ ="{0:n}".format(stats['nbmots']) }}</span>
                 </div>
                 <div class="depute-interventions-cloud">
                     <div>

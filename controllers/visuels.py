@@ -17,11 +17,12 @@ def getvisuel(name,deputeid,**args):
     prenom = s[1]
     nom = ' '.join(s[2:]).upper()
     id = depute['depute_shortid']
+    depart = depute['depute_departement_id'] if depute['depute_departement_id'][0]!='0' else depute['depute_departement_id'][1:]
     pct = ("%.2f%%" % depute['stats']['positions']['exprimes']).replace('.',',')
     import datetime
     import re
     symbol = XML(response.render('svg/symbols/vote.svg', color='#82cde2',tx=354,ty=150,scale=0.4))
-    svg = svgvisuel(name,symbol=symbol,photo=photo,prenom=prenom,nom=nom,pct=pct,groupe=groupe,depart=int(depute['depute_departement_id']),date=datetime.datetime.now().strftime('%d/%m/%Y'))
+    svg = svgvisuel(name,symbol=symbol,photo=photo,prenom=prenom,nom=nom,pct=pct,groupe=groupe,depart=depart,date=datetime.datetime.now().strftime('%d/%m/%Y'))
     data = str(svg)
     w,h = re.search(r'viewBox="0 0 ([0-9\.]+) ([0-9\.]+)"',data).groups()
     w = float(w)

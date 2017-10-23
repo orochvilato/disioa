@@ -46,14 +46,14 @@ class commissionsSpider(scrapy.Spider):
             libelle = com.xpath('text()').extract()[0]
             url = com.xpath('@href').extract()[0]
             id="OMC_PO"+re.search(r'/commissions/(\d+)_tab.asp',url).groups()[0]
-            commissions[id]=dict(libelle=libelle,membres=[],membres_ids=[])
+            commissions[id]=dict(commission_libelle=libelle,commission_membres=[],commission_membres_ids=[],commission_id=id)
             request = scrapy.Request(self.base_url+url, callback=self.parse_commission)
             request.meta['id'] = id
             yield request
 
     def parse_commission(self,response):
         id = response.meta['id']
-        commissions[id]['libelle_long'] = response.xpath('//div[contains(@class,"titre-bandeau-bleu")]/h1/text()').extract()[0]
+        commissions[id]['commission_libelle_long'] = response.xpath('//div[contains(@class,"titre-bandeau-bleu")]/h1/text()').extract()[0]
         request = scrapy.Request(self.base_url2+'/instances/tableau/'+id+'/null/ajax/1/legislature/15',callback=self.parse_membres)
         request.meta['id'] = id
         crs[id] = {}
@@ -108,8 +108,8 @@ class commissionsSpider(scrapy.Spider):
                         def getitem(i):
                             return ''.join(i.xpath('.//text()').extract()).strip()
                         article = getitem(tab[0])
-                        amendements.append(dict(com_id=com_id,
-                                                cr_id=cr_id,
+                        amendements.append(dict(commission_id=com_id,
+                                                reunion_id=cr_id,
                                                 amendement_id="%s_%s_%s_%s" % (com_id,cr_id,num,article),
                                                 texte=num,
                                                 article=article,
@@ -138,8 +138,8 @@ class commissionsSpider(scrapy.Spider):
             uid = td[0].xpath('a/@href').extract()[0].split('_')[1]
             depid = normalize(td[0].xpath('a/text()').extract()[0])
             fonction = td[1].xpath('text()').extract()[0].strip() or 'Membre'
-            commissions[id]['membres'].append(dict(uid=uid,id=depid,fonction=fonction))
-            commissions[id]['membres_ids'].append(depid)
+            commissions[id]['commission_membres'].append(dict(uid=uid,id=depid,fonction=fonction))
+            commissions[id]['commission_membres_ids'].append(depid)
 
 
 
@@ -156,7 +156,7 @@ ab = 0
 presences = []
 for comid in crs.keys():
     for crid in crs[comid].keys():
-        for depid in commissions[comid]['membres_ids']:
+        for depid in commissions[comid]['commission_membres_ids']:
             if depid in crs[comid][crid].get('presents',[]):
                 etat = "present"
                 pr += 1

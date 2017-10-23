@@ -5,7 +5,7 @@
 {{ for i,d in enumerate(deputes): }}
 
   <article class="depute-item">
-    <a href="{{=URL('depute','fiche',args=[d['depute_shortid']])}}">
+    <a href="{{=URL('depute','fiche',args=[d['depute_shortid'],'votes'])}}">
       <img src="http://www2.assemblee-nationale.fr/static/tribun/15/photos/{{ =d['depute_uid'][2:] }}.jpg" />
     </a>
     <div>
@@ -22,7 +22,7 @@
           <h2>{{ = d['stats']['ranks'][top_dir][top['rank']] }}</h2>
           <div class="{{ =top['classe'] }}">
             <h3>{{ =top['label'] }}{{ if top['rank'] in ('pctinscrits','pctexprimes'):}} ({{ ={1:'1er tour',2:'2e tour'}[d['depute_election']['tour']] }}){{pass}}</h3>
-            <div>{{ v=round(getdot(d,tri),top['precision']) }}{{ if (top['precision']==0): }}{{=int(v) }}{{else:}}{{ =v }}{{pass}} {{=top['unit']}}</div>
+            <div>{{ v=round(getdot(d,tri),top['precision']) }}{{ if (top['precision']==0): }}{{="{0:n}".format(int(v)) }}{{else:}}{{ =v }}{{pass}} {{=top['unit']}}</div>
             
           </div>
           

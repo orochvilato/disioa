@@ -1,8 +1,34 @@
 # -*- coding: utf-8 -*-
 # essayez quelque chose comme
 import json
+import datetime
+
 def tpr():
-    return BEAUTIFY(mdb.interventions.find_one({'itv_ctx_n':1}))
+    #return BEAUTIFY(mdb.votes.find_one())
+    #return BEAUTIFY(list(mdb.presences.find({'presence_date': {'$not': {'$type': 9}}})))
+    #return BEAUTIFY(list(mdb.presences.find({'reunion_id':'S-CRCANR5L15S2017PO419610N010'})))
+    depid = 'mmemariegeorgebuffet'
+    depuid = mdb.deputes.find_one({'depute_id':depid},{'depute_uid':1})['depute_uid']
+    weeks = {}
+    for p in mdb.presences.find({'depute_id':depid}):
+        w = p['presence_date'].strftime('%Y-%W')
+        if not w in weeks:
+            weeks[w] = {'present':0,'excuse':0,'absent':0}
+        weeks[w][p['presence_etat']] += 1
+    for v in mdb.votes.find({'depute_uid':depuid}):
+        w = datetime.datetime.strptime(v['scrutin_date'],'%d/%m/%Y').strftime('%Y-%W')
+        if not w in weeks:
+            weeks[w] = {'present':0,'excuse':0,'absent':0}
+        pos = 'absent' if v['vote_position']=='absent' else 'present'
+        weeks[w][pos] += 1
+    return TABLE(*[TR(TD(k),TD(v['present']),TD(v['excuse']),TD(v['absent'])) for k,v in weeks.iteritems()])
+    return BEAUTIFY(list(mdb.votes.find({'scrutin_id':'15_150','depute_uid':'PA722202'})))
+    scrutins = [ s['scrutin_id'] for s in mdb.scrutins.find({'scrutin_typedetail':'amendement'},{'scrutin_id':1})]
+    for id in scrutins:
+        mdb.votes.update_many({'scrutin_id':id},{'$set':{'scrutin_typedetail':'amendement'}})
+    return BEAUTIFY(scrutins)
+    
+    return BEAUTIFY(mdb.votes.find_one({'scrutin_typedetail':'amendement'}))
 def getPrivate():
     name = request.args(0)
     import os

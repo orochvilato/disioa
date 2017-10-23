@@ -239,15 +239,18 @@ def buildIndexes():
     mdb.deputes.reindex()
 
 def updateCommissions():
-    launchScript('commissions')
+    #launchScript('commissions')
     presences  =getJson('presences')
     #amendements  =getJson('amendements')
     commissions = getJson('commissions')
     groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
     for com in commissions:
         mdb.commissions.update_one({'commission_id':com['commission_id']},{'$set':com},upsert=True)
+    
+    import datetime
     for pres in presences:
         pres['groupe_abrev'] = groupe_depute[pres['depute_id']]
+        pres['presence_date'] = datetime.datetime.strptime(pres['presence_date'],'%Y-%m-%d %H:%M')
         mdb.presences.update_one({'presence_id':pres['presence_id']},{'$set':pres},upsert=True)
         
     # presences / depute
@@ -689,7 +692,10 @@ def updateScrutinsSignataires():
                             gp = groupe_depute[k]
                             break
             siggp = gp
-        mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
+        if s['scrutin_typedetail']=='autre':
+            if 'sous-amendement' in s['scrutin_desc']:
+                s['scrutin_typedetail'] = 'amendement'
+        mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_typedetail':s['scrutin_typedetail'],'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
         
 def updateDeputesStats():
     groupes_abrev = mdb.groupes.distinct('groupe_abrev')
