@@ -376,8 +376,10 @@ def updateHATVP():
         f.write(json.dumps(declarations))
 
 def updateSessions():
-
-    exclude = mdb.interventions.distinct('session_id')
+    if request.args(0)=='rebuild':
+        exclude = []
+    else:
+        exclude = mdb.interventions.distinct('session_id')
     launchScript('sessions',"'%s'" % (json.dumps(exclude)))
     sessions = getJson('sessions')
     scrutins = list(mdb.scrutins.find())
@@ -391,7 +393,9 @@ def updateSessions():
                 mdb.scrutins.update_one({'scrutin_id': s['scrutin_id']}, {'$set': {'scrutin_ref': s['scrutin_ref']}})
 
     deputes = dict((d['depute_id'],d['depute_uid']) for d in mdb.deputes.find({},{"depute_id":1,"depute_uid":1}))
+    deputes_id = dict((v,k) for k,v in deputes.iteritems())
     interventions = getJson('interventions')
+    ops = []
     for itv in interventions:
         for n,depid in enumerate(itv['depute_id'].split(u'|')):
             new_itv=dict(itv)
@@ -399,10 +403,20 @@ def updateSessions():
             nid = deputes.get(depid,None)
             if nid and nid != new_itv['depute_uid']:
                 new_itv['depute_uid'] = nid
+                new_itv['itv_tribun'] = True
+            elif not nid and deputes_id.get(new_itv['depute_uid'],None):
+                new_itv['depute_id'] = deputes_id[new_itv['depute_uid']]
+            if new_itv['itv_president']==new_itv['depute_id']:
+                new_itv['itv_president'] = True
+            else:
+                new_itv['itv_president'] = False
             new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
-            mdb.interventions.update_one({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True)
-    
-    updateInterventionsNuages()
+            ops.append(UpdateOne({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True))
+    if ops:
+        mdb.interventions.bulk_write(ops)
+
+    if request.args(0)!='rebuild':
+        updateInterventionsNuages()
 
 
 def updateInterventionsNuages():

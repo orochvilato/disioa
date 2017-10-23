@@ -32,24 +32,24 @@
         />
     <rect
        width="1024"
-       height="38.386047"
-       x="1.0101471"
-       y="473.61395"
+       height="38"
+       x="0"
+       y="474"
        id="rect3036"
        style="fill:#213659;fill-opacity:1;stroke:none" />
     <rect
        width="1024"
-       height="76.771843"
+       height="76"
        x="0"
-       y="-1.1577454"
+       y="0"
        id="rect3007"
        style="fill:#213659;fill-opacity:1;stroke:none" />
     <image
        xlink:href="data:image/jpeg;base64,{{=photo}}"
-       x="19.95433"
-       y="75.578339"
-       width="294.42026"
-       height="376.85791"
+       x="20"
+       y="76"
+       width="294"
+       height="376"
        id="photo" />
     <text
        x="512"
@@ -62,11 +62,10 @@
          y="54.009064"
          id="tspan3034">{{ =prenom+' '+nom }}</tspan></text>
     <rect
-       width="708.8324"
-       height="49.497227"
-       x="315.1676"
-       y="-125.11133"
-       transform="scale(1,-1)"
+       width="710"
+       height="50"
+       x="314"
+       y="76"
        id="rect3042"
        style="fill:#ff0052;fill-opacity:1;stroke:none" />
     <text
@@ -107,7 +106,7 @@
          x="703.06616"
          y="501.01843"
          id="tspan3011"
-         style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">observatoire-démocratie.fr</tspan></text>
+         style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">observatoire-democratie.fr</tspan></text>
     <text
        x="351.10095"
        y="424.16577"

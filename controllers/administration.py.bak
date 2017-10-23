@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # essayez quelque chose comme
 import json
+def tpr():
+    return BEAUTIFY(mdb.interventions.find_one({'itv_ctx_n':1}))
 def getPrivate():
     name = request.args(0)
     import os
@@ -11,8 +13,6 @@ def getPrivate():
     return response.stream(f,chunk_size=4096)
 
 def test2():
-    l = [ (len(d['depute_hatvp'][0]['nom']),d['depute_hatvp'][0]['nom']) for d in mdb.deputes.find({'depute_actif':True},{'depute_hatvp':1})]
-    return json.dumps(sorted(l,reverse=True)[0][1])
     return BEAUTIFY(mdb.deputes.find_one({'depute_id':'m.manuelvalls'}))
     pres = {}
     for d in mdb.deputes.find():
@@ -34,15 +34,50 @@ def updateElectionTour():
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": False } }, {'$set':{'depute_election.tour':1}})
     mdb.deputes.update_many({'depute_election.adversaires.0': { "$exists": True } }, {'$set':{'depute_election.tour':2}})
 def test():
-    #return BEAUTIFY(list(mdb.presences.find({'depute_id':'m.jeanlucmelenchon'})))
-    # presences / depute
+    presidents = {}
+    membres = {}
+    for g in mdb.groupes.find():
+        for m in g['groupe_membres']:
+            if m['qualite']==u'Président':
+                presidents[g['groupe_abrev']] = m['uid']
+                break
+    #return BEAUTIFY(presidents)
+    depute_groupe = dict((d['depute_id'],d) for d in mdb.deputes.find())
+    deputes_id = dict((d['depute_uid'],d['depute_id']) for d in mdb.deputes.find({},{'depute_id':1,'depute_uid':1}))
     pgroup = {}
-    pgroup['n'] = {'$sum':1}
-    pgroup['_id'] = { 'depute_id':'$depute_id', 'commission_id':'$commission_id','etat':'$presence_etat'}
-    pipeline = [{'$group':pgroup}]
-    presences_deputes = {}
+    pgroup['n'] = {'$sum':'$itv_nbmots'}
+    pgroup['_id'] = { 'depute_id':'$depute_id'}
+    
+    pipeline = [{'$match':{'itv_president':False}},{'$group':pgroup}]
+    #return json.dumps(list(mdb.interventions.aggregate(pipeline)))
+    mots = {}
+    for depid,d in depute_groupe.iteritems():
+        gp = depute_groupe.get(depid,{'groupe_abrev':None})['groupe_abrev']
+        if not gp:
+            continue
+        sexe = 'F' if depid[0:3]=='mme' else 'H'
+        if not gp in membres.keys():
+            membres[gp] = {'H':0,'F':0}
+        membres[gp][sexe] += 1
+
+    for itv in mdb.interventions.aggregate(pipeline):
+        depid = itv['_id']['depute_id']
+        gp = depute_groupe.get(depid,{'groupe_abrev':None})['groupe_abrev']
+        if not gp or depid==deputes_id.get(presidents.get(gp,None),None):
+            continue
+        sexe = 'F' if depid[0:3]=='mme' else 'H'
+        if not gp in mots.keys():
+            mots[gp]={'H':{'mots':0,'vote_expr':0,'vote_tot':0},'F':{'mots':0,'vote_expr':0,'vote_tot':0}}
+            
+        mots[gp][sexe]['mots'] += itv['n']
+        mots[gp][sexe]['vote_expr'] += depute_groupe[depid]['depute_positions']['exprimes']
+        mots[gp][sexe]['vote_tot'] += depute_groupe[depid]['depute_positions']['total']
+    
+    tableau = TABLE(THEAD(TR(*[TH(f) for f in ('Groupe','membres_f','membres_h','mots_f','v_exp_f','v_tot_f','mots_h','v_exp_h','v_tot_h')])),
+                    TBODY(*[TR(TD(k),TD(membres[k]['H']),TD(membres[k]['F']),TD(v['F']['mots']),TD(v['F']['vote_expr']),TD(v['F']['vote_tot']),TD(v['H']['mots']),TD(v['H']['vote_expr']),TD(v['H']['vote_tot'])) for k,v in mots.iteritems()]))
+    return tableau
     for p in mdb.presences.aggregate(pipeline):
-        depid = p['_id']['depute_id']
+        
         commissionid = p['_id']['commission_id'].split('_')[1]
         etat = p['_id']['etat']
         if not depid in presences_deputes.keys():

@@ -133,6 +133,12 @@ class SessionsSpider(scrapy.Spider):
                 else:
                     path[4] = ''
         #print [ x.extract() for x in sommaire]
+        pres = response.xpath('//*[@class="presidence"]/text()')[0].extract()
+        import re
+        if pres:
+            president = normalize(re.search('sidence de (.*)',pres).groups()[0])
+        else:
+            president = 'introuvable'
         for itv in response.xpath('//div[@class="intervention"]'):
             for ancre in itv.xpath('p/a/@id').extract():
                 if ancre in contexte.keys():
@@ -150,8 +156,10 @@ class SessionsSpider(scrapy.Spider):
                     url = acteur.extract()[0]
                     if 'tribun' in url:
                         acteur = 'PA'+url.split('/')[-1].split('.')[0]
+                        tribun = True
                     else:
                         acteur = url.split('/')[-1].split('_')[-1]
+                        tribun = False
                     if acteur[0:2]!='PA':
                         print url, response.url, ctx
                     texte = u' '.join(p.xpath('text()').extract())
@@ -165,6 +173,8 @@ class SessionsSpider(scrapy.Spider):
                         idx += 1
                         ctx_idx += 1
                         interventions.append({
+                            'itv_president':president,
+                            'itv_tribun':tribun,
                             'itv_n':idx,
                             'itv_date':sdate,
                             'itv_url':response.url+'#'+ancre,

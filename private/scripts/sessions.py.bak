@@ -103,13 +103,13 @@ class SessionsSpider(scrapy.Spider):
 
             if 'somtitre' in elt.extract():
                 path[1:] = ['','','','']
-                path[1] = elt.xpath('.//a/text()').extract()[0]
+                path[1] = elt.xpath('.//a//text()').extract()[0]
             if 'somtpetcap' in elt.extract():
                 path[2:] = ['','','']
-                path[2] = elt.xpath('.//a/text()').extract()[0]
+                path[2] = elt.xpath('.//a//text()').extract()[0]
             if 'sompetcap' in elt.extract():
                 path[3:] = ['','']
-                path[3] = elt.xpath('.//a/text()').extract()[0]
+                path[3] = elt.xpath('.//a//text()').extract()[0]
             if 'sommaigre' in elt.extract():
                 txt = elt.xpath('text()').extract()
                 txt = txt[0].strip() if txt and len(txt[0].strip())>0 else None
@@ -150,8 +150,10 @@ class SessionsSpider(scrapy.Spider):
                     url = acteur.extract()[0]
                     if 'tribun' in url:
                         acteur = 'PA'+url.split('/')[-1].split('.')[0]
+                        tribun = True
                     else:
                         acteur = url.split('/')[-1].split('_')[-1]
+                        tribun = False
                     if acteur[0:2]!='PA':
                         print url, response.url, ctx
                     texte = u' '.join(p.xpath('text()').extract())
@@ -165,6 +167,7 @@ class SessionsSpider(scrapy.Spider):
                         idx += 1
                         ctx_idx += 1
                         interventions.append({
+                            'itv_tribun':tribun,
                             'itv_n':idx,
                             'itv_date':sdate,
                             'itv_url':response.url+'#'+ancre,
