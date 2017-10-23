@@ -31,7 +31,7 @@
                     {{ pass }}
                 </div>
 
-                <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="{{ =URL('groupe','fiche',args=[groupe_abrev]) }}">{{ =groupe_libelle }}</a></div>
+                <div class="depute-groupe {{ =groupe_abrev }}"><i class="fa fa-group"></i> <a href="{{ =URL('groupe','fiche',args=[groupe_abrev]) }}">{{ =groupe_libelle }} ({{ =groupe_abrev if groupe_abrev!='NI' else depute_election['nuance']}})</a></div>
                 <div class="depute-infos"><span>{{ ="%s, %s" % (depute_profession, depute_naissance[0].lower()+depute_naissance[1:]) }}</span></div>
                 <div class="depute-infos"><span>Suppléant(e) : {{ =depute_suppleant }}</span></div>
                 
@@ -155,20 +155,20 @@
                     {{ if 'positions' in stats.keys(): }}
                     <div class="gauge">
                         <h2>Participation</h2>
-                        {{ =svggauge('vote',stats['positions']['exprimes']) }}
+                        {{ =svggauge('vote',int(round(stats['positions']['exprimes'],0))) }}
                     </div>
                     <div class="gauge">
                         <h2>Contre son groupe</h2>
-                        {{ =svggauge('diss',stats['positions']['dissidence']) }}
+                        {{ if groupe_abrev!='NI': }}{{ =svggauge('diss',int(round(stats['positions']['dissidence'],0))) }}{{else:}}{{ =svggauge('diss','N/A',unit='') }}{{pass}}
                     </div>
                     <div class="gauge">
                         <h2>Compatibilité FI</h2>
-                        {{ if stats['compat']['FI'] != None: }}{{ =svggauge('compfi',stats['compat']['FI']) }}{{else:}}
+                        {{ if stats['compat']['FI'] != None: }}{{ =svggauge('compfi',int(round(stats['compat']['FI'],0))) }}{{else:}}{{ =svggauge('compfi','N/A',unit='') }}
                         <p>Nombre de votes insuffisants</p>{{pass}}
                     </div>
                     <div class="gauge">
                         <h2>Compatibilité EM</h2>{{ if stats['compat']['REM'] != None: }}
-                        {{ =svggauge('compem',stats['compat']['REM']) }}{{ else: }}<p>Nombre de votes insuffisants</p>{{pass}}
+                        {{ =svggauge('compem',int(round(stats['compat']['REM'],0))) }}{{ else: }}{{ =svggauge('compem','N/A',unit='') }}<p>Nombre de votes insuffisants</p>{{pass}}
                     </div>
                     {{ pass }}
                 </div>
@@ -181,7 +181,7 @@
                     <div id="presenceChart"></div>
                 </div>-->
                 <div class="depute-votes-list">
-                    <h2>Ses votes clés</h2>
+                    <h2>Les votes clés</h2>
                     <ul >
                     {{ icons = {'pour':'fa-thumbs-up','contre':'fa-thumbs-down','abstention':'fa-microphone-slash','absent':'fa-question'} }}
                     {{ for theme in votes_cles.keys(): }}

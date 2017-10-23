@@ -13,7 +13,7 @@
       <div class="deputes-infos">
         <div><i class="fa fa-briefcase" aria-hidden="true"></i> {{=d['depute_csp'] }} / {{ =d['depute_profession'] }}</div>
         <div><i class="fa fa-birthday-cake" aria-hidden="true"></i> {{=d['depute_age'] }} ans</div>
-        <a href="{{=URL('groupe','fiche',args=[d['groupe_abrev']])}}" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{=d['groupe_abrev']}})</a>     
+        <a href="{{=URL('groupe','fiche',args=[d['groupe_abrev']])}}" class="deputes-groupe"><i class="fa fa-group"></i> {{ =d['groupe_libelle'] }} ({{ if d['groupe_abrev']!='NI':}}{{=d['groupe_abrev']}}{{else:}}{{=d['depute_election']['nuance']}}{{pass}})</a>     
         <div class="deputes-votes">
        
          {{ if 'positions' in d['stats'].keys(): }}
@@ -23,15 +23,15 @@
           </div>
           <div class="deputes-dissidence">
             <h3>Contre son groupe</h3>
-            <div>{{=int(round(d['stats']['positions']['dissidence'],0)) }} %</div>
+            <div>{{ if d['groupe_abrev']!='NI':}}{{=int(round(d['stats']['positions']['dissidence'],0)) }} %{{else:}}N/A{{pass}}</div>
           </div>
           <div class="deputes-fi">
             <h3>Vote Insoumis</h3>
-            {{ if d['stats']['compat']['FI']!=None: }}<div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
+            {{ if d['stats']['compat']['FI']!=None: }}<div>{{=int(round(d['stats']['compat']['FI'],0)) }} %</div>{{ else: }}<div>N/A</div><p>Nombre de votes insuffisants</p>{{ pass }}
           </div>
           <div class="deputes-em">
             <h3>Vote En marche</h3>
-            {{ if d['stats']['compat']['REM']!=None: }}<div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>{{ else: }}<p>Nombre de votes insuffisants</p>{{ pass }}
+            {{ if d['stats']['compat']['REM']!=None: }}<div>{{=int(round(d['stats']['compat']['REM'],0)) }} %</div>{{ else: }}<div>N/A</div><p>Nombre de votes insuffisants</p>{{ pass }}
           </div>
         {{ pass }}
       </div>

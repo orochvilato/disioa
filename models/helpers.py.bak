@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime
+def svgvisuel(visuel,**args):
+    return XML(response.render('svg/visuels/%s.svg' % visuel, **args))
+
 def obsass_log(domaine,page):
     if request.env.REQUEST_SCHEME=='http':
         mdb.logs.insert_one({'date':datetime.datetime.now(),
@@ -44,7 +47,7 @@ def svggauge(typeg,pct,unit='%'):
         symbolcolor = "#213558"
         symbol = typeg
         transp ='0.33'
-    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=int(round(pct,0)) if pct!=None else None,transp=transp,unit=unit))
+    return XML(response.render('svg/gauge.svg',color=circlecolor,symbol=XML(response.render('svg/gauge/%s.svg' % symbol, color=symbolcolor)),pct=pct) if pct!=None else None,transp=transp,unit=unit))
 
 def svgtop(typet):
     if typet=='top10':
