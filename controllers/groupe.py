@@ -21,7 +21,8 @@ def fiche():
     votes = []   
     president = [ m['uid'] for m in groupe['groupe_membres'] if m['actif']==True and m['qualite']==u'Président']
     president = mdb.deputes.find_one({'depute_uid':president[0]},{'depute_nom':1,'depute_shortid':1}) if president else None
-       
+    del groupe['_id']
+    del president['_id']
     return dict(tab=tab, president = president,
                 **groupe)
 

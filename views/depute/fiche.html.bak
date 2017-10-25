@@ -159,7 +159,7 @@
                     </div>
                     <div class="gauge">
                         <h2>Contre son groupe</h2>
-                        {{ if groupe_abrev!='NI' }}{{ =svggauge('diss',int(round(stats['positions']['dissidence'],0))) }}{{else:}}{{ =svggauge('diss','N/A',unit='') }}{{pass}}
+                        {{ if groupe_abrev!='NI': }}{{ =svggauge('diss',int(round(stats['positions']['dissidence'],0))) }}{{else:}}{{ =svggauge('diss','N/A',unit='') }}{{pass}}
                     </div>
                     <div class="gauge">
                         <h2>Compatibilité FI</h2>

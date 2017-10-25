@@ -1,8 +1,8 @@
 <g
-     transform="translate({{=tx}},{{=ty}}),scale({{=scale}})"
+     transform="matrix({{=scale}},0,0,{{=scale}},{{=tx}},{{=ty}})"
      id="layer1">
    <rect
-       ry="0"
+      
        y="437.55606"
        x="12.830188"
        height="39.228226"

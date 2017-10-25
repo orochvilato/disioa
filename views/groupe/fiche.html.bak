@@ -93,19 +93,19 @@
                     {{ if 'positions' in stats.keys(): }}
                     <div class="gauge">
                         <h2>Participation</h2>
-                        {{ =svggauge('vote',stats['positions']['exprimes']) }}
+                        {{ =svggauge('vote',int(stats['positions']['exprimes'])) }}
                     </div>
-                    <div class="gauge">
+                    {{ if groupe_abrev!='NI': }}<div class="gauge">
                         <h2>Dissidence</h2>
-                        {{ =svggauge('diss',stats['positions']['dissidence']) }}
-                    </div>
+                        {{ =svggauge('diss',int(stats['positions']['dissidence'])) }}
+                    </div>{{ pass }}
                     <div class="gauge">
                         <h2>Vote Insoumis</h2>
-                        {{ =svggauge('compfi',stats['compat']['FI']) }}
+                        {{ =svggauge('compfi'int(stats['compat']['FI'])) }}
                     </div>
                     <div class="gauge">
                         <h2>Vote En marche</h2>
-                        {{ =svggauge('compem',stats['compat']['REM']) }}
+                        {{ =svggauge('compem',int(stats['compat']['REM'])) }}
                     </div>
                     {{ pass }}
                 </div>

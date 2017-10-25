@@ -77,7 +77,7 @@
          x="328.1192"
          y="109.97256"
          id="tspan3040"
-         style="font-size:29.94020462px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">Député {{=groupe}} ({{=depart}})</tspan></text>
+         style="font-size:29.94020462px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">{{=groupe}}</tspan></text>
     <text
        x="582.23328"
        y="300.84467"
@@ -109,44 +109,35 @@
          style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">observatoire-democratie.fr</tspan></text>
     <text
        x="351.10095"
-       y="424.16577"
+       y="400"
        id="soustitre1"
        xml:space="preserve"
        style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
          x="351.10095"
-         y="424.16577"
+         y="400"
          id="tspan3015"
          style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">de</tspan></text>
     <text
        x="405.10095"
-       y="424.16577"
+       y="400"
        id="soustitres2"
        xml:space="preserve"
        style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0052;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
          x="405.10095"
-         y="424.16577"
+         y="400"
          id="tspan3019"
          style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0052;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">participation</tspan></text>
     <text
        x="651.10095"
-       y="424.16577"
+       y="400"
        id="soustitre3"
        xml:space="preserve"
        style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
          x="651.10095"
-         y="424.16577"
+         y="400"
          id="tspan3023"
          style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">aux scrutins publics</tspan></text>
-    <text
-       x="665.06616"
-       y="501.01843"
-       id="text3025"
-       xml:space="preserve"
-       style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium"><tspan
-         x="665.06616"
-         y="501.01843"
-         id="tspan3027"
-         style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">via</tspan></text>
+    
      {{ = symbol }}
      
   </g>

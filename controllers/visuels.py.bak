@@ -3,12 +3,18 @@
 from base64 import b64encode
 import requests
 import os
+nuances = dict([('DIV', 'Divers'), ('ECO', 'Ecologiste'), ('EXG', 'Extrème gauche'), ('FN', 'Front National'), ('DVD', 'Divers droite'), ('FI', 'La France insoumise'), ('LR', u'Les Républicains'), ('COM', u'Parti communiste fran\xc3\xa7ais'), ('REM', u'La République en marche'), ('SOC', 'Parti socialiste'), ('DLF', 'Debout la France'), ('DVG', 'Divers gauche'), ('EXD', 'Extrème droite'), ('REG', u'Régionalistes'), ('UDI', u'Union des Démocrates et Indépendants'), ('MDM', 'Modem'), ('RDG', 'Parti radical de gauche')])
 def getvisuel(name,deputeid,**args):
     depute = mdb.deputes.find_one({'depute_shortid':deputeid})
     
-    groupe = depute['groupe_abrev']
-    if groupe == 'NI':
-        groupe = depute['depute_election']['nuance']
+    groupe_abrev = depute['groupe_abrev']
+    if groupe_abrev == 'NI':
+        groupe_abrev = depute['depute_election']['nuance']
+        groupe_lib = nuances[groupe_abrev]
+    else:
+        groupe_lib = depute['groupe_libelle'].split(':')[0].strip()
+    groupe_abrev = "UDI"
+    groupe_lib = nuances[groupe_abrev]
     path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % depute['depute_id'])
     content = open(path).read()
     #content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+depute['depute_uid'][2:]+'.jpg').content
@@ -18,11 +24,12 @@ def getvisuel(name,deputeid,**args):
     nom = ' '.join(s[2:]).upper()
     id = depute['depute_shortid']
     depart = depute['depute_departement_id'] if depute['depute_departement_id'][0]!='0' else depute['depute_departement_id'][1:]
-    pct = ("%.2f%%" % depute['stats']['positions']['exprimes']).replace('.',',')
+    pct = ("%d%%" % depute['stats']['positions']['exprimes']).replace('.',',')
+    groupe = u"Député %s (%s) - %s" % (groupe_lib,groupe_abrev,depart)
     import datetime
     import re
     symbol = XML(response.render('svg/symbols/vote.svg', color='#82cde2',tx=354,ty=150,scale=0.4))
-    svg = svgvisuel(name,symbol=symbol,photo=photo,prenom=prenom,nom=nom,pct=pct,groupe=groupe,depart=int(depute['depute_departement_id']),date=datetime.datetime.now().strftime('%d/%m/%Y'))
+    svg = svgvisuel(name,symbol=symbol,photo=photo,prenom=prenom,nom=nom,pct=pct,groupe=groupe,date=datetime.datetime.now().strftime('%d/%m/%Y'))
     data = str(svg)
     w,h = re.search(r'viewBox="0 0 ([0-9\.]+) ([0-9\.]+)"',data).groups()
     w = float(w)
@@ -61,13 +68,16 @@ def tweeter():
     id = request.args(0)
     w = request.args(1)
     h = request.args(2)
-    
+    depute = mdb.deputes.find_one({'depute_shortid':id})
     data = getimage(id,w,h)
     r = api.request('statuses/update_with_media', {'status':'post'}, {'media': data})
     if r.status_code == 200:
         picurl = r.json()['extended_entities']['media'][0]['display_url']
         import urllib
-        params = urllib.urlencode({'text':'---Votre message---   '+picurl})
+        twitter = [ c['lien'] for c in depute['depute_contacts'] if c['type']=='twitter' ]
+        twitter = twitter[0].split('/')[-2] if twitter else ''
+
+        params = urllib.urlencode({'text':'---Votre message---   '+twitter+'   '+picurl})
         redirect('https://twitter.com/intent/tweet?'+params)
    
     #r = api.request('statuses/update_with_media', {'status':message},{'media[]':data})

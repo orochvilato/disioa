@@ -39,6 +39,7 @@ def fetch_amendements():
     for d in mdb.deputes.find({},{'depute_id':1,'depute_nom':1,'groupe_abrev':1}):
         g = d['groupe_abrev']
         nom =d['depute_nom'].split(' ')
+        gfn[d['depute_id']]= {'g':g,'id':d['depute_id'],'nom':d['depute_nom']}
         gfn[normalize(nom[0])+normalize(''.join(nom[2:]))] = {'g':g,'id':d['depute_id'],'nom':d['depute_nom']}
     
     amendements = []
@@ -47,7 +48,7 @@ def fetch_amendements():
     start = 1
     stats = {}
     stats_deps = {}
-    
+    notfound = []
     while (count==nb):
         r = requests.get('http://www2.assemblee-nationale.fr/recherche/query_amendements?typeDocument=amendement&leg=%s&idExamen=&idDossierLegislatif=&missionVisee=&numAmend=&idAuteur=&premierSignataire=false&idArticle=&idAlinea=&sort=&dateDebut=&dateFin=&periodeParlementaire=&texteRecherche=&rows=%d&format=json&tri=ordreTexteasc&start=%d&typeRes=liste' % (leg,nb,start))
         amds = r.json()
@@ -70,7 +71,8 @@ def fetch_amendements():
                     stats_deps[gfn[s]['nom']]['signes'] += 1
                     amd['signataires_ids'].append(gfn[s]['id'])
                     amd['signataires_groupes'].append(gfn[s]['g'])
-
+                else:
+                    notfound.append(s)
             if amd['signataires_groupes']:
                 g = amd['signataires_groupes'][0]
             else:
@@ -88,7 +90,7 @@ def fetch_amendements():
         stats[g]['total'] = sum(stats[g].values())
     for f in ['total',u'Adopt\xe9',u'Rejet\xe9',u'Retir\xe9',u'Tomb\xe9',u'Non renseign\xe9',u'Non soutenu']:
         totaux[f] = sum([stats[g].get(f,0) for g in stats.keys()])
-
+    return BEAUTIFY(notfound)
     return dict(stats=stats,totaux=totaux,stats_deps=sorted(stats_deps.iteritems(),key=lambda x:(x[1]['signes'],x[1]['signes']),reverse=True))
     
 def test():
@@ -239,7 +241,7 @@ def buildIndexes():
     mdb.deputes.reindex()
 
 def updateCommissions():
-    launchScript('commissions')
+    #launchScript('commissions')
     presences  =getJson('presences')
     #amendements  =getJson('amendements')
     commissions = getJson('commissions')
@@ -365,12 +367,16 @@ def updateHATVP():
     from cStringIO import StringIO
     from tools import normalize
     r = requests.get('http://www.hatvp.fr/files/open-data/liste.csv')
-    f = StringIO(r.content)
+    f = StringIO(r.content[3:])
     csv = csv.DictReader(f, delimiter=';', quotechar='"')
     declarations = {}
     for row in csv:
+        
         drow = dict((k,v.decode('utf8') if isinstance(v,basestring) else v) for k,v in row.iteritems())
-        id = normalize(drow['civilite']+' '+drow['prenom']+' '+drow['nom'])
+        
+        id = normalize(drow[u'civilite']+' '+drow['prenom']+' '+drow['nom'])
+        
+        
         code = drow['url_dossier'].split('/')[-1]
         drow['docurl'] = 'http://www.hatvp.fr/fiche-nominative/?declarant='+code
         declarations[id] = declarations.get(id,[])+ [drow]

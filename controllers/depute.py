@@ -9,6 +9,7 @@ deputesFI = cache.disk('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'
 def index():
     redirect(URL('fiche'))
 
+    
 def fiche():
     shortid = request.args(0)
     tab = request.args(1) if request.args(1) in ['votes','presentation','interventions'] else 'presentation'
@@ -18,7 +19,7 @@ def fiche():
     else:
         obsass_log('fiche',shortid)
     if request.args(1)=='data':
-        return BEAUTIFY(depute)
+        return BEAUTIFY(depute.keys())
     
     votes = list(mdb.votes.find({'depute_uid':depute['depute_uid']}).sort('scrutin_num',-1))
     votes_cles = list(mdb.votes.find({'depute_uid':depute['depute_uid'],'scrutin_num':{'$in':scrutins_cles.keys()}},{'scrutin_num':1,'vote_position':1,'scrutin_dossierLibelle':1}).sort('scrutin_num',-1))
@@ -45,11 +46,12 @@ def fiche():
         weeks[wdat]['e']+= 1 if v['vote_position']!='absent' else 0
         dates[sdat]['e']+= 1 if v['vote_position']!='absent' else 0
         
-        
-    return dict(dates=sorted([{"date": dat,"pct":round(float(v['e'])/v['n'],3)} for dat,v in dates.iteritems()],key=lambda x:x['date']),
+    resp = dict(dates=sorted([{"date": dat,"pct":round(float(v['e'])/v['n'],3)} for dat,v in dates.iteritems()],key=lambda x:x['date']),
                 weeks=sorted([{"week": w,"pct":100*round(float(v['e'])/v['n'],2)} for w,v in weeks.iteritems()],key=lambda x:x['week']),
                 tab=tab,votes_cles=s_cles,
                 **depute)
+    
+    return resp 
 
 def ajax_votes():
     nb = 25

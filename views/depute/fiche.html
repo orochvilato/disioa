@@ -23,7 +23,7 @@
                 </header>
 
                 <div class="depute-contacts">
-                    {{ for contact in depute_contacts: }}{{ if (contact['type']==u'mail'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-envelope"></i></a>
+                    {{ for contact in depute_contacts: }}{{ if (contact['type']==u'mail' and 'assemblee' in contact['lien']): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-envelope"></i></a>
                     {{ elif (contact['type']=='twitter'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-twitter"></i></a>
                     {{ elif (contact['type']=='facebook'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-facebook-square"></i></a>
                     {{ elif (contact['type']=='site'): }}<a class="depute-contact" href="{{ =contact['lien'] }}"><i class="fa fa-globe"></i></a>

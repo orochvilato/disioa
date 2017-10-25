@@ -1,1 +1,1 @@
-{{from gluon.serializers import json}}{{=XML(json(response._vars))}}
+{{from bson import json_util}}{{=XML(json_util.dumps(response._vars))}}
