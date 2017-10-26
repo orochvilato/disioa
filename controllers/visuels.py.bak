@@ -2,34 +2,75 @@
 # essayez quelque chose comme
 from base64 import b64encode
 import requests
+import json
 import os
+import re
+import datetime
 nuances = dict([('DIV', 'Divers'), ('ECO', 'Ecologiste'), ('EXG', 'Extrème gauche'), ('FN', 'Front National'), ('DVD', 'Divers droite'), ('FI', 'La France insoumise'), ('LR', u'Les Républicains'), ('COM', u'Parti communiste fran\xc3\xa7ais'), ('REM', u'La République en marche'), ('SOC', 'Parti socialiste'), ('DLF', 'Debout la France'), ('DVG', 'Divers gauche'), ('EXD', 'Extrème droite'), ('REG', u'Régionalistes'), ('UDI', u'Union des Démocrates et Indépendants'), ('MDM', 'Modem'), ('RDG', 'Parti radical de gauche')])
-def getvisuel(name,deputeid,**args):
-    depute = mdb.deputes.find_one({'depute_shortid':deputeid})
-    
-    groupe_abrev = depute['groupe_abrev']
-    if groupe_abrev == 'NI':
-        groupe_abrev = depute['depute_election']['nuance']
-        groupe_lib = nuances[groupe_abrev]
-    else:
-        groupe_lib = depute['groupe_libelle'].split(':')[0].strip()
-    groupe_abrev = "UDI"
-    groupe_lib = nuances[groupe_abrev]
-    path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % depute['depute_id'])
-    content = open(path).read()
-    #content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+depute['depute_uid'][2:]+'.jpg').content
-    photo = b64encode(content)
-    s = depute['depute_nom'].split(' ')
-    prenom = s[1]
-    nom = ' '.join(s[2:]).upper()
-    id = depute['depute_shortid']
-    depart = depute['depute_departement_id'] if depute['depute_departement_id'][0]!='0' else depute['depute_departement_id'][1:]
-    pct = ("%d%%" % depute['stats']['positions']['exprimes']).replace('.',',')
-    groupe = u"Député %s (%s) - %s" % (groupe_lib,groupe_abrev,depart)
-    import datetime
-    import re
-    symbol = XML(response.render('svg/symbols/vote.svg', color='#82cde2',tx=354,ty=150,scale=0.4))
-    svg = svgvisuel(name,symbol=symbol,photo=photo,prenom=prenom,nom=nom,pct=pct,groupe=groupe,date=datetime.datetime.now().strftime('%d/%m/%Y'))
+
+visuels_defs = {'participationscrutins20': {
+                         'nom':'Participation au scrutins publics < 20%',
+                         'collection':'deputes',
+                         'key':'depute_shortid',
+                         'match':{'$and':[{'depute_actif':True},{'stats.positions.exprimes':{'$lt':20}}]},
+                         'fields':[('groupe','groupe_libelle'),('participation','stats.positions.exprimes')],
+                         'visuel':'test2',
+                         'visuel_data':{'groupe':'depute_groupe',
+                                        'nom':'depute_nom',
+                                        'prenom':'depute_prenom',
+                                        'photo':'depute_photo',
+                                        'pct':'depute_pctexprime',
+                                        'symbol':('symbol_vote',{'color':'#82cde2','tx':354,'ty':150,'scale':0.4})
+                                        },
+                         }
+                }
+               
+def generer():
+    visuel_def = visuels_defs['participationscrutins20']
+    choix = list(mdb[visuel_def['collection']].find(visuel_def['match']))
+    return dict(visuel=visuel_def,choix=choix)
+
+def test():
+    return BEAUTIFY(mdb.deputes.find_one())
+    return BEAUTIFY(list(mdb.deputes.find({'$and':[{'depute_actif':True},{'stats.positions.exprimes':{'$lt':20}}]},{'stats.nbmots':1})))
+
+def get_vdata(source,key,**args):
+    if key=='depute_groupe':
+        groupe_abrev = source['groupe_abrev']
+        if groupe_abrev == 'NI':
+            groupe_abrev = source['depute_election']['nuance']
+            groupe_lib = nuances[groupe_abrev]
+        else:
+            groupe_lib = source['groupe_libelle'].split(':')[0].strip()
+        depart = source['depute_departement_id'] if source['depute_departement_id'][0]!='0' else source['depute_departement_id'][1:]
+        groupe = u"Député %s (%s) - %s" % (groupe_lib,groupe_abrev,depart)
+        return groupe
+    elif key=='depute_photo':
+        path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % source['depute_id'])
+        content = open(path).read()
+        #content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+depute['depute_uid'][2:]+'.jpg').content
+        photo = b64encode(content)
+        return photo
+    elif key=='depute_nom':
+        return source['depute_hatvp'][0]['nom']
+    elif key=='depute_prenom':
+        return source['depute_hatvp'][0]['prenom']
+    elif key=='depute_pctexprime':
+        return ("%d%%" % source['stats']['positions']['exprimes']).replace('.',',')
+    elif key[:7]=='symbol_':
+        symbol = key.split('_')[1]
+        return XML(response.render('svg/symbols/%s.svg' % symbol, **args))
+
+def getvisuel(name,key):
+    visuel_def = visuels_defs[name]
+    source = mdb[visuel_def['collection']].find_one({visuel_def['key']:key})
+    params = {}
+    for k,v in visuel_def['visuel_data'].iteritems():
+        if isinstance(v,tuple):
+            params[k] = get_vdata(source,v[0],**v[1])
+        else:
+            params[k] = get_vdata(source,v)
+    svg = svgvisuel(visuel_def['visuel'],date=datetime.datetime.now().strftime('%d/%m/%Y'),**params)
     data = str(svg)
     w,h = re.search(r'viewBox="0 0 ([0-9\.]+) ([0-9\.]+)"',data).groups()
     w = float(w)
@@ -49,7 +90,7 @@ def index():
         deputes = list(mdb.deputes.find({'$and':[{'depute_actif':True},{'stats.positions.exprimes':{'$lt':20}}]}))
         import random
         depute = deputes[random.randint(0,len(deputes)-1)]['depute_shortid']
-    return dict(tweet=tweet,visuel=getvisuel('test2',depute),id=depute,hasard=hasard)
+    return dict(tweet=tweet,visuel=getvisuel('participationscrutins20',depute),id=depute,hasard=hasard)
 
 
 def getimage(deputeid,w,h):

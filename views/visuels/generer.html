@@ -1,0 +1,31 @@
+<html>
+<body>
+<h2>{{ =visuel['nom'] }}</h2>
+<div id="items">
+  <input class="search" placeholder="Recherche" />
+  {{ for v in visuel['fields']: }}
+  <button class="sort" data-sort="{{=v[0]}}">
+    Tri par {{=v[0]}}
+  </button>
+  {{ pass }}
+  <table>
+    <tbody class="list">
+    {{ for item in choix: }}
+    <tr><td><a href="{{=URL('index',args=item[visuel['key']])}}">Visuel</a></td>
+      {{ for i,v in enumerate(visuel['fields']):}}<td class="{{=v[0]}}">{{ =getdot(item,v[1]) }}</td>{{ pass }}
+    </tr>
+    {{ pass }}
+    </tbody>
+  </table>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script>
+var options = {
+  valueNames: [ {{=XML("'"+"','".join([v[0] for v in visuel['fields']])+"'") }} ]
+};
+
+var userList = new List('items', options);
+</script>
+</body>
+
+</html>

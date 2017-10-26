@@ -41,6 +41,7 @@ def fetch_amendements():
         nom =d['depute_nom'].split(' ')
         gfn[d['depute_id']]= {'g':g,'id':d['depute_id'],'nom':d['depute_nom']}
         gfn[normalize(nom[0])+normalize(''.join(nom[2:]))] = {'g':g,'id':d['depute_id'],'nom':d['depute_nom']}
+        gfn[normalize(nom[0])+normalize(''.join(nom[-1]))] = {'g':g,'id':d['depute_id'],'nom':d['depute_nom']}
     
     amendements = []
     nb = 1000

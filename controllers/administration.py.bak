@@ -3,11 +3,22 @@
 import json
 import datetime
 
+
+def pres():
+    sess = mdb.interventions.find({'itv_president':True},{'session_id':1,'depute_id':1})
+    p = {}
+    for s in sess:
+        if not s['depute_id'] in p.keys():
+            p[s['depute_id']] = 0
+        p[s['depute_id']] += 1
+        
+    return BEAUTIFY(p)
+   
 def tpr():
     #return BEAUTIFY(mdb.votes.find_one())
     #return BEAUTIFY(list(mdb.presences.find({'presence_date': {'$not': {'$type': 9}}})))
     #return BEAUTIFY(list(mdb.presences.find({'reunion_id':'S-CRCANR5L15S2017PO419610N010'})))
-    depid = 'mme.mariegeorgebuffet'
+    depid = 'mmemariegeorgebuffet'
     depuid = mdb.deputes.find_one({'depute_id':depid},{'depute_uid':1})['depute_uid']
     weeks = {}
     for p in mdb.presences.find({'depute_id':depid}):

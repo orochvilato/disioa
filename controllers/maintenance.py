@@ -320,6 +320,8 @@ def updateAssemblee():
         d['depute_departement_id'] = departements_ids[d['depute_departement']]
         d['depute_circo_id'] = d['depute_departement_id']+'-'+('00'+d['depute_circo'])[-2:]
         m = professions.get(d['depute_uid'],None)
+        if d['depute_hatvp']:
+            d['depute_nomcomplet'] = "%s %s" % (d['depute_hatvp'][0]['nom'],d['depute_hatvp'][0]['prenom'])
         if not m:
             m = professions2.get(d['depute_profession'],None)
         csp = ""
