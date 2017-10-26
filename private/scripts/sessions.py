@@ -139,6 +139,7 @@ class SessionsSpider(scrapy.Spider):
             president = normalize(re.search('sidence de (.*)',pres).groups()[0])
         else:
             president = 'introuvable'
+        ctx_idx = 0
         for itv in response.xpath('//div[@class="intervention"]'):
             for ancre in itv.xpath('p/a/@id').extract():
                 if ancre in contexte.keys():
