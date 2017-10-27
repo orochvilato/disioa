@@ -56,7 +56,7 @@ def get_vdata(source,key,**args):
     elif key=='depute_prenom':
         return source['depute_hatvp'][0]['prenom']
     elif key=='depute_pctexprime':
-        return ("%d%%" % source['stats']['positions']['exprimes']).replace('.',',')
+        return ("%d%%" % round(source['stats']['positions']['exprimes'],0)).replace('.',',')
     elif key[:7]=='symbol_':
         symbol = key.split('_')[1]
         return XML(response.render('svg/symbols/%s.svg' % symbol, **args))
@@ -138,7 +138,7 @@ def download():
         compl = "%sx%s" % (width,height)
         ext = 'png'
     else:
-        visuel = getvisuel('test2',depid)
+        visuel = getvisuel('participationscrutins20',depid)
         data = str(visuel['data'])
         compl = ""
         ext = "svg"

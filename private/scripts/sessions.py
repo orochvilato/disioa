@@ -93,6 +93,7 @@ class SessionsSpider(scrapy.Spider):
         sommaire = response.xpath('//h1[@class="seance"]|//p[@class="somtitre"]|//p[@class="sompetcap"]|//p[@class="somtpetcap"]|//p[@class="sommaigre"]')
         path = ['','','','','']
         contexte = {}
+        
         idx = 0
         import datetime
         for elt in sommaire:
@@ -140,6 +141,7 @@ class SessionsSpider(scrapy.Spider):
         else:
             president = 'introuvable'
         ctx_idx = 0
+        ctx = []
         for itv in response.xpath('//div[@class="intervention"]'):
             for ancre in itv.xpath('p/a/@id').extract():
                 if ancre in contexte.keys():

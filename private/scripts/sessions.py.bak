@@ -93,6 +93,7 @@ class SessionsSpider(scrapy.Spider):
         sommaire = response.xpath('//h1[@class="seance"]|//p[@class="somtitre"]|//p[@class="sompetcap"]|//p[@class="somtpetcap"]|//p[@class="sommaigre"]')
         path = ['','','','','']
         contexte = {}
+        ctx = []
         idx = 0
         import datetime
         for elt in sommaire:

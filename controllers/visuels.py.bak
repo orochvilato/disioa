@@ -13,7 +13,7 @@ visuels_defs = {'participationscrutins20': {
                          'collection':'deputes',
                          'key':'depute_shortid',
                          'match':{'$and':[{'depute_actif':True},{'stats.positions.exprimes':{'$lt':20}}]},
-                         'fields':[('groupe','groupe_libelle'),('participation','stats.positions.exprimes')],
+                         'fields':[('nom','depute_nomcomplet'),('groupe','groupe_libelle'),('participation','stats.positions.exprimes')],
                          'visuel':'test2',
                          'visuel_data':{'groupe':'depute_groupe',
                                         'nom':'depute_nom',
@@ -56,7 +56,7 @@ def get_vdata(source,key,**args):
     elif key=='depute_prenom':
         return source['depute_hatvp'][0]['prenom']
     elif key=='depute_pctexprime':
-        return ("%d%%" % source['stats']['positions']['exprimes']).replace('.',',')
+        return ("%d%%" % round(source['stats']['positions']['exprimes'],0)).replace('.',',')
     elif key[:7]=='symbol_':
         symbol = key.split('_')[1]
         return XML(response.render('svg/symbols/%s.svg' % symbol, **args))
