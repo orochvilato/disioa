@@ -1,0 +1,40 @@
+<html>
+<head>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            {{ for item in items: }}
+            <div class="col s6">
+                <div class="card">
+                    <div class="card-image">
+                      <img src="{{=URL('getVisuel.svg',args=[idx,item])}}">
+                    </div>
+        
+                    <div class="card-action">
+                        <a href="{{=URL('getVisuel.svg',args=[idx,item],vars={'download':1})}}" class="btn"><i class="fa fa-download" aria-hidden="true"></i> SVG</a>
+                        <a href="{{=URL('getVisuel.png',args=[idx,item],vars={'download':1})}}" class="btn"><i class="fa fa-download" aria-hidden="true"></i> PNG</a>
+                        <a class="btn"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                    </div>
+               </div>
+            </div>
+            {{ pass }}
+        </div>
+
+    </div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    
+<script>
+  
+</script>
+</body>
+
+</html>

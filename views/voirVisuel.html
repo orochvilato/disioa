@@ -1,0 +1,40 @@
+<html>
+<head>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+   <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            {{ for item in items: }}
+            <div class="col s6">
+                <div class="card">
+                    <div class="card-image">
+                      <img src="{{=URL('getVisuel',args=[idx,item]">
+                    </div>
+                    <div class="card-content">
+                      <p>I am a very simple card. I am good at containing small bits of information.
+                      I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                    <div class="card-action">
+                      <a href="#">This is a link</a>
+                    </div>
+               </div>
+            </div>
+            {{ pass }}
+        </div>
+
+    </div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    
+<script>
+  
+</script>
+</body>
+
+</html>

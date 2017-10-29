@@ -14,6 +14,12 @@ import xmltodict
 mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
+def corrections_manuelles():
+    mdb.scrutins.update_one({'scrutin_id':'15_134'},{'$set':{'scrutin_groupe':'FI'}})
+    mdb.scrutins.update_one({'scrutin_id':'15_135'},{'$set':{'scrutin_groupe':'LR'}})
+    mdb.votes.update_many({'scrutin_id':'15_134'},{'$set':{'scrutin_groupe':'FI'}})
+    mdb.votes.update_many({'scrutin_id':'15_135'},{'$set':{'scrutin_groupe':'LR'}})
+    
 def groupeFromNom(nom):
     def gfromn():
         gfn  = {}
@@ -25,7 +31,17 @@ def groupeFromNom(nom):
     gfn = cache.ram('gfn',lambda:gfromn(),time_expire=3600)
     return gfn[nom]
 
-
+def update_deputesphotos():
+    from base64 import b64encode
+    import requests
+    for d in mdb.deputes.find():
+        #path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % source['depute_id'])
+        #content = open(path).read()
+        print d['depute_shortid']
+        content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+d['depute_uid'][2:]+'.jpg').content
+        photo = b64encode(content)
+        mdb.deputes.update_one({'depute_uid':d['depute_uid']},{'$set':{'depute_photo':photo}})
+        
 def get_amendements():
     result = cache.disk('amendements',lambda:fetch_amendements(),time_expire=0)
     return result
@@ -242,7 +258,7 @@ def buildIndexes():
     mdb.deputes.reindex()
 
 def updateCommissions():
-    #launchScript('commissions')
+    launchScript('commissions')
     presences  =getJson('presences')
     #amendements  =getJson('amendements')
     commissions = getJson('commissions')
@@ -671,6 +687,7 @@ def updateScrutinsSignataires():
     groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
     for s in mdb.scrutins.find():
         desc = s['scrutin_desc'].replace('. [','')
+        
         siggp = None
         sigs = None
         if 'scrutin_ref' in s.keys() and not isinstance(s['scrutin_ref'],unicode) and 'signataires' in s['scrutin_ref'].keys():
@@ -679,15 +696,15 @@ def updateScrutinsSignataires():
             siggp = sigs[0]
             
         if 'M. ' in s['scrutin_desc'] or 'Mme ' in s['scrutin_desc']:
-            print s['scrutin_desc'].encode('utf8')
+            
             mtch = re.search(r' (M.|Mme) (.*)(,| et les amende| et l.amende)',s['scrutin_desc'],re.UNICODE)
             if not mtch:
                 mtch =  re.search(r' (M.|Mme) (.*)( . l.article| apr.s l.article)',s['scrutin_desc'],re.UNICODE)
 
             if mtch:
-                print mtch.groups()
+               
                 siggp = normalize(mtch.groups()[0]+mtch.groups()[1])
-                print siggp.encode('utf8')
+                
         if siggp:
             gp = groupe_depute.get(siggp,None)
             if not gp:
@@ -704,7 +721,10 @@ def updateScrutinsSignataires():
         if s['scrutin_typedetail']=='autre':
             if 'sous-amendement' in s['scrutin_desc']:
                 s['scrutin_typedetail'] = 'amendement'
+        
+        siggp = s.get('scrutin_groupe',siggp)
         mdb.scrutins.update({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_typedetail':s['scrutin_typedetail'],'scrutin_desc':desc,'scrutin_signataires':sigs, 'scrutin_groupe':siggp}})
+        mdb.votes.update_many({'scrutin_id':s['scrutin_id']},{'$set':{'scrutin_typedetail':s['scrutin_typedetail'], 'scrutin_groupe':siggp}})
         
 def updateDeputesStats():
     groupes_abrev = mdb.groupes.distinct('groupe_abrev')
@@ -783,6 +803,45 @@ def updateDeputesStats():
                 dep['stats.compat'][g] = None
         dep['stats.compat_sort'] = [ dict(g=g,p=p) for g,p in sorted(dep['stats.compat'].items(), key=lambda x:x[1], reverse=True) ]
     
+    # Vote pour / contre amendements autres groupes
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = { 'uid':'$depute_uid','grouped':'$groupe_abrev','groupes':'$scrutin_groupe','position':'$vote_position'}
+    redact = {
+        "$redact": {
+            "$cond": [
+                { "$ne": [ "$scrutin_groupe", "$groupe_abrev" ] },
+                "$$KEEP",
+                "$$PRUNE"
+            ]
+        }
+    }
+    pipeline = [{'$match':{'scrutin_typedetail':'amendement'}},{'$group':pgroup}]
+    voteamtdeps = {}
+    
+    for p in mdb.votes.aggregate(pipeline):
+        if p['_id']['position']!='absent':
+            uid = p['_id']['uid']
+            pos = p['_id']['position']
+            if p['_id']['groupes']!=None and p['_id']['grouped']!=p['_id']['groupes']:
+                if not uid in voteamtdeps:
+                    voteamtdeps[uid] = {'pour':0,'contre':0,'abstention':0,'total':0}
+                voteamtdeps[uid][pos] += p['n']
+                voteamtdeps[uid]['total'] += p['n']
+    count = 0                
+    for uid,data in voteamtdeps.iteritems():
+        if data['total']>0:
+            for pos in ('pour','contre','abstention'):
+                voteamtdeps[uid]['pct'+pos] = round(100*float(data[pos])/data['total'],2)
+
+    # votes scrutins clés
+    votes_cles = {}
+    for v in mdb.votes.find({'scrutin_num':{'$in':scrutins_cles.keys()}},{'scrutin_num':1,'depute_uid':1,'vote_position':1}):
+        if not v['depute_uid'] in votes_cles.keys():
+            votes_cles[v['depute_uid']] = {}
+        votes_cles[v['depute_uid']][str(v['scrutin_num'])] = v['vote_position']
+
+    # ASSEMBLAGE FINAL
     for d in mdb.deputes.find():
         uid = d['depute_uid']
         if uid in deputes.keys():
@@ -792,6 +851,13 @@ def updateDeputesStats():
         # stats election
         dep['stats.election'] = {'exprimes':round(100*float(d['depute_election']['voix'])/d['depute_election']['exprimes'],2),
                                  'inscrits':round(100*float(d['depute_election']['voix'])/d['depute_election']['inscrits'],2)}
+
+        # positions votes cles
+        if uid in votes_cles.keys():
+            dep['depute_votes_cles'] = votes_cles[uid]
+        # stats votes amds autres groupes
+        if uid in voteamtdeps.keys():
+            dep['stats.votesamdements'] = voteamtdeps[uid]
         # stats commissions
         statsc = {'present':0,'absent':0,'excuse':0,'total':0}
         if 'depute_presences_commissions' in d.keys():

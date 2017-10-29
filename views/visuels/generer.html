@@ -1,30 +1,115 @@
 <html>
+<head>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <style>
+       
+       .choix.card:focus, .choix.card-panel:focus {
+           border:2px solid black;
+       }
+       .card .card-image {
+           padding:10px;
+       }
+       .card .card-image img {
+           border:1px solid #a0a0a0;
+       }
+       .choix.discord {
+           background-color:#04b4c7;
+       }
+       .choix.observatoire {
+           background-color:#213659;
+       }
+    </style>
+</head>
 <body>
-<h2>{{ =visuel['nom'] }}</h2>
-<div id="items">
-  <input class="search" placeholder="Recherche" />
-  {{ for v in visuel['fields']: }}
-  <button class="sort" data-sort="{{=v[0]}}">
-    Tri par {{=v[0]}}
-  </button>
-  {{ pass }}
-  <table>
-    <tbody class="list">
-    {{ for item in choix: }}
-    <tr><td><a href="{{=URL('index',args=item[visuel['key']])}}">Visuel</a></td>
-      {{ for i,v in enumerate(visuel['fields']):}}<td class="{{=v[0]}}">{{ =getdot(item,v[1]) }}</td>{{ pass }}
-    </tr>
-    {{ pass }}
-    </tbody>
-  </table>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-<script>
-var options = {
-  valueNames: [ {{=XML("'"+"','".join([v[0] for v in visuel['fields']])+"'") }} ]
-};
+    <div class="container">
+    <form action="#">
+        {{ def show_items(tree,level=0,n=0): }}
+        <div class="row selection" niveau="{{=level}}" parent="{{=n}}">
+        {{ n = 0 }}
+        {{ for k,v in tree.iteritems(): }}
+                 {{ if 'leaf' in v.keys(): }}
+                    <div class="col s6">
+                    <div itemid="{{=k}}" tabindex="-1" class="choix card leaf {{=k}}" niveau="{{=level}}" item="{{=n}}">
+                        <div class="card-image">
+                            <img src="{{=URL('getVisuel.svg',args=[v['id']])}}"/>
+                            <!--<img src="{{=URL('static','images/hemicyclelight.svg')}}"/>-->
+                            <!--<object data="{{=URL('getVisuel',args=['svg',v['id']])}}" type="image/svg+xml" style="width:100%;height:100%"></object>-->
+                        </div>
+                        <div class="card-content grey lighten-2">
+                            <span style="font-size:20px;">{{ =labels[k] }}</p>
+                        </div>
+                    </div>
+                    </div>
+                  {{ else: }}
+                  <div class="col s4">
+                    <div itemid="{{=k}}" tabindex="-1" class="choix card-panel {{=k}}" niveau="{{=level}}" item="{{=n}}">
+                      <span class="white-text" style="font-size:30px;">{{ =labels[k] }}</span>
+                    </div>
+                  </div>
+                  {{ pass }}
+            
+            {{ n += 1 }}
+        {{ pass }}
+        </div>
+        {{ n = 0 }}
+        {{ for k,v in tree.iteritems(): }}
+            {{ if not 'leaf' in v.keys(): }}
+                {{ show_items(v,level+1,n) }}
+            {{ pass }}
+            {{ n += 1 }}
+        {{ pass }}
+        {{ pass }}
+        {{ show_items(visuels_tree) }}        
+    </form>
+    <div class="row selection" niveau="99">
+        <div class="col s12" id="liste_choix">
+            
+        </div>
+    </div>
+    </div>
 
-var userList = new List('items', options);
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    
+<script>
+    {{ import json }}
+    var tree = JSON.parse('{{=XML(json.dumps(visuels_tree))}}');
+    var selections = Array(10);
+    console.log(tree);
+    $(".selection").filter(function() {
+            return  $(this).attr("niveau") > 0;
+        }).hide();
+    $(".choix").click(function() {
+        var niveau=parseInt($(this).attr('niveau'))+1;
+        var item=parseInt($(this).attr('item'));
+        selections[niveau-1]=$(this).attr('itemid');
+        console.log(niveau,item);
+        $(".selection").filter(function() {
+            return  $(this).attr("niveau") >= niveau;
+        }).hide();
+        $(".selection[niveau='"+niveau+"'][parent='"+item+"']").show();
+    });
+    $(".leaf").click(function() {
+        i=0;
+        var data=tree;
+        while (selections[i]!=undefined) {
+            data=data[selections[i]];
+            i++;
+        }
+        $.ajax({
+            async: false,
+            url: '{{ =URL('ajax_liste') }}/'+data.id,
+            complete: function(data){
+            
+            $('#liste_choix').html( data.responseText );
+            $(".selection[niveau='99']").show();
+            }
+        });
+        console.log(tree,selections,data);
+    });
 </script>
 </body>
 

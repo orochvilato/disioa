@@ -3,6 +3,42 @@
 import json
 import datetime
 
+def enlaisse():
+    return BEAUTIFY(mdb.deputes.find_one({'depute_uid':'PA720546'}))
+    #return BEAUTIFY(mdb.votes.find_one()) #({'$and':[{'scrutin_typedetail':'amendement'},{'scrutin_groupe':{'$eq':None}}]}).count())
+    #return BEAUTIFY(list(mdb.votes.find({'depute_uid':'PA721246'},{'groupe_abrev':1,'scrutin_typedetail':1,'vote_position':1,'scrutin_groupe':1})))
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = { 'uid':'$depute_uid','grouped':'$groupe_abrev','groupes':'$scrutin_groupe','position':'$vote_position'}
+    redact = {
+        "$redact": {
+            "$cond": [
+                { "$ne": [ "$scrutin_groupe", "$groupe_abrev" ] },
+                "$$KEEP",
+                "$$PRUNE"
+            ]
+        }
+    }
+    pipeline = [{'$match':{'scrutin_typedetail':'amendement'}},{'$group':pgroup}]
+    deps = {}
+    #return json.dumps(list(mdb.votes.aggregate(pipeline)))
+    for p in mdb.votes.aggregate(pipeline):
+        if p['_id']['position']!='absent':
+            uid = p['_id']['uid']
+            pos = p['_id']['position']
+            if p['_id']['groupes']!=None and p['_id']['grouped']!=p['_id']['groupes']:
+                if not uid in deps:
+                    deps[uid] = {'pour':0,'contre':0,'abstention':0,'total':0,'gp':p['_id']['grouped']}
+                deps[uid][pos] += p['n']
+                deps[uid]['total'] += p['n']
+    count = 0                
+    for uid,data in deps.iteritems():
+        if data['total']>0:
+            for pos in ('pour','contre','abstention'):
+                deps[uid]['pct'+pos] = round(100*float(data[pos])/data['total'],0)
+            if data['gp']=='REM' and deps[uid]['pctcontre']>90:
+                count += 1
+    return BEAUTIFY(dict(count=count,liste=sorted(dict((k,(v['pctpour'],v['total'],v['gp'])) for k,v in deps.iteritems() if v['total']>20).items(),key=lambda x:x[1][0],reverse=True)))
 
 def pres():
     sess = mdb.interventions.find({'itv_president':True},{'session_id':1,'depute_id':1})

@@ -73,7 +73,7 @@ class commissionsSpider(scrapy.Spider):
             if not cr_id:
                 return
             detail = cr.xpath('ul')[0].xpath('li')
-            date_cr = datetime.datetime.strptime(detail[0].xpath('span/text()').extract()[0].strip().encode('utf8'),"%d %B %Y")
+            date_cr = datetime.datetime.strptime(detail[0].xpath('span/text()').extract()[0].strip().replace('1er','1').encode('utf8'),"%d %B %Y")
             if len(detail)>1:
                 url_cr = detail[1].xpath('a/@href').extract()[0]
                 request = scrapy.Request(url_cr,callback=self.parse_compterendu)

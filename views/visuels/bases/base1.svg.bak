@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.2"
+   width="100%"
+   height="100%"
+   viewBox="0 0 1024 512"
+   id="svg2">
+  <defs
+     id="defs4">
+    <style
+       type="text/css"
+       id="style4" />
+  </defs>
+  
+  <rect
+       width="1024"
+       height="512"
+       x="0"
+       y="0"
+       id="fond"
+       style="fill:{{=c_fond}};fill-opacity:1;stroke:none" />
+    <rect
+       width="1024"
+       height="38"
+       x="0"
+       y="474"
+       id="bandeau3"
+       style="fill:{{=c_bandeau3}};fill-opacity:1;stroke:none" />
+    <rect
+       width="1024"
+       height="76"
+       x="0"
+       y="0"
+       id="bandeau1"
+       style="fill:{{=c_bandeau1}};fill-opacity:1;stroke:none" />
+    <image
+       xlink:href="data:image/jpeg;base64,{{=photo}}"
+       x="20"
+       y="76"
+       width="294"
+       height="376"
+       id="photo" />
+    <text
+       x="512"
+       y="54.009064"
+       id="nomdepute"
+       xml:space="preserve"
+       style="font-size:47.75409698px;font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:{{=c_textebandeau1}};fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+         x="512"
+         y="54.009064"
+         id="tspan3034">{{=nom}}</tspan></text>
+    <rect
+       width="710"
+       height="50"
+       x="314"
+       y="76"
+       id="bandeau2"
+       style="fill:{{=c_bandeau2}};fill-opacity:1;stroke:none" />
+    <text
+       x="15"
+       y="500"
+       id="date"
+       xml:space="preserve"
+       style="font-size:19.71894455px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:{{=c_date}};fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium"><tspan
+         x="15"
+         y="500"
+         id="tspan3007">{{=date}}</tspan></text>
+    <text
+       x="1009"
+       y="500"
+       id="site"
+       xml:space="preserve"
+       style="font-size:22.24330139px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:{{=c_site}};fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold"><tspan
+         x="1009"
+         y="500"
+         id="tspan3011">{{=site}}</tspan></text>
+    <text
+       x="323.58203"
+       y="108.05855"
+       id="groupe"
+       xml:space="preserve"
+       style="font-size:25.94837761px;font-style:normal;fill:{{=c_textebandeau2}};font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium"><tspan
+         x="323.58203"
+         y="108.05855"
+         id="tspan3040-6">{{=groupe}}</tspan></text>
+    <g transform="matrix(1,0,0,1,314,106)">
+    {{ =contenu }}</g>
+</svg>

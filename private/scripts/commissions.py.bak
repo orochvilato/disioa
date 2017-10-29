@@ -95,7 +95,7 @@ class commissionsSpider(scrapy.Spider):
         cr_id = response.meta['cr_id']
         heure = response.xpath('//h1[contains(@class,"SOMseance")]/text()').extract()[0].replace(u'\xa0',' ')
         cr_heure,cr_minute = re.search(r'ance de *(\d+) *heures *(\d*)',heure).groups()
-        crs[com_id][cr_id]['date'] = crs[com_id][cr_id]['date'].replace(hour=int(cr_heure),minute=int(cr_minute or 0)).strftime('%Y-%m-%f %H:%M')
+        crs[com_id][cr_id]['date'] = crs[com_id][cr_id]['date'].replace(hour=int(cr_heure),minute=int(cr_minute or 0)).strftime('%Y-%m-%d %H:%M')
         textes = response.xpath('//i[text()[contains(.,"La Commission examine") or contains(.,"texte de la Commission")]]')
         if textes:
             for texte in textes:
@@ -170,7 +170,7 @@ for comid in crs.keys():
                                 presence_id="%s_%s_%s" % (comid,crid,depid),
                                 commission_id = comid,
                                 reunion_id = crid,
-                                presense_date = crs[comid][crid]['date'],
+                                presence_date = crs[comid][crid]['date'],
                                 presence_etat = etat,
                                 depute_id = depid
             ))
