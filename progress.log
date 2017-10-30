@@ -7344,3 +7344,10 @@
 [2017-10-29 23:15:57] EDIT oadev/views/visuels/ajax_liste.html: 0
 [2017-10-29 23:16:36] EDIT oadev/views/visuels/ajax_liste.html: 2
 [2017-10-29 23:18:10] EDIT oadev/views/visuels/ajax_liste.html: -3
+[2017-10-30 01:03:52] CREATE visuels/contenus/base1/observatoire/presencecomm.svg: 0
+[2017-10-30 01:04:50] EDIT oadev/views/visuels/contenus/base1/observatoire/presencecomm.svg: 96
+[2017-10-30 01:10:53] EDIT oadev/controllers/visuels.py: 2
+[2017-10-30 01:12:05] EDIT oadev/views/visuels/contenus/base1/observatoire/presencecomm.svg: 0
+[2017-10-30 01:14:26] EDIT oadev/views/visuels/contenus/base1/observatoire/presencecomm.svg: -23
+[2017-10-30 01:24:04] EDIT oadev/controllers/visuels.py: 0
+[2017-10-30 01:24:20] EDIT oadev/controllers/visuels.py: 0

@@ -33,6 +33,7 @@ domaines = {'discord':{'nom':'Discord',
                                 }}
            }
 stats = {'participation':('stats.positions.exprimes','pct'),
+         'presencecom':('stats.commissions.present','pct'),
          'vote.isf':('depute_votes_cles.169','string')}
 
 prefiltres = { 
@@ -54,6 +55,7 @@ donnees = {
           }
 
 visuels = [ dict(base="base1",visuel='participation',nom='Participation au scrutins publics',domaine='observatoire',donnees='depute',liste='statdepute',stat='participation',ratio=2),
+            dict(base="base1",visuel='presencecomm',nom='Présence en commission',domaine='observatoire',donnees='depute',liste='statdepute',stat='presencecom',ratio=2),
             dict(base="base1",visuel='participation',nom='Participation au scrutins publics',domaine='discord',donnees='depute',liste='statdepute',stat='participation',ratio=2),
             dict(base="base1",visuel='participationcocotier',nom='Participation au scrutins publics (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre='deputepart20',ratio=2)
             ]
@@ -179,7 +181,7 @@ def getVisuel():
         response.headers['Content-Type'] ="image/png"
         
         driver.set_window_size(w,h)# optional
-        driver.get(URL('getVisuel.svg',args=[idx,key],scheme=True, host=True))
+        driver.get(URL('getVisuel.svg',args=[idx,key],vars={'contentonly':contentonly,'baseonly':baseonly'},scheme=True, host=True))
         data = driver.get_screenshot_as_png()
     else:
         from cStringIO import StringIO
@@ -214,7 +216,8 @@ def get_visuel_final(visuel,baseonly=False,contentonly=False,**_elts):
         return XML(Template(xmltodict.unparse(content_svg, full_document=True)).substitute(**_elts))
     couleurs = domaines[domaine]['couleurs']
     
-    elts ={'nom':'Jean-Claude DUPONT',
+    elts ={'nom':'DUPONT',
+           'prenom':'Jean-Claude',
             'groupe':'Groupe Les doux réveurs (42)',
             'photo':"""iVBORw0KGgoAAAANSUhEUgAAAPoAAAFACAYAAACVymGaAAAABHNCSVQICAgIfAhkiAAAGXlJREFU
 eJzt3Xncp3O9x/HXjH2ZGFuWKCnq8OikIoQkw0mIVskpSh89Og+nTjmOSnSEEp1OsjSfJERpIVu2
