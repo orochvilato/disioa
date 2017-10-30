@@ -122,7 +122,7 @@ def get_visudata(source,key,**args):
         return source['depute_hatvp'][0]['nom']
     elif key=='depute_prenom':
         return source['depute_hatvp'][0]['prenom']
-    elif "stats.positions" in key:
+    elif "stats." in key:
         return int(round(getdot(source,key),0))
     else:
         return getdot(source,key)

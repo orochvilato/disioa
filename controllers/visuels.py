@@ -181,7 +181,7 @@ def getVisuel():
         response.headers['Content-Type'] ="image/png"
         
         driver.set_window_size(w,h)# optional
-        driver.get(URL('getVisuel.svg',args=[idx,key],vars={'contentonly':contentonly,'baseonly':baseonly},scheme=True, host=True))
+        driver.get(URL('getVisuel.svg',args=[idx,key],scheme=True, host=True))
         data = driver.get_screenshot_as_png()
     else:
         from cStringIO import StringIO
