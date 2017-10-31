@@ -4,6 +4,28 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
    <style>
+       .collection .collection-item.avatar .title {
+           font-weight:600;
+           
+       }
+       .collection .collection-item.avatar .secondary-content {
+           font-weight:600;
+           font-size:18px;
+       }
+       .collection .collection-item.avatar {
+           min-height:0px;
+           padding-left:20px;
+       }
+       #liste_header {
+           background: #ffffff;
+           height:60px;
+       }
+       #liste_titre {
+           font-size:22px;
+       }
+       .selection {
+           display:none;
+       }
        .choix {
            background: #808080;
        }
@@ -35,7 +57,7 @@
         {{ n = 0 }}
         {{ for k,v in tree.iteritems(): }}
                  {{ if 'leaf' in v.keys(): }}
-                    <div class="col s6">
+                    <div class="col s12 m6">
                     <div itemid="{{=k}}" tabindex="-1" class="choix card leaf {{=k}}" niveau="{{=level}}" item="{{=n}}">
                         <div class="card-image">
                             <img src="{{=URL('getVisuel.svg',args=[v['id']])}}"/>
@@ -48,9 +70,9 @@
                     </div>
                     </div>
                   {{ else: }}
-                  <div class="col s4">
+                  <div class="col s6">
                     <div itemid="{{=k}}" tabindex="-1" class="choix card-panel {{=k}}" niveau="{{=level}}" item="{{=n}}">
-                      <span class="white-text" style="font-size:30px;">{{ =labels[k] }}</span>
+                      <span class="white-text" style="font-size:26px;">{{ =labels[k] }}</span>
                     </div>
                   </div>
                   {{ pass }}
@@ -69,52 +91,89 @@
         {{ show_items(visuels_tree) }}        
     </form>
     <div class="row selection" niveau="99">
-        <div class="col s12" id="liste_choix">
-            
+        <div id="liste_header">
+            <div class="col s12" id="liste_titre">                
+           </div>
+           <select class="col s12 browser-default" name="groupe"><option value="">Tous les groupes</option>
+               {{ for k,v in filtres_data['groupe']: }}<option value="{{=k}}">{{=v}}</option>{{pass}}
+            </select>
         </div>
+        <ul class="collection" id="liste_choix">
+        </ul>
     </div>
     </div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js"></script>
     
 <script>
     {{ import json }}
     var tree = JSON.parse('{{=XML(json.dumps(visuels_tree))}}');
+    var currentVisuel = 0;
+    var groupe_filter = "";
+    $('#liste_choix').infiniteScroll({
+                  // options
+                  path: function() {
+                      //var pageNumber = ( this.loadCount + 1 ) * 10;
+                      return '{{=URL('ajax_liste')}}/' + (this.loadCount+1)+'?visuel='+currentVisuel+'&groupe='+groupe_filter;
+                  },
+                  append: '.item',
+                  checkLastPage: '.pagination__next',
+                  history: false,
+                });
+ 
+            
     var selections = Array(10);
-    console.log(tree);
     $(".selection").filter(function() {
-            return  $(this).attr("niveau") > 0;
-        }).hide();
+            return  $(this).attr("niveau") == 0;
+        }).show();
     $(".choix").click(function() {
         var niveau=parseInt($(this).attr('niveau'))+1;
         var item=parseInt($(this).attr('item'));
         selections[niveau-1]=$(this).attr('itemid');
-        console.log(niveau,item);
+        for(i=niveau;i<9;i++){ selections[i] = undefined;}
+        
         $(".selection").filter(function() {
             return  $(this).attr("niveau") >= niveau;
         }).hide();
-        $(".selection[niveau='"+niveau+"'][parent='"+item+"']").show();
+        if (!$(this).hasClass('leaf')) {
+            $(".selection[niveau='"+niveau+"'][parent='"+item+"']").show();
+        }
     });
+    $('select[name="groupe"]').change(function() {
+        console.log($(this).val());
+    });
+    function initList() {
+         $.ajax({
+            async: false,
+            url: '{{ =URL('ajax_liste') }}/0?visuel='+currentVisuel+'&groupe='+groupe_filter,
+            complete: function(resp){
+            $('#liste_choix').html( resp.responseText );
+            
+            $(".selection[niveau='99']").show();
+            //$('#liste_titre').sticky({topSpacing:0});
+            } 
+            
+        });
+    }
     $(".leaf").click(function() {
         i=0;
         var data=tree;
+        
         while (selections[i]!=undefined) {
             data=data[selections[i]];
             i++;
         }
-        $.ajax({
-            async: false,
-            url: '{{ =URL('ajax_liste') }}/'+data.id,
-            complete: function(data){
-            
-            $('#liste_choix').html( data.responseText );
-            $(".selection[niveau='99']").show();
-            }
-        });
-        console.log(tree,selections,data);
+       
+        currentVisuel = data.id;
+       
+        $('#liste_titre').html(data.nom);
+
+        $('#liste_choix').data('infiniteScroll').loadCount=0;
+       initList();
+        
     });
 </script>
 </body>

@@ -1,66 +1,12 @@
-<div id="items">
-    {{ if 0: }}
-    {{ for f in filtres:}}
-        <div class="input-field col s6">
-        <select class="filtre" name="{{ =f[0]}}">
-        <option value="" selected>Tous</option>
-        {{ fkey = f[0] if f[0] in filtres_data.keys() else f[1] }}
-        {{ for lib,id in sorted(filtres_data[fkey].iteritems(),key=lambda x:x[1]): }}
-         <option value="{{=id}}">{{ =lib }}</option>
-        {{ pass }}
-        </select>
-       <label>{{ =f[0] }}</label>
-        </div>
-    {{ pass }}
-    {{ pass }}
-    <div class="col s12">
-    <input class="search" placeholder="Recherche" />
-    </div>
-    
-    
-      <table>
-        <thead><tr><th></th>{{ for v in champs: }}
-      <th><button class="sort" data-sort="{{=v[0]}}">
-        Tri par {{=v[0]}}
-      </button></th>
-      {{ pass }}</tr></thead>
-        <tbody class="list">
-        {{ for item in liste: }}
-            
-        <tr>
-          <td><a target="_blank" href="{{=URL('voirVisuel',args=[idx,getdot(item,cle)])}}" class="btn"><i class="fa fa-id-card-o" aria-hidden="true"></i></a></td>
-          {{ for i,v in enumerate(champs):}}<td class="{{=v[0]}} {{=v[0]}}{{=item.get('filtres',{}).get(v[0],'')}}">{{ =getdot(item,v[1]) }}</td>{{ pass }}
-        </tr>
-        {{ pass }}
-        </tbody>
-      </table>
-    </div>
-    </form>
-    
-    </div>
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-    
-<script>
-var options = {
-  valueNames: [ {{=XML("'"+"','".join([v[0] for v in champs])+"'") }} ]
-};
-{{ import json }}
-var filters = JSON.parse('{{=XML(json.dumps(dict([(f[0],'') for f in filtres])))}}');
-
-$('select').material_select();
-var userList = new List('items', options);
-$('select.filtre').change(function() {
-  var filter = $(this).attr('name');
-  var value = $(this).val();
-  $("tbody.list td."+filter+value).parent().hide();
-  console.log($("tbody.list td."+filter+value))
-  
-});
-
-</script>
-</body>
-
-</html>
+<ul class="collection" id="liste_choix">
+{{ for item in items: }}
+   <li class="item collection-item avatar">
+       <a target="_blank" href="{{=URL('voirVisuel',args=[visuel_idx,getdot(item,cle)])}}"><i class="fa fa-id-card-o" aria-hidden="true"></i></a>
+       <span class="title">{{ =getdot(item,champs['nom']) }}</span>
+         <p>{{ =getdot(item,champs['groupe']) }}</p>
+       {{ s = getdot(item,champs[visuel['stat']]) }}
+       <div class="secondary-content">{{if stat[1]=='pct':}}{{ ="{0:n}".format(round(s,1)) }} %{{else:}}{{=s}}{{pass}}</div>
+    </li>      
+       {{ pass }}
+    {{if not lastpage:}}<div class="pagination__next"></div>{{pass}}
+</ul>

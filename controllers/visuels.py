@@ -9,6 +9,10 @@ import datetime
 import xmltodict
 nuances = dict([('DIV', 'Divers'), ('ECO', 'Ecologiste'), ('EXG', 'Extrème gauche'), ('FN', 'Front National'), ('DVD', 'Divers droite'), ('FI', 'La France insoumise'), ('LR', u'Les Républicains'), ('COM', u'Parti communiste fran\xc3\xa7ais'), ('REM', u'La République en marche'), ('SOC', 'Parti socialiste'), ('DLF', 'Debout la France'), ('DVG', 'Divers gauche'), ('EXD', 'Extrème droite'), ('REG', u'Régionalistes'), ('UDI', u'Union des Démocrates et Indépendants'), ('MDM', 'Modem'), ('RDG', 'Parti radical de gauche')])
 
+filtres_data = {'groupe':[(g['groupe_abrev'],g['groupe_libelle']) for g in mdb.groupes.find({},{'groupe_libelle':1,'groupe_abrev':1})],
+                'pct':{'0 à 10%':0,'10 à 20%':1,'20 à 30%':2,'30 à 40%':3,'40 à 50%':4,'50 à 60%':5,'60 à 70%':6,'70 à 80%':7,'80 à 90%':8,'90 à 100%':9},
+                   'vote':{'pour':0,'contre':1,'abstention':2,'absent':3}}
+
 
 domaines = {'discord':{'nom':'Discord',
                        'champs':{'site':'discord-insoumis.fr'},
@@ -59,56 +63,47 @@ donnees = {
 
 visuels = [ dict(base="base1",path='observatoire.stats.participation',visuel='participation',nom='Participation aux scrutins publics',domaine='observatoire',donnees='depute',liste='statdepute',stat='participation',ratio=2,default=45),
             dict(base="base1",path='observatoire.stats.presencecomm',visuel='presencecomm',nom='Présence en commission',domaine='observatoire',donnees='depute',liste='statdepute',stat='presencecom',ratio=2,default=45),
-            dict(base="base1",path='observatoire.votes.voteordonnances',visuel='voteordonnances',nom='Reforme du code du travail par ordonnances',domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.ordonnances',svgdata='position',prefiltre='voteordonnance',ratio=2,default='contre'),
+            dict(base="base1",path='observatoire.votes.voteordonnances',visuel='voteordonnances',nom='Reforme du code du travail par ordonnances',domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.ordonnances',svgdata='position',prefiltre='voteordonnances',ratio=2,default='contre'),
             dict(base="base1",path='observatoire.votes.voteisf',visuel='voteisf',nom="Suppression de lʹISF",domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.isf',svgdata='position',prefiltre='voteisf',ratio=2,default='pour'),
             dict(base="base1",path='discord.participation',visuel='participation',nom='Participation aux scrutins publics',domaine='discord',donnees='depute',liste='statdepute',stat='participation',ratio=2,default=45),
-            dict(base="base1",path='discord.participationcocotier',visuel='participationcocotier',nom='Participation aux scrutins publics (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre='deputepart20',ratio=2,default=45)
+            dict(base="base1",path='discord.participationcocotier',visuel='participationcocotier',nom='Participation aux scrutins publics (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre='deputepart20',ratio=2,default=12)
             ]
 vlabels = {'discord':'Discord','observatoire':'Observatoire','votes':'Votes','stats':'Stats'}
+
 def ajax_liste():
     try:
-        idx = int(request.args(0))
+        page = int(request.args(0))
+        visuel_idx = int(request.vars.get('visuel','0'))
+        groupe = request.vars.get('groupe','')
     except:
+        page = 0
         idx = 0
         
-
     
+    nbitems = 20
     filtres_data = {'groupe':dict([ (g['groupe_libelle'],g['groupe_abrev']) for g in mdb.groupes.find({},{'groupe_libelle':1,'groupe_abrev':1})]),
                 'pct':{'0 à 10%':0,'10 à 20%':1,'20 à 30%':2,'30 à 40%':3,'40 à 50%':4,'50 à 60%':5,'60 à 70%':6,'70 à 80%':7,'80 à 90%':8,'90 à 100%':9},
                    'vote':{'pour':0,'contre':1,'abstention':2,'absent':3}}
 
-    visuel = visuels[idx]
+    visuel = visuels[visuel_idx]
     stat = stats[visuel['stat']]
     datasrc=listes[visuel['liste']]
     prefiltre = prefiltres.get(visuel.get('prefiltre',None),None)
-    filtre = {}
     if datasrc['collection']=='deputes':
         filtre = {'$and':[{'depute_actif':True}]}
+        if groupe:
+            filtre['$and'].append({'groupe_abrev':groupe})
     if prefiltre:
         if '$and' in filtre.keys():
             filtre['$and'].append(prefiltre)
         else:
             filtre = prefiltre
-    cle = listes[visuels[idx]['liste']]['cle']
+    cle = listes[visuels[visuel_idx]['liste']]['cle']
     fields = dict((k,1) for k in dict(datasrc['champs']).values() + [stat[0],cle])
-    data = list(mdb[datasrc['collection']].find(filtre,fields))
-    champdict = dict(datasrc['champs']+[(visuel['stat'],stat[0])])
-    filtredict = dict((v[0],(champdict[v[0]],v[1])) for v in datasrc['filtres']+[(visuel['stat'],stat[1])])
-    for item in data:
-        item['filtres']={}
-        for k,v in filtredict.iteritems():
-            if v[1]=='string':
-                valeur = getdot(item,v[0])
-                item['filtres'][k] = filtres_data[k][valeur]
-            elif v[1]=='pct':
-                tranche = int(getdot(item,v[0]) / 10)
-                item['filtres'][k] = tranche
-            elif v[1]=='vote':
-                valeur = getdot(item,v[0])
-                item['filtres'][k] = filtres_data['vote'][valeur]
+    data = list(mdb[datasrc['collection']].find(filtre,fields).sort(stat[0],-1).skip(page*nbitems).limit(nbitems))
+    
         
-        return dict(idx=idx,cle=cle,liste=data,filtres_data=filtres_data,champs = datasrc['champs']+[(visuel['stat'],stat[0])],
-                    filtres = datasrc['filtres']+[(visuel['stat'],stat[1])])
+    return dict(visuel_idx=visuel_idx, visuel=visuel, stat=stat,champs = dict(datasrc['champs']+[(visuel['stat'],stat[0])]),cle=cle,items=data,lastpage=(len(data)<nbitems))
 
 def get_visudata(source,key,**args):
     if key=='depute_groupe':
@@ -144,7 +139,8 @@ def voirVisuel():
         idx = 0
         items = ['modele']
     return dict(idx=idx,items=items)
-    
+
+@cache(request.env.path_info, time_expire=600, cache_model=cache.ram)
 def getVisuel():
     #if 1:
     try:
@@ -201,7 +197,7 @@ def getVisuel():
     #response.headers['Cache-Control']=''
     #response.headers['Expires']=''
     
-   
+    
     return data
     
     #response.headers['Content-Disposition']="attachment; filename="+depid+compl+"."+ext
@@ -380,7 +376,7 @@ def generer():
         labels[spath[-1]] = v['nom']
         tree[spath[-1]] = v
         
-    return dict(visuels_tree=visuels_tree,labels=labels)
+    return dict(visuels_tree=visuels_tree,labels=labels, filtres_data=filtres_data)
 
 
 def test():
