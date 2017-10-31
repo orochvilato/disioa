@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   width="710.8125"
+   id="svg3157"
    height="349.34375"
-   id="svg3157">
+   width="710.8125"
+   version="1.1">
   <metadata
      id="metadata21">
     <rdf:RDF>
@@ -25,50 +23,50 @@
   </metadata>
   <defs
      id="defs3159" />
-  <g
+   <g
      id="layer1">
-    <text
+  <text
+     x="304.32483"
+     y="181.12952"
+     id="text3044"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:129.75027466px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none"><tspan
        x="304.32483"
        y="181.12952"
-       id="text3044"
-       xml:space="preserve"
-       style="font-size:129.75027466px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
-         x="304.32483"
-         y="181.12952"
-         id="tspan3046">$stat%</tspan></text>
-    <text
+       id="tspan3046">$stat%</tspan></text>
+  <text
+     x="239.66681"
+     y="254.30711"
+     id="soustitre1"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:35.74801636px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none"><tspan
        x="239.66681"
        y="254.30711"
-       id="soustitre1"
-       xml:space="preserve"
-       style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
-         x="239.66681"
-         y="254.30711"
-         id="tspan3015"
-         style="font-size:35.74801636px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">de</tspan></text>
-    <text
+       id="tspan3015"
+       style="font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:35.74801636px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Montserrat Medium';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1">de</tspan></text>
+  <text
+     x="300.77087"
+     y="256.40613"
+     id="soustitres2"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:49.13347244px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#ff0052;fill-opacity:1;stroke:none"><tspan
        x="300.77087"
        y="256.40613"
-       id="soustitres2"
-       xml:space="preserve"
-       style="font-size:49.13347244px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0052;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
-         x="300.77087"
-         y="256.40613"
-         id="tspan3019"
-         style="font-size:49.13347244px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0052;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Bold">présence</tspan></text>
-    <text
+       id="tspan3019"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:49.13347244px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Montserrat Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0052;fill-opacity:1">présence</tspan></text>
+  <text
+     x="236.79626"
+     y="305.21515"
+     id="soustitre3"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:38.8910675px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none"><tspan
        x="236.79626"
        y="305.21515"
-       id="soustitre3"
-       xml:space="preserve"
-       style="font-size:38.8910675px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#213659;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
-         x="236.79626"
-         y="305.21515"
-         id="tspan3023"
-         style="font-size:38.8910675px;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1;font-family:Montserrat;-inkscape-font-specification:Montserrat Medium">en commission</tspan></text>
-    <path
-       d="m 167.33151,226.03308 c -28.11797,-6.56245 -49.99466,-23.56847 -61.73639,-47.99128 -5.87328,-12.21644 -8.25586,-21.27942 -9.12764,-34.72022 -1.74047,-26.83408 8.26535,-51.691769 28.41513,-70.592418 48.86721,-45.837798 127.84747,-23.817346 147.20281,41.041558 3.56639,11.95083 4.0267,31.674 1.03259,44.24403 -7.58031,31.82409 -29.05158,55.04496 -60.75538,65.70608 -7.50163,2.52259 -11.19,3.04158 -23.89145,3.36179 -9.62644,0.24269 -17.21778,-0.13421 -21.13967,-1.04954 z m 45.20578,-28.53069 5.70798,-1.42313 1.09096,-6.79351 1.09096,-6.79349 0.1549,6.39752 c 0.0852,3.51865 0.41517,6.39753 0.7333,6.39753 1.72236,0 14.56495,-5.83301 16.3003,-7.40348 1.48886,-1.3474 2.03572,-3.43985 2.03572,-7.78925 0,-3.2708 -0.18919,-5.94693 -0.42043,-5.94693 -0.23124,0 -2.31022,0.78961 -4.61996,1.75468 -6.9753,2.91446 -17.03915,2.47315 -24.2693,-1.06423 -6.65339,-3.2552 -10.56466,-7.19985 -14.34607,-14.46854 -2.91381,-5.60096 -3.25536,-18.06875 -0.65887,-24.05078 l 1.69026,-3.89415 -9.56284,-0.0827 c -5.25958,-0.0455 -11.89803,-0.48123 -14.75213,-0.96838 -10.30941,-1.75965 -25.79271,4.03078 -33.1609,12.40147 -6.13415,6.96877 -7.8233,13.32442 -7.8233,29.43626 0,15.00305 -0.41876,14.3243 11.9455,19.36162 l 6.41263,2.61256 0.56632,-7.45924 0.56632,-7.45924 0.90982,6.74815 c 0.5004,3.71148 1.29827,7.37669 1.77306,8.14491 2.57646,4.1688 44.58013,5.8467 58.63577,2.3423 z m 20.99475,-26.54311 c 5.72306,-2.60649 12.31935,-9.93824 13.82743,-15.36916 4.14643,-14.93222 -4.04183,-29.07407 -18.89767,-32.63794 -18.15925,-4.35632 -35.07866,13.50378 -29.99459,31.66225 1.76391,6.30007 8.02306,13.66947 13.86307,16.32207 5.84068,2.65292 15.40418,2.66319 21.20176,0.0228 z m -21.15746,-15.74404 c -5.5347,-5.59307 -6.42407,-7.01086 -5.40899,-8.62276 2.02063,-3.20865 4.49154,-2.82194 9.21062,1.44145 l 4.49428,4.06031 3.09293,-2.2342 c 1.70111,-1.22882 5.32505,-4.52796 8.0532,-7.33143 5.33483,-5.48212 8.20483,-6.33845 10.0002,-2.98377 0.97008,1.81262 -0.37645,3.55464 -9.46018,12.23875 -5.8252,5.56892 -11.21384,10.12531 -11.97475,10.12531 -0.76092,0 -4.36421,-3.01215 -8.00731,-6.69366 z m -12.52476,-31.98079 c 18.51881,-10.46245 19.57426,-36.412087 1.96209,-48.240563 -8.30639,-5.578634 -14.72101,-6.554152 -24.33123,-3.700219 -15.81305,4.695964 -24.56162,23.478321 -17.85008,38.322382 7.30971,16.16701 25.06605,22.17939 40.21922,13.6184 z"
-       id="path3047"
-       style="fill:#82cde2;fill-opacity:1" />
-  </g>
+       id="tspan3023"
+       style="font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:38.8910675px;line-height:125%;font-family:Montserrat;-inkscape-font-specification:'Montserrat Medium';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#213659;fill-opacity:1">en commission</tspan></text>
+  <path
+     d="M 151.33151,226.03308 C 123.21354,219.47063 101.33685,202.46461 89.59512,178.0418 83.72184,165.82536 81.33926,156.76238 80.46748,143.32158 78.72701,116.4875 88.73283,91.629811 108.88261,72.729162 157.74982,26.891364 236.73008,48.911816 256.08542,113.77072 c 3.56639,11.95083 4.0267,31.674 1.03259,44.24403 -7.58031,31.82409 -29.05158,55.04496 -60.75538,65.70608 -7.50163,2.52259 -11.19,3.04158 -23.89145,3.36179 -9.62644,0.24269 -17.21778,-0.13421 -21.13967,-1.04954 z m 45.20578,-28.53069 5.70798,-1.42313 1.09096,-6.79351 1.09096,-6.79349 0.1549,6.39752 c 0.0852,3.51865 0.41517,6.39753 0.7333,6.39753 1.72236,0 14.56495,-5.83301 16.3003,-7.40348 1.48886,-1.3474 2.03572,-3.43985 2.03572,-7.78925 0,-3.2708 -0.18919,-5.94693 -0.42043,-5.94693 -0.23124,0 -2.31022,0.78961 -4.61996,1.75468 -6.9753,2.91446 -17.03915,2.47315 -24.2693,-1.06423 -6.65339,-3.2552 -10.56466,-7.19985 -14.34607,-14.46854 -2.91381,-5.60096 -3.25536,-18.06875 -0.65887,-24.05078 l 1.69026,-3.89415 -9.56284,-0.0827 c -5.25958,-0.0455 -11.89803,-0.48123 -14.75213,-0.96838 -10.30941,-1.75965 -25.79271,4.03078 -33.1609,12.40147 -6.13415,6.96877 -7.8233,13.32442 -7.8233,29.43626 0,15.00305 -0.41876,14.3243 11.9455,19.36162 l 6.41263,2.61256 0.56632,-7.45924 0.56632,-7.45924 0.90982,6.74815 c 0.5004,3.71148 1.29827,7.37669 1.77306,8.14491 2.57646,4.1688 44.58013,5.8467 58.63577,2.3423 z m 20.99475,-26.54311 c 5.72306,-2.60649 12.31935,-9.93824 13.82743,-15.36916 4.14643,-14.93222 -4.04183,-29.07407 -18.89767,-32.63794 -18.15925,-4.35632 -35.07866,13.50378 -29.99459,31.66225 1.76391,6.30007 8.02306,13.66947 13.86307,16.32207 5.84068,2.65292 15.40418,2.66319 21.20176,0.0228 z m -21.15746,-15.74404 c -5.5347,-5.59307 -6.42407,-7.01086 -5.40899,-8.62276 2.02063,-3.20865 4.49154,-2.82194 9.21062,1.44145 l 4.49428,4.06031 3.09293,-2.2342 c 1.70111,-1.22882 5.32505,-4.52796 8.0532,-7.33143 5.33483,-5.48212 8.20483,-6.33845 10.0002,-2.98377 0.97008,1.81262 -0.37645,3.55464 -9.46018,12.23875 -5.8252,5.56892 -11.21384,10.12531 -11.97475,10.12531 -0.76092,0 -4.36421,-3.01215 -8.00731,-6.69366 z m -12.52476,-31.98079 c 18.51881,-10.46245 19.57426,-36.412087 1.96209,-48.240563 -8.30639,-5.578634 -14.72101,-6.554152 -24.33123,-3.700219 -15.81305,4.695964 -24.56162,23.478321 -17.85008,38.322382 7.30971,16.16701 25.06605,22.17939 40.21922,13.6184 z"
+     id="path3047"
+     style="fill:#82cde2;fill-opacity:1" />
+    </g>
 </svg>

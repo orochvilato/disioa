@@ -34,10 +34,13 @@ domaines = {'discord':{'nom':'Discord',
            }
 stats = {'participation':('stats.positions.exprimes','pct'),
          'presencecom':('stats.commissions.present','pct'),
-         'vote.isf':('depute_votes_cles.169','string')}
+         'vote.isf':('depute_votes_cles.169','vote'),
+         'vote.ordonnances':('depute_votes_cles.106','vote')}
 
 prefiltres = { 
-    'deputepart20':{'stats.positions.exprimes':{'$lt':20}}
+    'deputepart20':{'stats.positions.exprimes':{'$lt':20}},
+    'voteisf':{'depute_votes_cles.169':{'$in':['pour','contre']}},
+    'voteordonnances':{'depute_votes_cles.106':{'$in':['pour','contre']}},
     }
 
 listes = {
@@ -54,12 +57,14 @@ donnees = {
                         }
           }
 
-visuels = [ dict(base="base1",visuel='participation',nom='Participation au scrutins publics',domaine='observatoire',donnees='depute',liste='statdepute',stat='participation',ratio=2),
-            dict(base="base1",visuel='presencecomm',nom='Présence en commission',domaine='observatoire',donnees='depute',liste='statdepute',stat='presencecom',ratio=2),
-            dict(base="base1",visuel='participation',nom='Participation au scrutins publics',domaine='discord',donnees='depute',liste='statdepute',stat='participation',ratio=2),
-            dict(base="base1",visuel='participationcocotier',nom='Participation au scrutins publics (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre='deputepart20',ratio=2)
+visuels = [ dict(base="base1",path='observatoire.stats.participation',visuel='participation',nom='Participation aux scrutins publics',domaine='observatoire',donnees='depute',liste='statdepute',stat='participation',ratio=2,default=45),
+            dict(base="base1",path='observatoire.stats.presencecomm',visuel='presencecomm',nom='Présence en commission',domaine='observatoire',donnees='depute',liste='statdepute',stat='presencecom',ratio=2,default=45),
+            dict(base="base1",path='observatoire.votes.voteordonnances',visuel='voteordonnances',nom='Reforme du code du travail par ordonnances',domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.ordonnances',svgdata='position',prefiltre='voteordonnance',ratio=2,default='contre'),
+            dict(base="base1",path='observatoire.votes.voteisf',visuel='voteisf',nom="Suppression de lʹISF",domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.isf',svgdata='position',prefiltre='voteisf',ratio=2,default='pour'),
+            dict(base="base1",path='discord.participation',visuel='participation',nom='Participation aux scrutins publics',domaine='discord',donnees='depute',liste='statdepute',stat='participation',ratio=2,default=45),
+            dict(base="base1",path='discord.participationcocotier',visuel='participationcocotier',nom='Participation aux scrutins publics (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre='deputepart20',ratio=2,default=45)
             ]
-
+vlabels = {'discord':'Discord','observatoire':'Observatoire','votes':'Votes','stats':'Stats'}
 def ajax_liste():
     try:
         idx = int(request.args(0))
@@ -69,7 +74,8 @@ def ajax_liste():
 
     
     filtres_data = {'groupe':dict([ (g['groupe_libelle'],g['groupe_abrev']) for g in mdb.groupes.find({},{'groupe_libelle':1,'groupe_abrev':1})]),
-                'pct':{'0 à 10%':0,'10 à 20%':1,'20 à 30%':2,'30 à 40%':3,'40 à 50%':4,'50 à 60%':5,'60 à 70%':6,'70 à 80%':7,'80 à 90%':8,'90 à 100%':9}}
+                'pct':{'0 à 10%':0,'10 à 20%':1,'20 à 30%':2,'30 à 40%':3,'40 à 50%':4,'50 à 60%':5,'60 à 70%':6,'70 à 80%':7,'80 à 90%':8,'90 à 100%':9},
+                   'vote':{'pour':0,'contre':1,'abstention':2,'absent':3}}
 
     visuel = visuels[idx]
     stat = stats[visuel['stat']]
@@ -97,6 +103,9 @@ def ajax_liste():
             elif v[1]=='pct':
                 tranche = int(getdot(item,v[0]) / 10)
                 item['filtres'][k] = tranche
+            elif v[1]=='vote':
+                valeur = getdot(item,v[0])
+                item['filtres'][k] = filtres_data['vote'][valeur]
         
         return dict(idx=idx,cle=cle,liste=data,filtres_data=filtres_data,champs = datasrc['champs']+[(visuel['stat'],stat[0])],
                     filtres = datasrc['filtres']+[(visuel['stat'],stat[1])])
@@ -112,7 +121,7 @@ def get_visudata(source,key,**args):
         depart = source['depute_departement_id'] if source['depute_departement_id'][0]!='0' else source['depute_departement_id'][1:]
         groupe = u"Député %s (%s) - %s" % (groupe_lib,groupe_abrev,depart)
         return groupe
-    elif key=='depute_photo':
+    elif key=='depute_photo2':
         path = os.path.join(request.folder, 'static/images/deputes/%s.jpg' % source['depute_id'])
         content = open(path).read()
         #content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+depute['depute_uid'][2:]+'.jpg').content
@@ -143,17 +152,14 @@ def getVisuel():
         idx = int(request.args(0))
         visuel = visuels[idx]
         key = request.args(1) or 'modele'
-        contentonly = request.vars.get('contentonly',False)
         baseonly = request.vars.get('baseonly',False)
         liste = listes[visuel['liste']]
-        ext = {'stat':45}
+        ext = {'stat':visuel['default']}
         if key!='modele':
             data = mdb[liste['collection']].find_one({liste['cle']:key})
             if data:
                 ext = dict((k,get_visudata(data,v)) for k,v in donnees[visuel['donnees']].iteritems())
-                if contentonly:
-                    ext['contentonly'] = True
-                elif baseonly:
+                if baseonly:
                     ext['baseonly'] = True
                 ext['stat']=get_visudata(data,stats[visuel['stat']][0])
                 
@@ -201,24 +207,31 @@ def getVisuel():
     #response.headers['Content-Disposition']="attachment; filename="+depid+compl+"."+ext
 
 
-
-def get_visuel_final(visuel,baseonly=False,contentonly=False,**_elts):
+def subsvg(content_path):
+    content_svg = xmltodict.parse(open(content_path).read())
+    from string import Template
+    g = content_svg['svg']['g']
+    return xmltodict.unparse({'g':g},full_document=False)
+    
+def get_visuel_final(visuel,baseonly=False,**_elts):
     base = visuel['base']
     domaine = visuel['domaine']
-    visuel = visuel['visuel']
-    content_path = os.path.join(request.folder, 'views', 'visuels','contenus',base,domaine,'%s.svg' % visuel)
-    content_svg = xmltodict.parse(open(content_path).read())
-    g = content_svg['svg']['g']
-    from string import Template
-    if not contentonly:
-        contenu = XML(Template(xmltodict.unparse({'g':g},full_document=False)).substitute(**_elts))
+    visuelname = visuel['visuel']
+    
+    if 'svgdata' in visuel.keys() and 'stat' in _elts.keys():
+        svgdata_path = os.path.join(request.folder, 'views', 'visuels','svgdata',visuel['svgdata'],domaine,'%s.svg' % _elts['stat'])
+        svgdata = subsvg(svgdata_path)
     else:
-        return XML(Template(xmltodict.unparse(content_svg, full_document=True)).substitute(**_elts))
+        svgdata = ""
+    content_path = os.path.join(request.folder, 'views', 'visuels','contenus',base,domaine,'%s.svg' % visuelname)
+    content_svg = subsvg(content_path)
+    from string import Template
+    contenu = XML(Template(content_svg).substitute(**_elts)+svgdata)
     couleurs = domaines[domaine]['couleurs']
     
     elts ={'nom':'DUPONT',
            'prenom':'Jean-Claude',
-            'groupe':'Groupe Les doux réveurs (42)',
+            'groupe':'Député Les doux réveurs (42)',
             'photo':"""iVBORw0KGgoAAAANSUhEUgAAAPoAAAFACAYAAACVymGaAAAABHNCSVQICAgIfAhkiAAAGXlJREFU
 eJzt3Xncp3O9x/HXjH2ZGFuWKCnq8OikIoQkw0mIVskpSh89Og+nTjmOSnSEEp1OsjSfJERpIVu2
 CGk40VGU9dgaJsqWsYxllvPH95rcxr38luu6Ptf3ut7Px2MeHu6579/vPTP3+/5+r+37nbRgwQJE
@@ -348,15 +361,24 @@ def generer():
     visuels_tree = {}
     labels = {}
     for i,v in enumerate(visuels):
-        if not v['domaine'] in visuels_tree.keys():
-            visuels_tree[v['domaine']] = {}
-            labels[v['domaine']] = domaines[v['domaine']]['nom']
-        if not v['visuel'] in visuels_tree[v['domaine']].keys():
-            visuels_tree[v['domaine']][v['visuel']] = {}
-            labels[v['visuel']] = v['nom']
+        tree = visuels_tree
+        spath = v['path'].split('.')
+        for elt in spath[:-1]:
+            if not elt in tree.keys():
+                tree[elt] = {}
+            tree = tree[elt]
+            labels[elt] = vlabels.get(elt,elt)
+        #if not v['domaine'] in visuels_tree.keys():
+        #    visuels_tree[v['domaine']] = {}
+        #    labels[v['domaine']] = domaines[v['domaine']]['nom']
+        #if not v['visuel'] in visuels_tree[v['domaine']].keys():
+        #    visuels_tree[v['domaine']][v['visuel']] = {}
+        #    labels[v['visuel']] = v['nom']
         v['id'] = i
         v['leaf'] = True
-        visuels_tree[v['domaine']][v['visuel']] = v
+        #visuels_tree[v['domaine']][v['visuel']] = v
+        labels[spath[-1]] = v['nom']
+        tree[spath[-1]] = v
         
     return dict(visuels_tree=visuels_tree,labels=labels)
 
