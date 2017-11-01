@@ -1,4 +1,4 @@
-<ul class="collection" id="liste_choix">
+<ul>
 {{ for item in items: }}
    <li class="item collection-item avatar">
        <a target="_blank" href="{{=URL('voirVisuel',args=[visuel_idx,getdot(item,cle)])}}"><i class="fa fa-id-card-o" aria-hidden="true"></i></a>
@@ -8,5 +8,5 @@
        <div class="secondary-content">{{if stat[1]=='pct':}}{{ ="{0:n}".format(round(s,1)) }} %{{else:}}{{=s}}{{pass}}</div>
     </li>      
        {{ pass }}
-    {{if not lastpage:}}<div class="pagination__next"></div>{{pass}}
+    {{if len(items)>0:}}<div class="pagination__next"></div>{{pass}} 
 </ul>
