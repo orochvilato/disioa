@@ -7,7 +7,7 @@ import os
 import re
 import datetime
 import xmltodict
-CACHE_TIME = 0
+CACHE_TIME = 600
 nuances = dict([('DIV', 'Divers'), ('ECO', 'Ecologiste'), ('EXG', 'Extrème gauche'), ('FN', 'Front National'), ('DVD', 'Divers droite'), ('FI', 'La France insoumise'), ('LR', u'Les Républicains'), ('COM', u'Parti communiste fran\xc3\xa7ais'), ('REM', u'La République en marche'), ('SOC', 'Parti socialiste'), ('DLF', 'Debout la France'), ('DVG', 'Divers gauche'), ('EXD', 'Extrème droite'), ('REG', u'Régionalistes'), ('UDI', u'Union des Démocrates et Indépendants'), ('MDM', 'Modem'), ('RDG', 'Parti radical de gauche')])
 
 filtres_data = {'groupe':[(g['groupe_abrev'],g['groupe_libelle']) for g in mdb.groupes.find({},{'groupe_libelle':1,'groupe_abrev':1})],
@@ -69,7 +69,9 @@ visuels = [ dict(base="base1",path='observatoire.stats.participation',visuel='pa
             dict(base="base1",path='observatoire.votes.voteordonnances',visuel='voteordonnances',nom='Reforme du code du travail par ordonnances',domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.ordonnances',svgdata='position',prefiltre='voteordonnances',ratio=2,default='contre'),
             dict(base="base1",path='observatoire.votes.voteisf',visuel='voteisf',nom="Suppression de lʹISF",domaine='observatoire',donnees='depute',liste='statdepute',stat='vote.isf',svgdata='position',prefiltre='voteisf',ratio=2,default='pour'),
             dict(base="base2",path='discord.presencecomrem',visuel='presencecomrem',nom='Présence en commission (REM) (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='presencecom',prefiltre='deputepres20rem',ratio=2,default=15),
+            dict(base="base3",path='discord.presencecomrem2',visuel='presencecomrem2',nom='Présence en commission (REM) (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='presencecom',prefiltre='deputepres20rem',ratio=2,default=15),
             dict(base="base2",path='discord.participationrem',visuel='participationrem',nom='Participation aux scrutins publics (REM)   (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre="deputepart20rem",ratio=2,default=15),
+           dict(base="base3",path='discord.participationrem2',visuel='participationrem2',nom='Participation aux scrutins publics (REM)   (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre="deputepart20rem",ratio=2,default=15),
             dict(base="base1",path='discord.participationcocotier',visuel='participationcocotier',nom='Participation aux scrutins publics (<20%)',domaine='discord',donnees='depute',liste='statdepute',stat='participation',prefiltre='deputepart20',ratio=2,default=12)
             ]
 vlabels = {'discord':'Discord','observatoire':'Observatoire','votes':'Votes','stats':'Stats'}
@@ -173,11 +175,16 @@ def getVisuel():
         visuel = visuels[0]
         format = 'svg'
         idx = 0
+        w = 1024
+        h = 512
         key = 'modele'
     
     
     def getdata():
         if format=='png':
+            w = request.vars.get('w',None)
+            h = request.vars.get('h',None)
+
             from selenium import webdriver
             driver = webdriver.PhantomJS(service_args=['--ignore-ssl-errors=true'])
             if not w:

@@ -14,6 +14,17 @@ import sys
 
 output_path = sys.argv[1]
 
+commlibs = {
+u'Commission de la défense nationale et des forces armées':'OMC_PO59046',
+u"Commission des affaires culturelles et de l'éducation":'OMC_PO419604',
+u"Commission des lois constitutionnelles, de la législation et de l'administration générale de la République":'OMC_PO59051',
+u'Commission des affaires étrangères':'OMC_PO59047',
+u"Commission du développement durable et de l'aménagement du territoire":'OMC_PO419865',
+u'Commission des affaires économiques':'OMC_PO419610',
+u"Commission des finances, de l'économie générale et du contrôle budgétaire":'OMC_PO59048',
+u'Commission des affaires sociales':'OMC_PO420120'
+}
+
 from scrapy.crawler import CrawlerProcess
 
 import unicodedata
@@ -22,13 +33,17 @@ def strip_accents(s):
                   if unicodedata.category(c) != 'Mn')
 def normalize(s):
     return strip_accents(s).replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
-    
+
 
 groupes = {}
 commissions = {}
 deputes = {}
 
 class AssembleeSpider(scrapy.Spider):
+    import requests
+    import json
+    import re
+    import datetime
     name = "assemblee"
     noninscrits = "VIDE"
     base_url = 'http://www2.assemblee-nationale.fr'
@@ -38,7 +53,7 @@ class AssembleeSpider(scrapy.Spider):
          ('/instances/embed/41452/GP/instance/legislature/15', self.parse_groupes),
          ('/deputes/liste/clos',self.parse_deputesclos)]
 
-        
+
         for url,callback in urls:
             request = scrapy.Request(url=self.base_url+url, callback=callback)
             yield request
@@ -112,6 +127,8 @@ class AssembleeSpider(scrapy.Spider):
 
 
     def parse_depute(self, response):
+        import re
+        import datetime
         nom = response.xpath('//div[contains(@class,"titre-bandeau-bleu")]/h1/text()').extract()[0].split('- ')[0]
         uid = response.url.split('_')[1]
         if not 'dep' in response.meta.keys():
@@ -126,7 +143,8 @@ class AssembleeSpider(scrapy.Spider):
         ddn = re.search(r'le ([0-9]+[^0-9]+[0-9]+)',nais).groups()[0]
         ddn = datetime.datetime.strptime(ddn.replace('1er','1').encode('utf8'),'%d %B %Y')
         naissance = nais.strip().replace('/t','').replace('/n','')
-        
+
+        historique = []
         mandats = {}
         bureau = None
         # Fin mandat ?
@@ -151,6 +169,25 @@ class AssembleeSpider(scrapy.Spider):
             mand = response.xpath('//h4[text()[contains(.,"Mandat")]]/following-sibling::ul/li/text()')[0].extract()
             date_elec,debmand = re.search(r'le ([^ ]+)[^:]+: ([^\)]+)',mand).groups()
 
+            # historique commissions
+            import datetime
+            import re
+            histo_com = {}
+            hc = response.xpath('//div[@id="deputes-historique"]//span[@class="dt"]')
+
+            for c in hc:
+                nomcom = c.xpath('text()').extract()[0]
+                histo_com[nomcom] = c.xpath('following-sibling::li')[0].xpath('ul/li/text()').extract()
+                for h in histo_com[nomcom]:
+                    debut,fin=re.search(r'du (\d+/\d+/\d+) au (\d+/\d+/\d+)',h).groups()
+                    historique.append([datetime.datetime.strptime(debut,'%d/%m/%Y'),
+                                       datetime.datetime.strptime(fin,'%d/%m/%Y'),
+                                       commlibs.get(nomcom,nomcom)])
+
+            historique.sort(reverse=True)
+            historique = [(d.strftime('%d/%m/%Y'),f.strftime('%d/%m/%Y'),c) for d,f,c in historique]
+
+
             # commissions
             def getFctElts(elt):
                 elts = response.xpath('//h4[text()[contains(.,"'+elt+'")]]/following-sibling::ul')
@@ -165,7 +202,7 @@ class AssembleeSpider(scrapy.Spider):
                         clib = c.xpath('text()').extract()[0]
                         _list.append(dict(qualite=elts_quals[i],nom=clib,id=clink.split('_')[-1],lien=clink))
                 return _list
-            
+
             mandats['commissions'] = getFctElts('Commissions')
             mandats['delegations_bureau'] = getFctElts(u'du Bureau')
             mandats['delegations_office'] = getFctElts('et Office')
@@ -177,7 +214,7 @@ class AssembleeSpider(scrapy.Spider):
             if bur:
                 bureau = bur[0].xpath('li/text()').extract()[0].replace('\t','').replace('\n','')
             # delegations
-            
+
 
             place = response.xpath('//div[@id="hemicycle-container"]/@data-place').extract()[0]
             collaborateurs = response.xpath('//span[text()[contains(.,"collaborateurs")]]/parent::div/following-sibling::div/ul/li[contains(@class,"allpadding")]/text()').extract()
@@ -192,7 +229,7 @@ class AssembleeSpider(scrapy.Spider):
                 contacts.append(dict(type='twitter',lien=c))
             else:
                 contacts.append(dict(type="site",lien=c))
-           
+
 
 
         if 'groupe' in response.meta.keys():
@@ -227,7 +264,8 @@ class AssembleeSpider(scrapy.Spider):
             depute_autresmandats = autres_mandats,
             depute_contacts = contacts,
             depute_place = place,
-            depute_collaborateurs = collaborateurs
+            depute_collaborateurs = collaborateurs,
+            depute_commissions_historique = historique
 
 
 

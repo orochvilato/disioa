@@ -40,7 +40,7 @@ def update_deputesphotos():
         print d['depute_shortid']
         content =requests.get('http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+d['depute_uid'][2:]+'.jpg').content
         photo = b64encode(content)
-        mdb.update_one({'depute_uid':d['depute_uid']},{'$set':{'depute_photo':photo}})
+        mdb.deputes.update_one({'depute_uid':d['depute_uid']},{'$set':{'depute_photo':photo}})
         
 def get_amendements():
     result = cache.disk('amendements',lambda:fetch_amendements(),time_expire=0)
@@ -258,7 +258,35 @@ def buildIndexes():
     mdb.deputes.reindex()
 
 def updateCommissions():
-    launchScript('commissions')
+    import datetime
+    dhc=mdb.deputes.find({'depute_commissions_historique':{'$ne':[]}},{'depute_id':1,'depute_commissions_historique':1,'depute_mandat_debut':1,'depute_mandat_fin':1})
+    
+    histcom = {}
+    historique = []
+    current = {}
+    for d in dhc:
+        fin =  datetime.datetime.strptime(d['depute_mandat_fin'] or '01/01/2999','%d/%m/%Y')
+        debut =  datetime.datetime.strptime(d['depute_mandat_debut'],'%d/%m/%Y')
+        cfin = datetime.datetime.strptime(d['depute_commissions_historique'][0][1],'%d/%m/%Y') + datetime.timedelta(days=1)
+        if cfin<debut:
+            cfin = debut
+        current[d['depute_id']] = cfin.strftime('%d/%m/%Y')
+        for cdebut,cfin,comm in d['depute_commissions_historique']:
+            _cdebut = datetime.datetime.strptime(cdebut,'%d/%m/%Y')
+            _cfin = datetime.datetime.strptime(cfin,'%d/%m/%Y')
+            if (_cdebut>=debut and _cdebut<=fin):
+                historique.append([d['depute_id'],cdebut, cfin, comm])
+        
+    for h in historique:
+        if not h[3] in histcom.keys():
+            histcom[h[3]] = {}
+        if not h[0] in histcom[h[3]].keys():
+            histcom[h[3]][h[0]]=[]
+        histcom[h[3]][h[0]].append([h[1],h[2]])
+        
+    open(output_path+'/'+'comparams.json','w').write(json.dumps(dict(current=current,histo=histcom)))
+    #launchScript('commissions','comparams.json')
+    
     presences  =getJson('presences')
     #amendements  =getJson('amendements')
     commissions = getJson('commissions')
@@ -268,7 +296,9 @@ def updateCommissions():
     
     import datetime
     for pres in presences:
+        pres['depute_id'] = pres['depute_id'].replace('\r','').replace('8','').replace('6','')
         pres['groupe_abrev'] = groupe_depute[pres['depute_id']]
+        
         pres['presence_date'] = datetime.datetime.strptime(pres['presence_date'],'%Y-%m-%d %H:%M')
         mdb.presences.update_one({'presence_id':pres['presence_id']},{'$set':pres},upsert=True)
         
@@ -386,7 +416,8 @@ def updateHATVP():
     from cStringIO import StringIO
     from tools import normalize
     r = requests.get('http://www.hatvp.fr/files/open-data/liste.csv')
-    f = StringIO(r.content[3:])
+    #f = StringIO(r.content[3:])
+    f = StringIO(r.content)
     csv = csv.DictReader(f, delimiter=';', quotechar='"')
     declarations = {}
     for row in csv:

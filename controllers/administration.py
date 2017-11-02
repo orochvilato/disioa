@@ -4,7 +4,35 @@ import json
 import datetime
 
 def enlaisse():
-    return BEAUTIFY(mdb.deputes.find_one({'depute_uid':'PA720546'}))
+    #return BEAUTIFY(mdb.presences.count())
+    return BEAUTIFY(list(mdb.deputes.find({'depute_id':'mmececilemuschotti'})))
+    dhc=mdb.deputes.find({'depute_commissions_historique':{'$ne':[]}},{'depute_id':1,'depute_commissions_historique':1,'depute_mandat_debut':1,'depute_mandat_fin':1})
+    
+    histcom = {}
+    historique = []
+    current = {}
+    for d in dhc:
+        fin =  datetime.datetime.strptime(d['depute_mandat_fin'] or '01/01/2999','%d/%m/%Y')
+        debut =  datetime.datetime.strptime(d['depute_mandat_debut'],'%d/%m/%Y')
+        cfin = datetime.datetime.strptime(d['depute_commissions_historique'][0][1],'%d/%m/%Y') + datetime.timedelta(days=1)
+        if cfin<debut:
+            cfin = debut
+        current[d['depute_id']] = cfin.strftime('%d/%m/%Y')
+        for cdebut,cfin,comm in d['depute_commissions_historique']:
+            _cdebut = datetime.datetime.strptime(cdebut,'%d/%m/%Y')
+            _cfin = datetime.datetime.strptime(cfin,'%d/%m/%Y')
+            if (_cdebut>=debut and _cdebut<=fin):
+                historique.append([d['depute_id'],cdebut, cfin, comm])
+        
+    for h in historique:
+        if not h[3] in histcom.keys():
+            histcom[h[3]] = {}
+        if not h[0] in histcom[h[3]].keys():
+            histcom[h[3]][h[0]]=[]
+        histcom[h[3]][h[0]].append([h[1],h[2]])
+    
+    return BEAUTIFY(dict(current=current,histo=histcom))
+    return BEAUTIFY(list((c['commission_id'],c['commission_libelle'],c['commission_libelle_long']) for c in mdb.commissions.find()))
     #return BEAUTIFY(mdb.votes.find_one()) #({'$and':[{'scrutin_typedetail':'amendement'},{'scrutin_groupe':{'$eq':None}}]}).count())
     #return BEAUTIFY(list(mdb.votes.find({'depute_uid':'PA721246'},{'groupe_abrev':1,'scrutin_typedetail':1,'vote_position':1,'scrutin_groupe':1})))
     pgroup = {}

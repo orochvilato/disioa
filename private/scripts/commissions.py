@@ -14,6 +14,10 @@ import sys
 from string import Template
 
 output_path = sys.argv[1]
+params = json.loads(open(output_path+'/'+sys.argv[2]).read())
+
+histcom = params['histo']
+currcom = params['current']
 
 from scrapy.crawler import CrawlerProcess
 
@@ -22,9 +26,12 @@ def strip_accents(s):
    return ''.join(c for c in unicodedata.normalize('NFD', s)
                   if unicodedata.category(c) != 'Mn')
 def normalize(s):
-    return strip_accents(s).replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
-
-
+    s = strip_accents(s).replace('&nbsp;','.').replace('mme.','mme').replace('m..','m.').replace(u'\u2019','').replace('&apos;','').replace(u'\xa0','').encode('utf8').replace(' ','').replace("'",'').replace('-','').replace('\x0a','').replace('\xc5\x93','oe').decode('utf8').lower() if s else s
+    if len(s)>3:
+        s = s.replace('.mme','mme').replace('.m.','m.').replace('mmax','m.max').replace('m.tanisla','m.stanisla')
+        if s[0]=='m' and s[:3]!='mme' and s[1]!='.':
+            s='m.'+s[1:]
+    return s
 groupes = {}
 commissions = {}
 deputes = {}
@@ -119,16 +126,21 @@ class commissionsSpider(scrapy.Spider):
                                                 groupe=getitem(tab[3]),
                                                 sort=getitem(tab[4])))
 
-        presents = response.xpath(u'//p[i[text()[contains(.,"Présents.")]]]').extract()
+        presents = response.xpath(u'//p[i[text()[contains(.,"Présents.")]]]/text()').extract()
+        #if presents:
+        #    presents = re.search(r'</i>(.*)</p>',presents[0].replace(' M&nbsp;','M.').replace('<br>','').replace('\n','').replace('\r','')).groups()
+            
         if presents:
-            presents = re.search(r'</i>(.*)</p>',presents[0].replace('<br>','').replace('\n','')).groups()
-            if presents:
-                crs[com_id][cr_id]['presents'] = normalize(presents[0]).split(',')
-        excuses = response.xpath(u'//p[i[text()[contains(.,"Excusé")]]]').extract()
+            presents = presents[0].replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
+            crs[com_id][cr_id]['presents'] = [ normalize(p) for p in presents.split(',')]
+                
+        excuses = response.xpath(u'//p[i[text()[contains(.,"Excusé")]]]/text()').extract()
+        #if excuses:
+        #    excuses = re.search(r'</i>(.*)</p>',excuses[0].replace(' M&nbsp;','M.').replace('<br>','').replace('\n','').replace('\r','')).groups()
+            
         if excuses:
-            excuses = re.search(r'</i>(.*)</p>',excuses[0].replace('<br>','').replace('\n','')).groups()
-            if excuses:
-                crs[com_id][cr_id]['excuses'] =normalize(excuses[0]).split(',')
+            excuses = excuses[0].replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
+            crs[com_id][cr_id]['excuses'] = [normalize(e) for e in excuses.split(',')]
 
 
     def parse_membres(self,response):
@@ -150,30 +162,34 @@ process = CrawlerProcess({
 
 process.crawl(commissionsSpider)
 process.start() # the script will block here until the crawling is finished
-ex = 0
-pr = 0
-ab = 0
 presences = []
 for comid in crs.keys():
     for crid in crs[comid].keys():
+        datecom = datetime.datetime.strptime(crs[comid][crid]['date'],'%Y-%m-%d %H:%M')
+        listep = dict((depid,'present') for depid in crs[comid][crid].get('presents',[]))
+        listep.update(dict((depid,'excuse') for depid in crs[comid][crid].get('excuses',[])))
+        if histcom.get(comid,None):
+            for depid in histcom[comid].keys():
+                if not depid in listep.keys():
+                    for period in histcom[comid][depid]:
+                        debut = datetime.datetime.strptime(period[0],'%d/%m/%Y')
+                        fin = datetime.datetime.strptime(period[1],'%d/%m/%Y')
+                        if datecom>=debut and datecom<=fin:
+                            listep[depid] = "absent"
         for depid in commissions[comid]['commission_membres_ids']:
-            if depid in crs[comid][crid].get('presents',[]):
-                etat = "present"
-                pr += 1
-            elif depid in crs[comid][crid].get('excuses',[]):
-                etat = "excuse"
-                ex += 1
-            else:
-                ab += 1
-                etat = "absent"
-            presences.append(dict(
-                                presence_id="%s_%s_%s" % (comid,crid,depid),
-                                commission_id = comid,
-                                reunion_id = crid,
-                                presence_date = crs[comid][crid]['date'],
-                                presence_etat = etat,
-                                depute_id = depid
-            ))
+            if not depid in listep.keys():
+                if depid in currcom.keys() and datecom>datetime.datetime.strptime(currcom[depid],'%d/%m/%Y'):
+                      listep[depid] = 'absent'
+        for depid in listep.keys():
+            if len(depid)>7:
+                presences.append(dict(
+                    presence_id="%s_%s_%s" % (comid,crid,depid),
+                    commission_id = comid,
+                    reunion_id = crid,
+                    presence_date = crs[comid][crid]['date'],
+                    presence_etat = listep[depid],
+                    depute_id = depid
+                ))
 
 import json
 
