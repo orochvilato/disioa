@@ -781,7 +781,7 @@ def updateDeputesStats():
             pos = pos if pos else 'absent'
             gp_pos[g][pos].append(s['scrutin_id'])
     
-    for gid in ['FI','REM']:
+    for gid in ['FI','GDR','LC','LR','MODEM','NG','REM']:
         pgroup['n'] = {'$sum':1}
         pgroup['_id']['position'] ='$vote_position'
         # V1 : pipeline = [{'$match':{'$and':[{'scrutin_typedetail':'amendement'},{'vote_position':{'$ne':'absent'}}]}}] + pipeline
@@ -999,8 +999,8 @@ def updateGroupesStats():
         del compat['_id']
         groupes[groupe] = {'groupe_compat_globale':compat, 'groupe_positions':{} }        
 
-    pgroup = dict((g+'_pour',{'$sum':'$depute_compat.'+g+'.pour'}) for g in ['FI','REM'])
-    pgroup.update(dict((g+'_total',{'$sum':'$depute_compat.'+g+'.total'}) for g in ['FI','REM']))
+    pgroup = dict((g+'_pour',{'$sum':'$depute_compat.'+g+'.pour'}) for g in ['FI','GDR','LC','LR','MODEM','NG','REM'])
+    pgroup.update(dict((g+'_total',{'$sum':'$depute_compat.'+g+'.total'}) for g in ['FI','GDR','LC','LR','MODEM','NG','REM']))
     pgroup['_id'] = {'groupe':'$groupe_abrev'}
     pipeline = [
         {"$group": pgroup },
@@ -1008,7 +1008,7 @@ def updateGroupesStats():
     for cpt in mdb.deputes.aggregate(pipeline):
         gp = cpt['_id']['groupe']
         _comp = {}
-        for g in ['FI','REM']:
+        for g in ['FI','GDR','LC','LR','MODEM','NG','REM']:
             _comp[g] = {'pour':cpt[g+'_pour'],'total':cpt[g+'_total']}
         groupes[gp]['groupe_compat'] = _comp
 

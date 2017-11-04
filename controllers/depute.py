@@ -51,6 +51,11 @@ def fiche():
                 tab=tab,votes_cles=s_cles,
                 **depute)
     
+    #response.headers["Access-Control-Allow-Origin"] = '*'
+    #response.headers['Access-Control-Max-Age'] = 86400
+    #response.headers['Access-Control-Allow-Headers'] = '*'
+    #response.headers['Access-Control-Allow-Methods'] = '*'
+    #response.headers['Access-Control-Allow-Credentials'] = 'true'
     return resp 
 
 def ajax_votes():

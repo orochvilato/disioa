@@ -5,7 +5,7 @@ import datetime
 
 def enlaisse():
     #return BEAUTIFY(mdb.presences.count())
-    return BEAUTIFY(list(mdb.deputes.find({'depute_id':'mmececilemuschotti'})))
+    return BEAUTIFY(mdb.groupes.find_one({'groupe_abrev':'LR'}))
     dhc=mdb.deputes.find({'depute_commissions_historique':{'$ne':[]}},{'depute_id':1,'depute_commissions_historique':1,'depute_mandat_debut':1,'depute_mandat_fin':1})
     
     histcom = {}

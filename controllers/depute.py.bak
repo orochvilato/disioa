@@ -26,7 +26,6 @@ def fiche():
     from collections import OrderedDict
     s_cles = OrderedDict()
     for v in votes_cles:
-        del v['_id']
         v.update(scrutins_cles[v['scrutin_num']])
         if not v['theme'] in s_cles:
             s_cles[v['theme']] = []
@@ -34,7 +33,6 @@ def fiche():
     dates = {}
     weeks = {}
     for v in votes:
-        del v['_id']
         pdat =  datetime.datetime.strptime(v['scrutin_date'],'%d/%m/%Y')
         wdat = pdat.strftime('%Y-S%W')
         sdat = pdat.strftime('%Y-%m-%d')
@@ -53,6 +51,11 @@ def fiche():
                 tab=tab,votes_cles=s_cles,
                 **depute)
     
+    response.headers["Access-Control-Allow-Origin"] = '*'
+    response.headers['Access-Control-Max-Age'] = 86400
+    response.headers['Access-Control-Allow-Headers'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = '*'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
     return resp 
 
 def ajax_votes():

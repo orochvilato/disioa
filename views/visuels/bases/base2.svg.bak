@@ -27,9 +27,9 @@
   </metadata>
   <defs
      id="defs4">
-    <style
-       type="text/css"
-       id="style4" />
+    <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800,900');
+ </style>
   </defs>
   <rect
      width="1024"
@@ -64,7 +64,7 @@
      y="54.009064"
      id="nomdepute"
      xml:space="preserve"
-     style="font-size:47.75409698px;font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
+     style="font-size:47.75409698px;font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Sans Bold"><tspan
        x="512"
        y="54.009064"
        id="tspan3034">{{=prenom}} {{=nom}}</tspan></text>
