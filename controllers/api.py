@@ -14,7 +14,7 @@ deputefields = ['depute_uid','depute_id','depute_shortid','depute_region','deput
                 'depute_hatvp','depute_nuages','depute_place','stats']
 
 deputesfields = ['depute_uid','depute_id','depute_shortid','depute_region','depute_departement','depute_departement_id',
-                 'depute_csp',
+                 'depute_csp','depute_contacts',
                 'depute_circo','depute_nom','groupe_abrev','groupe_libelle',
                 'depute_profession','depute_naissance','depute_actif','depute_place','stats']
 
@@ -118,7 +118,7 @@ def deputes():
 def _ajax(type_page):
     # ajouter des index (aux differentes collections)
     
-    nb = int(request.vars.get('itemsperpage','25'))
+    nb = int(request.vars.get('itemsperpage','15'))
     age = request.vars.get('age',None)
     csp = request.vars.get('csp',None)
     page = int(request.vars.get('page','1'))-1
@@ -191,7 +191,7 @@ def _ajax(type_page):
         photo_an='http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+d['depute_uid'][2:]+'.jpg'
         depnumdep = d['depute_departement_id'][1:] if d['depute_departement_id'][0]=='0' else d['depute_departement_id']
         depute_circo_complet = "%s / %s (%s) / %se circ" % (d['depute_region'],d['depute_departement'],depnumdep,d['depute_circo'])
-        d['photo_an'] = photo_an
+        d['depute_photo_an'] = photo_an
         d['depute_circo_complet'] = depute_circo_complet
         d['id'] = d['depute_shortid']
         items.append(d)
@@ -203,7 +203,7 @@ def _ajax(type_page):
 
 
 def votes():
-    nb = int(request.vars.get('itemsperpage','25'))
+    nb = int(request.vars.get('itemsperpage','15'))
     page = int(request.vars.get('page','1'))-1
     groupe = request.vars.get('group',None)
     scrutin = request.vars.get('scrutin',None)
