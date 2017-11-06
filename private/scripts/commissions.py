@@ -126,20 +126,24 @@ class commissionsSpider(scrapy.Spider):
                                                 groupe=getitem(tab[3]),
                                                 sort=getitem(tab[4])))
 
-        presents = response.xpath(u'//p[i[text()[contains(.,"Présents.")]]]/text()').extract()
+        presents = response.xpath(u'//p[i[text()[contains(.,"Présents.")]]]')
         #if presents:
         #    presents = re.search(r'</i>(.*)</p>',presents[0].replace(' M&nbsp;','M.').replace('<br>','').replace('\n','').replace('\r','')).groups()
             
         if presents:
-            presents = presents[0].replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
+            presents = presents[0].xpath('text()').extract()
+            presents = ''.join(presents)
+            presents = presents.replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
             crs[com_id][cr_id]['presents'] = [ normalize(p) for p in presents.split(',')]
                 
-        excuses = response.xpath(u'//p[i[text()[contains(.,"Excusé")]]]/text()').extract()
+        excuses = response.xpath(u'//p[i[text()[contains(.,"Excusé")]]]')
         #if excuses:
         #    excuses = re.search(r'</i>(.*)</p>',excuses[0].replace(' M&nbsp;','M.').replace('<br>','').replace('\n','').replace('\r','')).groups()
             
         if excuses:
-            excuses = excuses[0].replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
+            excuses = excuses[0].xpath('text()').extract()
+            excuses = ''.join(excuses)
+            excuses = excuses.replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
             crs[com_id][cr_id]['excuses'] = [normalize(e) for e in excuses.split(',')]
 
 

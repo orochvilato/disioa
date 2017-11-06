@@ -157,6 +157,7 @@ def daily_job2():
     updateCommissions()
     get_amendements()
 def daily_job3():
+    updateScrutinsCles()
     updateAllStats()
 def daily_job():
     daily_job1()
@@ -252,10 +253,14 @@ def genNuages(_mots):
 # ---------------------
 
 def buildIndexes():
-    mdb.deputes.ensure_index([("depute_nom", pymongo.TEXT)],default_language='french')
-    mdb.deputes.ensure_index([("depute_nom_sort", pymongo.ASCENDING)])
-    mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
-    mdb.deputes.reindex()
+    #mdb.deputes.ensure_index([("depute_nom", pymongo.TEXT)],default_language='french')
+    #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.ASCENDING)])
+    #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
+    #mdb.deputes.reindex()
+    mdb.scrutins.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
+    mdb.scrutins.reindex()
+    mdb.votes.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
+    mdb.votes.reindex()
 
 def updateCommissions():
     import datetime
@@ -569,6 +574,7 @@ def updateScrutins():
     def act_votedata(id,position,posori=None):
         d = deputes[id]
         return {'depute_uid':d['depute_uid'],
+                'depute_shortid':d['depute_shortid'],
                 'depute_nom':d['depute_nom'],
                 'groupe_uid': d['groupe_uid'],
                 'groupe_abrev': d['groupe_abrev'],
@@ -1057,3 +1063,22 @@ def updateGroupesStats():
         mdb.groupes.bulk_write(ops)
 
     return json.dumps(groupes)
+
+def updateScrutinsCles():
+    from openpyxl import load_workbook
+    from cStringIO import StringIO
+    import requests
+    
+    r =requests.get("https://docs.google.com/spreadsheets/d/1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw/export?format=xlsx&id=1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw")
+    f = StringIO(r.content)
+    wb = load_workbook(f)
+    for niv in range(2):
+        ws = wb[wb.sheetnames[niv]]
+        elts = []
+        for j,row in enumerate(ws.iter_rows(min_row=2)):
+            elts.append([a.value for a in list(row[:4])]+[niv])
+    
+    for e in elts:
+        if e[0] != None:
+            mdb.scrutinscles.update({'num':int(e[0])},{'$set':dict(num=int(e[0]),nom=e[1],desc=e[2],theme=e[3],niveau=e[4])},upsert=True)
+    return "ok"

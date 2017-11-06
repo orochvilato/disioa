@@ -129,19 +129,7 @@ def _ajax(type_page):
     top = None if type_page=='liste' else type_page
     tri = request.vars.get('sort','stats.positions.exprimes' if top else 'depute_nom_tri')
     
-    if 0: #(count):
-        filters = []
-        if groupe:
-            filters.append(groupe)
-        if csp:
-            filters.append(csp)
-        if region:
-            filters.append(region)
-        if age:
-            filters.append(age)
-        if top:
-            filters.append(tri_choices[tri]['rank'])
-        #obsass_log((top if top else 'liste')+'_depute',filters)
+    
         
     tops_dir = {'stats.positions.exprimes':-1,
                   'stats.positions.dissidence':-1,
@@ -194,14 +182,14 @@ def _ajax(type_page):
                 skipped=excount
         
         return {'totalitems':rcount, 'skipped':skipped, 'skippedpct':seuil_compat}
-    cachekey= u"%s_%s_%s_%s_%s_%s" % (type_page,age,csp.decode('utf8') if csp else csp,groupe,text,region.decode('utf8') if region else region)
-    counts = cache.ram(cachekey,lambda:countItems(),time_expire=0)
+    cachekey= u"dep%s_%s_%s_%s_%s_%s" % (type_page,age,csp.decode('utf8') if csp else csp,groupe,text,region.decode('utf8') if region else region)
+    counts = cache.ram(cachekey,lambda:countItems(),time_expire=3600)
     #return json.dumps(counts)
     items = []
    
     for d in mdb.deputes.find(filter,deputes_filters).sort(sort).skip(skip).limit(nb):
         photo_an='http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+d['depute_uid'][2:]+'.jpg'
-        depnumdep = de['depute_departement_id'][1:] if d['depute_departement_id'][0]=='0' else d['depute_departement_id']
+        depnumdep = d['depute_departement_id'][1:] if d['depute_departement_id'][0]=='0' else d['depute_departement_id']
         depute_circo_complet = "%s / %s (%s) / %se circ" % (d['depute_region'],d['depute_departement'],depnumdep,d['depute_circo'])
         d['photo_an'] = photo_an
         d['depute_circo_complet'] = depute_circo_complet
@@ -212,3 +200,63 @@ def _ajax(type_page):
     nbpages = int(math.ceil(float(counts['totalitems'])/nb))
     result = dict(nbitems=len(items),nbpages=nbpages, currentpage=1+page,itemsperpage=nb, items=items,**counts)
     return result
+
+
+def votes():
+    nb = int(request.vars.get('itemsperpage','25'))
+    page = int(request.vars.get('page','1'))-1
+    groupe = request.vars.get('group',None)
+    scrutin = request.vars.get('scrutin',None)
+    csp = request.vars.get('csp',None)
+    age = request.vars.get('age',None)
+    search = request.vars.get('query','').decode('utf8')
+    region = request.vars.get('region',None)
+    depute = request.vars.get('depute',None)
+    position = request.vars.get('position',None)
+    text = request.vars.get('query','').decode('utf8')
+    skip = nb*page
+    filters = []
+    if position:
+        filters.append({'vote_position':position})
+    if depute:
+        filters.append({'depute_shortid': depute})
+    if csp:
+        filters.append({'depute_csp':csp})
+    if age:
+        filters.append({'depute_classeage':age})
+    if groupe:
+        filters.append({'groupe_abrev':groupe})
+    if region:
+        filters.append({'depute_region':region})
+    if scrutin:
+        try:
+            scrutin=int(scrutin)
+        except:
+            pass
+        filters.append({'scrutin_num':scrutin})
+    if search:
+        filters.append({'$text':{'$search':search}})
+    if len(filters)==0:
+        vote_filter = {}
+    elif len(filters)==1:
+        vote_filter = filters[0]
+    else:
+        vote_filter = {'$and':filters}
+        
+    votes = list(mdb.votes.find(vote_filter).sort('scrutin_num',-1).skip(skip).limit(nb))
+    
+    def countItems():
+        rcount = mdb.votes.find(vote_filter).count()
+        return {'totalitems':rcount}
+    cachekey= u"vot%s_%s_%s_%s_%s_%s_%s_%s" % (depute,position,scrutin,age,csp.decode('utf8') if csp else csp,groupe,text,region.decode('utf8') if region else region)
+    counts = cache.ram(cachekey,lambda:countItems(),time_expire=3600)
+    regx = re.compile(search, re.IGNORECASE)
+    for v in votes:
+        repl = regx.subn('<high>'+search+'</high>',v['scrutin_desc'])
+        if repl[1]:
+            v['scrutin_desc'] = repl[0]
+
+    import math
+    nbpages = int(math.ceil(float(counts['totalitems'])/nb))
+    result = dict(nbitems=len(votes),nbpages=nbpages, currentpage=1+page,itemsperpage=nb, items=votes,**counts)
+    return return_json(result)

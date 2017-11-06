@@ -4,7 +4,12 @@ import json
 import datetime
 
 def enlaisse():
-    #return BEAUTIFY(mdb.presences.count())
+    return BEAUTIFY(mdb.votes.find_one())
+    depids = dict((d['depute_uid'],d['depute_shortid']) for d in mdb.deputes.find())
+    for v in mdb.votes.find({'depute_shortid':None}):
+        mdb.votes.update_one({'vote_id':v['vote_id']},{'$set':{'depute_shortid':depids[v['depute_uid']]}})
+    
+    return BEAUTIFY(mdb.votes.find_one())
     return BEAUTIFY(mdb.groupes.find_one({'groupe_abrev':'LR'}))
     dhc=mdb.deputes.find({'depute_commissions_historique':{'$ne':[]}},{'depute_id':1,'depute_commissions_historique':1,'depute_mandat_debut':1,'depute_mandat_fin':1})
     

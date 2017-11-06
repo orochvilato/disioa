@@ -157,6 +157,7 @@ def daily_job2():
     updateCommissions()
     get_amendements()
 def daily_job3():
+    updateScrutinsCles()
     updateAllStats()
 def daily_job():
     daily_job1()
@@ -285,7 +286,7 @@ def updateCommissions():
         histcom[h[3]][h[0]].append([h[1],h[2]])
         
     open(output_path+'/'+'comparams.json','w').write(json.dumps(dict(current=current,histo=histcom)))
-    #launchScript('commissions','comparams.json')
+    launchScript('commissions','comparams.json')
     
     presences  =getJson('presences')
     #amendements  =getJson('amendements')
@@ -569,6 +570,7 @@ def updateScrutins():
     def act_votedata(id,position,posori=None):
         d = deputes[id]
         return {'depute_uid':d['depute_uid'],
+                'depute_shortid':d['depute_shortid'],
                 'depute_nom':d['depute_nom'],
                 'groupe_uid': d['groupe_uid'],
                 'groupe_abrev': d['groupe_abrev'],
@@ -781,7 +783,7 @@ def updateDeputesStats():
             pos = pos if pos else 'absent'
             gp_pos[g][pos].append(s['scrutin_id'])
     
-    for gid in ['FI','REM']:
+    for gid in ['FI','GDR','LC','LR','MODEM','NG','REM']:
         pgroup['n'] = {'$sum':1}
         pgroup['_id']['position'] ='$vote_position'
         # V1 : pipeline = [{'$match':{'$and':[{'scrutin_typedetail':'amendement'},{'vote_position':{'$ne':'absent'}}]}}] + pipeline
@@ -999,8 +1001,8 @@ def updateGroupesStats():
         del compat['_id']
         groupes[groupe] = {'groupe_compat_globale':compat, 'groupe_positions':{} }        
 
-    pgroup = dict((g+'_pour',{'$sum':'$depute_compat.'+g+'.pour'}) for g in ['FI','REM'])
-    pgroup.update(dict((g+'_total',{'$sum':'$depute_compat.'+g+'.total'}) for g in ['FI','REM']))
+    pgroup = dict((g+'_pour',{'$sum':'$depute_compat.'+g+'.pour'}) for g in ['FI','GDR','LC','LR','MODEM','NG','REM'])
+    pgroup.update(dict((g+'_total',{'$sum':'$depute_compat.'+g+'.total'}) for g in ['FI','GDR','LC','LR','MODEM','NG','REM']))
     pgroup['_id'] = {'groupe':'$groupe_abrev'}
     pipeline = [
         {"$group": pgroup },
@@ -1008,7 +1010,7 @@ def updateGroupesStats():
     for cpt in mdb.deputes.aggregate(pipeline):
         gp = cpt['_id']['groupe']
         _comp = {}
-        for g in ['FI','REM']:
+        for g in ['FI','GDR','LC','LR','MODEM','NG','REM']:
             _comp[g] = {'pour':cpt[g+'_pour'],'total':cpt[g+'_total']}
         groupes[gp]['groupe_compat'] = _comp
 
@@ -1057,3 +1059,22 @@ def updateGroupesStats():
         mdb.groupes.bulk_write(ops)
 
     return json.dumps(groupes)
+
+def updateScrutinsCles():
+    from openpyxl import load_workbook
+    from cStringIO import StringIO
+    import requests
+    
+    r =requests.get("https://docs.google.com/spreadsheets/d/1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw/export?format=xlsx&id=1lZ5aMIaglRh6_BK66AYkXzi9guJaMij9RlpSoO4dnIw")
+    f = StringIO(r.content)
+    wb = load_workbook(f)
+    for niv in range(2):
+        ws = wb[wb.sheetnames[niv]]
+        elts = []
+        for j,row in enumerate(ws.iter_rows(min_row=2)):
+            elts.append([a.value for a in list(row[:4])]+[niv])
+    
+    for e in elts:
+        if e[0] != None:
+            mdb.scrutinscles.update({'num':int(e[0])},{'$set':dict(num=int(e[0]),nom=e[1],desc=e[2],theme=e[3],niveau=e[4])},upsert=True)
+    return "ok"
