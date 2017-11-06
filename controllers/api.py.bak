@@ -6,6 +6,7 @@ import re
 import random
 
 deputefields = ['depute_uid','depute_id','depute_shortid','depute_region','depute_departement','depute_departement_id',
+                'depute_csp',
                 'depute_circo','depute_nom','depute_contacts','groupe_abrev','groupe_libelle',
                 'depute_election','depute_profession','depute_naissance','depute_suppleant',
                 'depute_actif','depute_mandat_debut','depute_mandat_fin','depute_mandat_fin_cause',
@@ -13,6 +14,7 @@ deputefields = ['depute_uid','depute_id','depute_shortid','depute_region','deput
                 'depute_hatvp','depute_nuages','depute_place','stats']
 
 deputesfields = ['depute_uid','depute_id','depute_shortid','depute_region','depute_departement','depute_departement_id',
+                 'depute_csp',
                 'depute_circo','depute_nom','groupe_abrev','groupe_libelle',
                 'depute_profession','depute_naissance','depute_actif','depute_place','stats']
 
@@ -123,7 +125,7 @@ def _ajax(type_page):
     groupe = request.vars.get('group',None)
     direction = int(request.vars.get('direction',1))
     text = request.vars.get('query','').decode('utf8')
-    region = request.vars.get('rg',None)
+    region = request.vars.get('region',None)
     top = None if type_page=='liste' else type_page
     tri = request.vars.get('sort','stats.positions.exprimes' if top else 'depute_nom_tri')
     
@@ -188,16 +190,21 @@ def _ajax(type_page):
             cfilter = {'$and':list(filter['$and'])}
             cfilter['$and'][-1] = {tri:{'$eq':None}}
             excount = mdb.deputes.find(cfilter).sort(sort).count()
-            if excount>0 and tri in ('stats.compat.FI','stats.compat.REM'):
+            if excount>0 and 'stats.compat.' in tri:
                 skipped=excount
         
         return {'totalitems':rcount, 'skipped':skipped, 'skippedpct':seuil_compat}
-    cachekey= "%s_%s_%s_%s_%s_%s" % (type_page,age,csp,groupe,text,region)
+    cachekey= u"%s_%s_%s_%s_%s_%s" % (type_page,age,csp.decode('utf8') if csp else csp,groupe,text,region.decode('utf8') if region else region)
     counts = cache.ram(cachekey,lambda:countItems(),time_expire=0)
     #return json.dumps(counts)
     items = []
    
     for d in mdb.deputes.find(filter,deputes_filters).sort(sort).skip(skip).limit(nb):
+        photo_an='http://www2.assemblee-nationale.fr/static/tribun/15/photos/'+d['depute_uid'][2:]+'.jpg'
+        depnumdep = de['depute_departement_id'][1:] if d['depute_departement_id'][0]=='0' else d['depute_departement_id']
+        depute_circo_complet = "%s / %s (%s) / %se circ" % (d['depute_region'],d['depute_departement'],depnumdep,d['depute_circo'])
+        d['photo_an'] = photo_an
+        d['depute_circo_complet'] = depute_circo_complet
         d['id'] = d['depute_shortid']
         items.append(d)
     
