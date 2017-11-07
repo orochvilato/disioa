@@ -158,6 +158,7 @@ def _ajax(type_page):
         filter['$and'].append({'depute_nom':regx})
 
     sort = []
+    rank = None
     if top:
         #direction = tops_dir[tri] * (1 if top=='top' else -1)
         #rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='top') else 'up')+'.'+tri_choices[tri]['rank']
@@ -195,6 +196,8 @@ def _ajax(type_page):
         d['depute_photo_an'] = photo_an
         d['depute_circo_complet'] = depute_circo_complet
         d['id'] = d['depute_shortid']
+        if rank:
+            d['depute_rank'] = getdot(d,rank)
         items.append(d)
     
     import math

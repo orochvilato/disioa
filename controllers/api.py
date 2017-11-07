@@ -123,12 +123,12 @@ def _ajax(type_page):
     csp = request.vars.get('csp',None)
     page = int(request.vars.get('page','1'))-1
     groupe = request.vars.get('group',None)
-    direction = request.vars.get('order','up')
+    
     text = request.vars.get('query','').decode('utf8')
     region = request.vars.get('region',None)
     top = None if type_page=='liste' else type_page
     tri = request.vars.get('sort','stats.positions.exprimes' if top else 'depute_nom_tri')
-    
+    direction = request.vars.get('order','down' if top else 'up')
     #direction = 1 if direction=='up' else -1
         
     tops_dir = {'stats.positions.exprimes':-1,
