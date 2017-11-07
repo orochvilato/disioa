@@ -104,15 +104,14 @@ tri_items = {'tops': ('stats.positions.exprimes','stats.positions.dissidence','s
 # ---------------------------------
 def deputes():
     func = request.args(0)
-    if not func in ['liste','tops','flops']:
+    if not func in ['liste','top']:
         return depute()
     if func=='liste':
         ajx = _ajax('liste')
         return return_json(ajx)
-    elif func=='tops':
-        return return_json(_ajax('tops'))
-    elif func=='flops':
-        return return_json(_ajax('flops'))
+    elif func=='top':
+        return return_json(_ajax('top'))
+   
 
     return_json([])
 
@@ -124,13 +123,13 @@ def _ajax(type_page):
     csp = request.vars.get('csp',None)
     page = int(request.vars.get('page','1'))-1
     groupe = request.vars.get('group',None)
-    direction = int(request.vars.get('direction',1))
+    direction = request.vars.get('order','up')
     text = request.vars.get('query','').decode('utf8')
     region = request.vars.get('region',None)
     top = None if type_page=='liste' else type_page
     tri = request.vars.get('sort','stats.positions.exprimes' if top else 'depute_nom_tri')
     
-    
+    #direction = 1 if direction=='up' else -1
         
     tops_dir = {'stats.positions.exprimes':-1,
                   'stats.positions.dissidence':-1,
@@ -159,14 +158,16 @@ def _ajax(type_page):
         filter['$and'].append({'depute_nom':regx})
 
     sort = []
+    rank = None
     if top:
-        direction = tops_dir[tri] * (1 if top=='tops' else -1)
-        rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='tops') else 'up')+'.'+tri_choices[tri]['rank']
+        #direction = tops_dir[tri] * (1 if top=='top' else -1)
+        #rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='top') else 'up')+'.'+tri_choices[tri]['rank']
+        rank = 'stats.ranks.'+direction+'.'+tri_choices[tri]['rank']
         #sort += [ ('stats.nonclasse',1),(tri,direction),(rank,tops_dir[tri]*(-1 if top=='top' else 1))]
         sort += [ ('stats.nonclasse',1),(rank,1)]
         filter['$and'].append({tri:{'$ne':None}})
     else:
-        sort += [ (tri,direction)]
+        sort += [ (tri,1 if direction=='up' else -1)]
 
     skip = nb*page
     deputes_filters = dict((f,1) for f in deputesfields)
@@ -195,6 +196,8 @@ def _ajax(type_page):
         d['depute_photo_an'] = photo_an
         d['depute_circo_complet'] = depute_circo_complet
         d['id'] = d['depute_shortid']
+        if rank:
+            d['depute_rank'] = getdot(d,rank)
         items.append(d)
     
     import math
