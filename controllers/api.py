@@ -159,8 +159,8 @@ def _ajax(type_page):
 
     sort = []
     if top:
-        direction = tops_dir[tri] * (1 if top=='top' else -1)
-        rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='top') else 'up')+'.'+tri_choices[tri]['rank']
+        direction = tops_dir[tri] * (1 if top=='tops' else -1)
+        rank = 'stats.ranks.'+('down' if (tops_dir[tri]==-1 and top=='tops') else 'up')+'.'+tri_choices[tri]['rank']
         #sort += [ ('stats.nonclasse',1),(tri,direction),(rank,tops_dir[tri]*(-1 if top=='top' else 1))]
         sort += [ ('stats.nonclasse',1),(rank,1)]
         filter['$and'].append({tri:{'$ne':None}})
