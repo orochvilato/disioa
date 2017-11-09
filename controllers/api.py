@@ -299,6 +299,7 @@ def interventions():
     def countItems():
         rcount = mdb.interventions.find(itv_filter).count()
         return {'totalitems':rcount}
+    cachekey= u"itv%s_%s_%s_%s_%s" % (depute,groupe,search,session,date)
     counts = cache.ram(cachekey,lambda:countItems(),time_expire=3600)
     regx = re.compile(search, re.IGNORECASE)
 
@@ -312,6 +313,3 @@ def interventions():
     nbpages = int(math.ceil(float(counts['totalitems'])/nb))
     result = dict(nbitems=len(itvs),nbpages=nbpages, currentpage=1+page,itemsperpage=nb, items=itvs,**counts)
     return return_json(result)
-
-    
-    return dict(itvs=itvs, next=(nb == len(itvs)))

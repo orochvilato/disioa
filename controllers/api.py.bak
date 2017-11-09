@@ -313,6 +313,3 @@ def interventions():
     nbpages = int(math.ceil(float(counts['totalitems'])/nb))
     result = dict(nbitems=len(itvs),nbpages=nbpages, currentpage=1+page,itemsperpage=nb, items=itvs,**counts)
     return return_json(result)
-
-    
-    return dict(itvs=itvs, next=(nb == len(itvs)))
