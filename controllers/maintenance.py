@@ -139,7 +139,7 @@ def updateDeputesStatsElection():
             i += 9
 
         for d in deputes[t]:
-            #mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election':{'inscrits':r[4].value, 'adversaires':advs, 'abstentions':r[5].value,'votants':r[7].value,'blancs':r[9].value,'nuls':r[12].value,'exprimes':r[15].value,'voix':r[23].value}}})
+            #mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election':{'inscrits':r[4].value, 'adversaires':advs, 'abstentions':r[5].value,'votants':r[7].value,'blancs':r[9].value,'nuls':r[12].value,'exprimes':r[15].value,'voix':r[23].value,'depute_election.nuance':r[22].value}}})
             mdb.deputes.update({'depute_shortid':d},{'$set':{'depute_election.nuance':r[22].value}})
     return json.dumps(advs)
 

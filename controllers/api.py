@@ -6,7 +6,7 @@ import re
 import random
 
 deputefields = ['depute_uid','depute_id','depute_shortid','depute_region','depute_departement','depute_departement_id',
-                'depute_csp',
+                'depute_csp','groupe_qualite',
                 'depute_circo','depute_nom','depute_contacts','groupe_abrev','groupe_libelle',
                 'depute_election','depute_profession','depute_naissance','depute_suppleant',
                 'depute_actif','depute_mandat_debut','depute_mandat_fin','depute_mandat_fin_cause',

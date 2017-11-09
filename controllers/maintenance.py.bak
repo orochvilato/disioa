@@ -254,10 +254,12 @@ def buildIndexes():
     #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.ASCENDING)])
     #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
     #mdb.deputes.reindex()
-    mdb.scrutins.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
-    mdb.scrutins.reindex()
-    mdb.votes.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
-    mdb.votes.reindex()
+    #mdb.scrutins.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
+    #mdb.scrutins.reindex()
+    #mdb.votes.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
+    #mdb.votes.reindex()
+    mdb.interventions.ensure_index([("itv_contenu_texte",pymongo.TEXT)],default_language='french')
+    mdb.interventions.reindex()
 
 def updateCommissions():
     import datetime

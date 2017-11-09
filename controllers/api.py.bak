@@ -6,7 +6,7 @@ import re
 import random
 
 deputefields = ['depute_uid','depute_id','depute_shortid','depute_region','depute_departement','depute_departement_id',
-                'depute_csp',
+                'depute_csp','groupe_qualite,
                 'depute_circo','depute_nom','depute_contacts','groupe_abrev','groupe_libelle',
                 'depute_election','depute_profession','depute_naissance','depute_suppleant',
                 'depute_actif','depute_mandat_debut','depute_mandat_fin','depute_mandat_fin_cause',
@@ -256,7 +256,7 @@ def votes():
     regx = re.compile(search, re.IGNORECASE)
     if search:
         for v in votes:
-            repl = regx.subn('<high>'+search+'</high>',v['scrutin_desc'])
+            repl = regx.subn('<strong>'+search+'</strong>',v['scrutin_desc'])
             if repl[1]:
                 v['scrutin_desc'] = repl[0]
 
@@ -305,7 +305,7 @@ def interventions():
 
     if search:
         for itv in itvs:
-            repl = regx.subn('<high>'+search+'</high>',itv['itv_contenu'])
+            repl = regx.subn('<strong>'+search+'</strong>',itv['itv_contenu'])
             if repl[1]:
                 itv['itv_contenu'] = repl[0]
 
