@@ -3,8 +3,54 @@
 import json
 import datetime
 
+def coritv():
+    
+    for d in mdb.deputes.find():
+        mdb.interventions.update_many({'depute_id':d['depute_id']},{'$set':{'depute_shortid':d['depute_shortid']}})
+        
+def professions():
+    profs = []
+    for d in mdb.deputes.find():
+        profs.append('%s;%s;%s;%s' % (d['depute_shortid'],d['depute_nom'],d['depute_profession'],d['depute_csp']))
+    return BEAUTIFY(profs)
+def enfants():
+    noms = []
+    for d in mdb.deputes.find():
+        noms[d['depute_hatvp'][0]['nom']]="%s (%s)" % (d['depute_nom'],d['groupe_abrev'])
+    
+    bip = []
+    for d in mdb.deputes.find():
+        if d['depute_collaborateurs']:
+            for c in d['depute_collaborateurs']:
+                nomf = ' '.join(c.split(' ')[2:]).upper()
+                if nomf in noms.keys():
+                    bip.append('%s;%s (%s);%s' % (c,d['depute_nom'],d['groupe_abrev'],noms[nomf]))
+    
+    return BEAUTIFY(bip)
+
+def stats():
+    ids = []
+    #for d in mdb.votes.find():
+    #    sexe = 'Homme' if d['depute_nom'][0:2]=='M.' else 'Femme'
+    #    mdb.votes.update_many({'depute_shortid':d['depute_shortid']},{'$set':{'depute_sexe':sexe}})
+    pgroup = {}
+    pgroup['n'] = {'$sum':1}
+    pgroup['_id'] = {'sexe':'$depute_sexe', 'classeage':'$depute_classeage','position':'$vote_position'}
+    
+    pipeline = [{'$group':pgroup}]
+    r = []
+    for p in mdb.votes.aggregate(pipeline):
+        r.append('%s;%s;%s;%d' % (p['_id']['sexe'],p['_id']['classeage'],p['_id']['position'],p['n']))
+    return '\n'.join(r)
+        
+    for d in mdb.votes.find():
+        if (d['depute_nom'][0:2]=='M.' and d['depute_sexe']=='Femme') or (d['depute_nom'][0:3]=='Mme' and d['depute_sexe']=='Homme'):
+            sexe = 'Homme' if d['depute_nom'][0:2]=='M.' else 'Femme'
+            ids.append((d['depute_nom'],d['depute_sexe'],sexe))
+            return BEAUTIFY(ids)
+    return BEAUTIFY(ids)
 def enlaisse():
-    return BEAUTIFY(mdb.votes.find_one())
+    return BEAUTIFY(mdb.interventions.find_one({'depute_shortid':{'$ne':None}}))
     depids = dict((d['depute_uid'],d['depute_shortid']) for d in mdb.deputes.find())
     for v in mdb.votes.find({'depute_shortid':None}):
         mdb.votes.update_one({'vote_id':v['vote_id']},{'$set':{'depute_shortid':depids[v['depute_uid']]}})

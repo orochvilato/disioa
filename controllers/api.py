@@ -207,7 +207,7 @@ def _ajax(type_page):
 
 
 def votes():
-    nb = int(request.vars.get('itemsperpage','15'))
+    nb = int(request.vars.get('itemsperpage','25'))
     page = int(request.vars.get('page','1'))-1
     groupe = request.vars.get('group',None)
     scrutin = request.vars.get('scrutin',None)
@@ -217,7 +217,6 @@ def votes():
     region = request.vars.get('region',None)
     depute = request.vars.get('depute',None)
     position = request.vars.get('position',None)
-    text = request.vars.get('query','').decode('utf8')
     skip = nb*page
     filters = []
     if position:
@@ -252,12 +251,12 @@ def votes():
     def countItems():
         rcount = mdb.votes.find(vote_filter).count()
         return {'totalitems':rcount}
-    cachekey= u"vot%s_%s_%s_%s_%s_%s_%s_%s" % (depute,position,scrutin,age,csp.decode('utf8') if csp else csp,groupe,text,region.decode('utf8') if region else region)
+    cachekey= u"vot%s_%s_%s_%s_%s_%s_%s_%s" % (depute,position,scrutin,age,csp.decode('utf8') if csp else csp,groupe,search,region.decode('utf8') if region else region)
     counts = cache.ram(cachekey,lambda:countItems(),time_expire=3600)
     regx = re.compile(search, re.IGNORECASE)
     if search:
         for v in votes:
-            repl = regx.subn('<high>'+search+'</high>',v['scrutin_desc'])
+            repl = regx.subn('<strong>'+search+'</strong>',v['scrutin_desc'])
             if repl[1]:
                 v['scrutin_desc'] = repl[0]
 
@@ -265,3 +264,54 @@ def votes():
     nbpages = int(math.ceil(float(counts['totalitems'])/nb))
     result = dict(nbitems=len(votes),nbpages=nbpages, currentpage=1+page,itemsperpage=nb, items=votes,**counts)
     return return_json(result)
+
+
+def interventions():
+    nb = int(request.vars.get('itemsperpage','25'))
+    page = int(request.vars.get('page','1'))-1
+    groupe = request.vars.get('group',None)
+    search = request.vars.get('query','').decode('utf8')
+    depute = request.vars.get('depute',None)
+    session = request.vars.get('session',None)
+    date = request.vars.get('date',None)
+    skip = nb*page
+    filters = []
+    if depute:
+        filters.append({'depute_shortid': depute})
+    if groupe:
+        filters.append({'groupe_abrev':groupe})
+    if session:
+        filters.append({'session_id':session})
+    if date:
+        filters.append({'itv_date':date})
+    if search:
+        filters.append({'$text':{'$search':search}})
+
+    if len(filters)==0:
+        itv_filter = {}
+    elif len(filters)==1:
+        itv_filter = filters[0]
+    else:
+        itv_filter = {'$and':filters}
+    
+    itvs = list(mdb.interventions.find(itv_filter).sort([('itv_date',-1),('session_id',1),('itv_n',1)]).skip(skip).limit(nb))
+    
+    def countItems():
+        rcount = mdb.interventions.find(itv_filter).count()
+        return {'totalitems':rcount}
+    counts = cache.ram(cachekey,lambda:countItems(),time_expire=3600)
+    regx = re.compile(search, re.IGNORECASE)
+
+    if search:
+        for itv in itvs:
+            repl = regx.subn('<strong>'+search+'</strong>',itv['itv_contenu'])
+            if repl[1]:
+                itv['itv_contenu'] = repl[0]
+
+    import math
+    nbpages = int(math.ceil(float(counts['totalitems'])/nb))
+    result = dict(nbitems=len(itvs),nbpages=nbpages, currentpage=1+page,itemsperpage=nb, items=itvs,**counts)
+    return return_json(result)
+
+    
+    return dict(itvs=itvs, next=(nb == len(itvs)))

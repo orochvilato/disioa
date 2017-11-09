@@ -110,9 +110,6 @@ def fetch_amendements():
     return BEAUTIFY(notfound)
     return dict(stats=stats,totaux=totaux,stats_deps=sorted(stats_deps.iteritems(),key=lambda x:(x[1]['signes'],x[1]['signes']),reverse=True))
     
-def test():
-    
-    return BEAUTIFY(mdb.scrutins.find_one())
 
 def correctData():
     mdb.scrutins.update({'scrutin_id':'15_135'},{'$set':{'scrutin_groupe':'LR'}})
@@ -253,10 +250,14 @@ def genNuages(_mots):
 # ---------------------
 
 def buildIndexes():
-    mdb.deputes.ensure_index([("depute_nom", pymongo.TEXT)],default_language='french')
-    mdb.deputes.ensure_index([("depute_nom_sort", pymongo.ASCENDING)])
-    mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
-    mdb.deputes.reindex()
+    #mdb.deputes.ensure_index([("depute_nom", pymongo.TEXT)],default_language='french')
+    #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.ASCENDING)])
+    #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
+    #mdb.deputes.reindex()
+    mdb.scrutins.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
+    mdb.scrutins.reindex()
+    mdb.votes.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
+    mdb.votes.reindex()
 
 def updateCommissions():
     import datetime
@@ -355,7 +356,7 @@ def updateAssemblee():
     hatvp = getJson('hatvp')
     csp_incomplet = []
     for d in deputes:
-        d['depute_sexe'] = 'Homme' if d['depute_nom']=='M.' else 'Femme'
+        d['depute_sexe'] = 'Homme' if d['depute_nom'][0:2]=='M.' else 'Femme'
         d['depute_id'] = normalize(d['depute_nom'])
         d['depute_shortid'] = d['depute_id'][2:] if '.' in d['depute_id'] else d['depute_id'][3:]
         d['depute_age'] = int((datetime.datetime.now() - datetime.datetime.strptime(d['depute_ddn'],'%d/%m/%Y')).days / 365.25)
@@ -441,6 +442,7 @@ def updateSessions():
     else:
         exclude = mdb.interventions.distinct('session_id')
     launchScript('sessions',"'%s'" % (json.dumps(exclude)))
+    
     sessions = getJson('sessions')
     scrutins = list(mdb.scrutins.find())
     for s in scrutins:
@@ -452,15 +454,16 @@ def updateSessions():
                 s['scrutin_ref']['urlCompteRenduRef'] = cptrd + '#' + bal
                 mdb.scrutins.update_one({'scrutin_id': s['scrutin_id']}, {'$set': {'scrutin_ref': s['scrutin_ref']}})
 
-    deputes = dict((d['depute_id'],d['depute_uid']) for d in mdb.deputes.find({},{"depute_id":1,"depute_uid":1}))
-    deputes_id = dict((v,k) for k,v in deputes.iteritems())
+    deputes = dict((d['depute_id'],{'uid':d['depute_uid'],'shortid':d['depute_shortid']}) for d in mdb.deputes.find({},{"depute_id":1,"depute_uid":1,"depute_shortid":1}))
+    deputes_id = dict((v['uid'],k) for k,v in deputes.iteritems())
     interventions = getJson('interventions')
     ops = []
     for itv in interventions:
         for n,depid in enumerate(itv['depute_id'].split(u'|')):
             new_itv=dict(itv)
             new_itv['depute_id'] = depid
-            nid = deputes.get(depid,None)
+            if depid in deputes.keys():
+                nid = deputes[depid]['uid']
             if nid and nid != new_itv['depute_uid']:
                 new_itv['depute_uid'] = nid
                 new_itv['itv_tribun'] = True
@@ -471,6 +474,8 @@ def updateSessions():
             else:
                 new_itv['itv_president'] = False
             new_itv['itv_id'] = "%s%d" % (new_itv['itv_id'],n)
+            if new_itv['depute_id'] in deputes.keys():
+                new_itv['depute_shortid'] = deputes[new_itv['depute_id']]['shortid']
             ops.append(UpdateOne({'itv_id':new_itv['itv_id']},{'$set':new_itv}, upsert=True))
     if ops:
         mdb.interventions.bulk_write(ops)
