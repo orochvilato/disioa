@@ -2,6 +2,7 @@
 # essayez quelque chose comme
 
 import os
+import re
 import json
 import datetime
 import csv
@@ -11,6 +12,7 @@ from pymongo import UpdateOne
 from bson.son import SON
 from tools import normalize
 import xmltodict
+client = pymongo.MongoClient('mongodb://writer:discordinsoumisrw@localhost:27017/obsass')
 mdb = client.obsass
 output_path = os.path.join(request.folder, 'private', 'scrapy')
 
@@ -250,17 +252,34 @@ def genNuages(_mots):
 # ---------------------
 
 def buildIndexes():
-    #mdb.deputes.ensure_index([("depute_nom", pymongo.TEXT)],default_language='french')
-    #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.ASCENDING)])
+    mdb.interventions.ensure_index([('itv_date',pymongo.DESCENDING),('session_id',pymongo.ASCENDING),('itv_n',pymongo.ASCENDING)])
+    mdb.interventions.reindex()
+    mdb.votes.ensure_index([('scrutin_num',pymongo.DESCENDING)])
+    mdb.votes.reindex()
+    return 
+    # Deputes
+    mdb.deputes.drop_indexes()
+    mdb.deputes.ensure_index([("depute_nom", pymongo.TEXT)],default_language='french')
+    mdb.deputes.ensure_index([("depute_nom_tri", pymongo.ASCENDING)])
     #mdb.deputes.ensure_index([("depute_nom_sort", pymongo.DESCENDING)])
     #mdb.deputes.reindex()
     #mdb.scrutins.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
     #mdb.scrutins.reindex()
     #mdb.votes.ensure_index([("scrutin_fulldesc",pymongo.TEXT)],default_language='french')
     #mdb.votes.reindex()
-    mdb.interventions.ensure_index([("itv_contenu_texte",pymongo.TEXT)],default_language='french')
-    mdb.interventions.reindex()
-
+    #mdb.interventions.ensure_index([("itv_contenu_texte",pymongo.TEXT)],default_language='french')
+    #mdb.interventions.reindex()
+    sortfields = ['stats.positions.exprimes','stats.positions.dissidence','stats.nbitvs','stats.nbmots','stats.compat.FI','stats.compat.REM',
+                  'stats.amendements.rediges','stats.amendements.adoptes','stats.commissions.present','stats.election.exprimes','stats.election.inscrits']
+    ranks = ['exprimes','dissidence','compatFI','compatREM','nbitvs','nbmots','nbamendements','pctamendements','pctcommissions','pctinscrits','pctexprimes']
+    for sf in sortfields:
+        mdb.deputes.ensure_index([(sf,pymongo.ASCENDING)])
+    for o in 'up','down':
+        for r in ranks:
+            mdb.deputes.ensure_index([('stats.nonclasse',pymongo.ASCENDING),('stats.ranks.%s.%s' % (o,r),pymongo.ASCENDING)])
+    
+    mdb.deputes.reindex()
+    
 def updateCommissions():
     import datetime
     dhc=mdb.deputes.find({'depute_commissions_historique':{'$ne':[]}},{'depute_id':1,'depute_commissions_historique':1,'depute_mandat_debut':1,'depute_mandat_fin':1})
@@ -279,8 +298,11 @@ def updateCommissions():
             _cdebut = datetime.datetime.strptime(cdebut,'%d/%m/%Y')
             _cfin = datetime.datetime.strptime(cfin,'%d/%m/%Y')
             if (_cdebut>=debut and _cdebut<=fin):
+                if comm[0:3]=='OMC':
+                    mdb.presences.delete_many({'$and':[{'depute_id':d['depute_id']},{'presence_etat':'absent'},{'presence_date':{'$lte':_cfin,'$gte':_cdebut}},{'commission_id':{'$ne':comm}}]})
+                
                 historique.append([d['depute_id'],cdebut, cfin, comm])
-        
+    
     for h in historique:
         if not h[3] in histcom.keys():
             histcom[h[3]] = {}
@@ -301,7 +323,10 @@ def updateCommissions():
     import datetime
     for pres in presences:
         pres['depute_id'] = pres['depute_id'].replace('\r','').replace('8','').replace('6','')
-        pres['groupe_abrev'] = groupe_depute[pres['depute_id']]
+                    
+        pres['groupe_abrev'] = groupe_depute.get(pres['depute_id'],groupe_depute.get('m.'+pres['depute_id'],groupe_depute.get('mme'+pres['depute_id'],'Nope')))
+        if pres['groupe_abrev']=='Nope':
+            1/0
         
         pres['presence_date'] = datetime.datetime.strptime(pres['presence_date'],'%Y-%m-%d %H:%M')
         mdb.presences.update_one({'presence_id':pres['presence_id']},{'$set':pres},upsert=True)
@@ -464,6 +489,7 @@ def updateSessions():
         for n,depid in enumerate(itv['depute_id'].split(u'|')):
             new_itv=dict(itv)
             new_itv['depute_id'] = depid
+            nid = None
             if depid in deputes.keys():
                 nid = deputes[depid]['uid']
             if nid and nid != new_itv['depute_uid']:
@@ -703,8 +729,8 @@ def updateDeputesRanks():
     topflop = {}
     for rank in ranks.keys():
         topflop[rank] = {'down':{},'up':{}}
-        topflop[rank]['down'] = sorted(ranks[rank],key=lambda x:x[1][0], reverse=True)
-        topflop[rank]['up'] = sorted(ranks[rank],key=lambda x:x[1][0] if x[1][0]!=None else 'ZZZZ')
+        topflop[rank]['down'] = sorted(ranks[rank],key=lambda x:x[1][0] if not x[1][0] in ('N/A',None) else -1, reverse=True)
+        topflop[rank]['up'] = sorted(ranks[rank],key=lambda x:x[1][0] if not x[1][0] in ('N/A',None) else 'ZZZZ')
         topflop[rank]['down'] = dict([ (r[0],i+1) for i,r in enumerate(topflop[rank]['down']) ])
         topflop[rank]['up'] = dict([ (r[0],i+1) for i,r in enumerate(topflop[rank]['up']) ])
         
@@ -724,8 +750,9 @@ def updateAllStats():
     updateDeputesRanks()
 
 def updateScrutinsSignataires():
+    import re
     groupe_depute = dict((d['depute_id'],d['groupe_abrev']) for d in mdb.deputes.find({},{'depute_id':1,'groupe_abrev':1}))
-    for s in mdb.scrutins.find():
+    for s in mdb.scrutins.find({'scrutin_num':240}):
         desc = s['scrutin_desc'].replace('. [','')
         
         siggp = None
@@ -737,14 +764,15 @@ def updateScrutinsSignataires():
             
         if 'M. ' in s['scrutin_desc'] or 'Mme ' in s['scrutin_desc']:
             
-            mtch = re.search(r' (M.|Mme) (.*)(,| et les amende| et l.amende)',s['scrutin_desc'],re.UNICODE)
-            if not mtch:
-                mtch =  re.search(r' (M.|Mme) (.*)( . l.article| apr.s l.article)',s['scrutin_desc'],re.UNICODE)
+            mtch1 = re.search(r' (M.|Mme) (.*)(,| et les amende| et l.amende)',s['scrutin_desc'],re.UNICODE)
+            mtch2 =  re.search(r' (M.|Mme) (.*)( . l.article| apr.s l.article)',s['scrutin_desc'],re.UNICODE)
+            
 
-            if mtch:
-               
-                siggp = normalize(mtch.groups()[0]+mtch.groups()[1])
+            
+            siggp1 = normalize(mtch1.groups()[0]+mtch1.groups()[1]) if mtch1 else ""
+            siggp2 = normalize(mtch2.groups()[0]+mtch2.groups()[1]) if mtch2 else ""
                 
+            siggp = siggp1 if len(siggp1)>0 and len(siggp1)<len(siggp2) else siggp2
         if siggp:
             gp = groupe_depute.get(siggp,None)
             if not gp:
@@ -920,6 +948,7 @@ def updateDeputesStats():
     
     if ops:
         mdb.deputes.bulk_write(ops)
+        mdb.deputes.update_many({'groupe_abrev':'NI'},{'$set':{'stats.positions.dissidence':'N/A'}})
 
     return json.dumps(gp_nbvotes)
 
@@ -986,6 +1015,7 @@ def updateScrutinsStats():
         ops.append(UpdateOne({'vote_id':v['vote_id']},{'$set':{'vote_compat':scrutins[v['scrutin_id']]['compatpos'][v['vote_position']]}}))
     if ops:
         mdb.votes.bulk_write(ops)
+        
 
 
     return "OK"

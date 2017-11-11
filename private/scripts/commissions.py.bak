@@ -126,7 +126,7 @@ class commissionsSpider(scrapy.Spider):
                                                 groupe=getitem(tab[3]),
                                                 sort=getitem(tab[4])))
 
-        presents = response.xpath(u'//p[i[text()[contains(.,"Présents.")]]]').extract()
+        presents = response.xpath(u'//p[i[text()[contains(.,"Présents.")]]]')
         #if presents:
         #    presents = re.search(r'</i>(.*)</p>',presents[0].replace(' M&nbsp;','M.').replace('<br>','').replace('\n','').replace('\r','')).groups()
             
@@ -144,6 +144,7 @@ class commissionsSpider(scrapy.Spider):
             excuses = excuses[0].xpath('text()').extract()
             excuses = ''.join(excuses)
             excuses = excuses.replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
+            excuses = excuses.replace(u'M. Gilbert Collard Mme Marie Guévenoux','m.gilbertcollard,mmemarieguevenoux').replace('Belkhir Belhaddad','M. Belkhir Belhaddad')
             crs[com_id][cr_id]['excuses'] = [normalize(e) for e in excuses.split(',')]
 
 

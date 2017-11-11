@@ -4,7 +4,7 @@ import locale
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 import pymongo
 
-client = pymongo.MongoClient('mongodb://localhost:27017/')
+client = pymongo.MongoClient('mongodb://reader:discordinsoumis@localhost:27017/obsass')
 mdb = client.obsass
 
 
@@ -170,5 +170,5 @@ class AppCache:
     def clear(self):
         self.cachedb.remove()
     
-appcache = AppCache(mdb,'cache_obsas')#+request.application)
-tinyurl = TinyURL(mdb)
+#appcache = AppCache(mdb,'cache_obsas')#+request.application)
+#tinyurl = TinyURL(mdb)

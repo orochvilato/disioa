@@ -3,6 +3,8 @@
 import json
 import datetime
 
+def cor():
+    return BEAUTIFY(mdb.amendements.find_one())
 def coritv():
     
     for d in mdb.deputes.find():
@@ -50,7 +52,7 @@ def stats():
             return BEAUTIFY(ids)
     return BEAUTIFY(ids)
 def enlaisse():
-    return BEAUTIFY(mdb.interventions.find_one({'depute_shortid':{'$ne':None}}))
+    return BEAUTIFY(mdb.deputes.find_one({}))
     depids = dict((d['depute_uid'],d['depute_shortid']) for d in mdb.deputes.find())
     for v in mdb.votes.find({'depute_shortid':None}):
         mdb.votes.update_one({'vote_id':v['vote_id']},{'$set':{'depute_shortid':depids[v['depute_uid']]}})

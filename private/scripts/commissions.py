@@ -144,6 +144,7 @@ class commissionsSpider(scrapy.Spider):
             excuses = excuses[0].xpath('text()').extract()
             excuses = ''.join(excuses)
             excuses = excuses.replace('8','').replace('<i>','').replace('</i>.','').replace('</i>','').replace(u'\u2013','').replace('.mme','mme')
+            excuses = excuses.replace(u'M. Gilbert Collard Mme Marie Guévenoux','m.gilbertcollard,mmemarieguevenoux')
             crs[com_id][cr_id]['excuses'] = [normalize(e) for e in excuses.split(',')]
 
 

@@ -21,6 +21,15 @@ deputesfields  = deputefields
 
 #scrutins_by_id = cache.disk('scrutins_by_id',lambda: dict((s['scrutin_id'],s) for s in mdb.scrutins.find()), time_expire=3600)
 deputesFI = cache.disk('deputesFI',lambda: mdb.deputes.find({'groupe_abrev':'FI'}).distinct('depute_shortid'),time_expire=3600)
+def test():
+    #56 4
+    #mdb.deputes.update_one({'depute_shortid':'paulmolac'},{'$set':{'depute_election.adversaires':[{'nom': 'M. Jean-Louis AMISSE (EXG)', 'voix': '638'}, {'nom': 'Mme C\xc3\xa9cile BUCHET (FI)', 'voix': '6791'}, {'nom': 'Mme Nathalie LANDRIAU BERHAULT (ECO)', 'voix': '2285'}, {'nom': 'Mme France SAVELLI (ECO)', 'voix': '6'}, {'nom': 'Mme Christine RAULT (DIV)', 'voix': '377'}, {'nom': 'Mme Marie-H\xc3\xa9l\xc3\xa8ne HERRY (LR)', 'voix': '8074'}, {'nom': 'M. Bernard HUET (DVD)', 'voix': '349'}, {'nom': 'M. David CABAS (DLF)', 'voix': '952'}, {'nom': 'Mme Agn\xc3\xa8s RICHARD (FN)', 'voix': '5667'}, {'nom': 'M. Jean-Paul FELIX (EXD)', 'voix': '553'}]}})
+    #75 1
+    #mdb.deputes.update_one({'depute_shortid':'sylvainmaillard'},{'$set':{'depute_election.adversaires':[{'nom': 'Mme Laurence BOULINIER (EXG)', 'voix': '102'}, {'nom': 'Mme Sylvie BAYLE (COM)', 'voix': '388'}, {'nom': 'M. Patrick COMOY (FI)', 'voix': '2840'}, {'nom': 'Mme Pauline V\xc3\x89RON (SOC)', 'voix': '3705'}, {'nom': 'M. Pascal MUNIER (ECO)', 'voix': '39'}, {'nom': 'M. Marc VALLAUD (ECO)', 'voix': '180'}, {'nom': 'Mme Victoria BARIGANT (ECO)', 'voix': '2481'}, {'nom': 'Mme B\xc3\xa9rang\xc3\xa8re QUINTERNET (DIV)', 'voix': '185'}, {'nom': 'Mme Mathilde DE BAYSER (DIV)', 'voix': '160'}, {'nom': 'M. Micha MAZAHERI (DIV)', 'voix': '413'}, {'nom': 'Mme Nathalie GORDTS (DIV)', 'voix': '327'}, {'nom': 'M. Ronan LE ROY (DIV)', 'voix': '250'}, {'nom': 'M. Jacques DOR (DIV)', 'voix': '111'}, {'nom': 'M. Jean-Fran\xc3\xa7ois LEGARET (LR)', 'voix': '8402'}, {'nom': 'M. \xc3\x89ric LEVAVASSEUR (DVD)', 'voix': '3'}, {'nom': 'M. Louis-Max DE NAZELLE (DVD)', 'voix': '47'}, {'nom': 'M. Vincent BALADI (DVD)', 'voix': '1578'}, {'nom': 'M. Louis DE GENOUILLAC (DVD)', 'voix': '265'}, {'nom': 'Mme Ida DE CHAVAGNAC (DVD)', 'voix': '551'}, {'nom': 'M. Christophe TAVERNIER (DLF)', 'voix': '221'}, {'nom': 'Mme Guylaine COEFFIER (FN)', 'voix': '1029'}]}})
+    #80 5
+    #mdb.deputes.update_one({'depute_shortid':'stephanedemilly'},{'$set':{'depute_election.adversaires':[{'nom': 'M. R\xc3\xa9gis LI\xc3\x89VRARD (EXG)', 'voix': '439'}, {'nom': 'Mme Val\xc3\xa9rie ROUSSEL (COM)', 'voix': '1937'}, {'nom': 'M. Olivier SPINELLI (FI)', 'voix': '4770'}, {'nom': 'M. Thierry VINDEVOGEL (DIV)', 'voix': '1441'}, {'nom': 'M. David MAKOWSKI (DIV)', 'voix': '263'},  {'nom': 'Mme Olga SOROKINA-DOLLE (DLF)', 'voix': '620'}, {'nom': 'M. Lo\xc3\xafc GRIMAUX (FN)', 'voix': '8487'}, {'nom': 'Mme Florence PERDU (EXD)', 'voix': '472'}]}})
+
+    return BEAUTIFY(mdb.deputes.find_one({'depute_shortid':'napolepolutele'}))
 
 def return_json(resp):
     from bson import json_util
@@ -166,6 +175,7 @@ def _ajax(type_page):
         #sort += [ ('stats.nonclasse',1),(tri,direction),(rank,tops_dir[tri]*(-1 if top=='top' else 1))]
         sort += [ ('stats.nonclasse',1),(rank,1)]
         filter['$and'].append({tri:{'$ne':None}})
+        #filter['$and'].append({tri:{'$ne':'N/A'}})
     else:
         sort += [ (tri,1 if direction=='up' else -1)]
 
