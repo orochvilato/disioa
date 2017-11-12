@@ -3,6 +3,9 @@ import datetime
 def svgvisuel(visuel,**args):
     return XML(response.render('svg/visuels/%s.svg' % visuel, **args))
 
+def get_visuel(visuel,**args):
+    return XML(response.render('visuels/%s.svg' % visuel, **args))
+
 def obsass_log(domaine,page):
     if request.env.REQUEST_SCHEME=='http':
         mdb.logs.insert_one({'date':datetime.datetime.now(),

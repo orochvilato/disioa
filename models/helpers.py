@@ -7,6 +7,7 @@ def get_visuel(visuel,**args):
     return XML(response.render('visuels/%s.svg' % visuel, **args))
 
 def obsass_log(domaine,page):
+    return
     if request.env.REQUEST_SCHEME=='http':
         mdb.logs.insert_one({'date':datetime.datetime.now(),
                              'client':request.client,
